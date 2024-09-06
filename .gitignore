@@ -1,5 +1,4 @@
-/code/
 .gitignore
 *.xml
 /.idea/
-.pyc
+*.pyc

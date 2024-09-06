@@ -4,12 +4,12 @@ import config
 
 # 创建一个文本标签用于显示运行时间
 time_label = label(
-    pos=vector(0, 10, 0),  # 标签的位置
+    pos=vector(-30, 25, 0),  # 标签的位置
     text="Time: 0.0s",  # 初始文本
     xoffset=1,  # 文本的X偏移量
     yoffset=1,  # 文本的Y偏移量
-    height=20,  # 字体高度
-    border=4,  # 标签边框宽度
+    height=15,  # 字体高度
+    border=3,  # 标签边框宽度
     font='sans',  # 字体类型
     color=color.black  # 字体颜色
 )

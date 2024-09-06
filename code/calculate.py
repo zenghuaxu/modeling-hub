@@ -28,7 +28,7 @@ def find_delta_theta(theta, fixed_distance):
     # 二分上下限
     low = 0
     high = 4
-    while high - low > config.tolerance:
+    while high - low > config.dis_tolerance:
         mid = (low + high) / 2
         pos1 = get_position(theta)
         pos2 = get_position(theta + mid)

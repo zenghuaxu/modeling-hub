@@ -30,7 +30,8 @@ def generate_spiral():
 
 def generate(points, lines, fixed_distances):
     # 龙头起始位置
-    theta = 20 * np.pi
+    current_time = time.time() - config.start_time
+    theta = t_to_theta(current_time)
     while theta > 0:
         rate(60)  # 控制移动速度
         record_time()
@@ -56,6 +57,8 @@ def generate(points, lines, fixed_distances):
         theta -= 0.05  # 控制第一个点的移动速度
 
         if theta < 0:
-            theta = 20 * np.pi
             config.start_time = time.time()
+
+        current_time = time.time() - config.start_time
+        theta = t_to_theta(current_time)
         

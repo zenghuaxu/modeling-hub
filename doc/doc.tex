@@ -133,12 +133,15 @@
 	%\end{figure}
 	
 	\subsection{问题重述}
-	\begin{enumerate}[itemindent=0.5cm]
-		\item \textbf{问题一：}在题目给定的 55cm 螺距的等距螺线作为行进路线的情形下，取龙头位置为第十六圈与 x 轴交点处，且龙头以 1m/s 的速度向内顺时针盘绕，计算 0-300s 内每一秒舞龙队各把手的所在位置即速度。
-		\item \textbf{问题二：}
-		\item \textbf{问题三：}
-		\item \textbf{问题四：}
-	\end{enumerate}
+		\textbf{问题一：}在题目给定的 55cm 螺距的等距螺线作为行进路线的情形下，取龙头位置为第十六圈与 x 轴交点处为龙头的初始位置，且龙头以 1m/s 的速度向内顺时针盘绕，计算 0-300s 内每一秒舞龙队各把手的所在位置以及速度。
+		
+		\textbf{问题二：}
+		
+		\textbf{问题三：}
+		
+		\textbf{问题四：}
+		
+		\textbf{问题五：}
 	
 	%Part Two
 	\section{问题分析}
@@ -147,6 +150,7 @@
 	\subsection{问题二的分析}
 	\subsection{问题三的分析}
 	\subsection{问题四的分析}
+	\subsection{问题五的分析}
 	
 	%Part Three
 	\section{模型假设}
@@ -155,7 +159,6 @@
 		\item 假设板凳龙盘入与盘出时，龙头、各节龙身以及龙尾之间连接牢固，旋转润滑，运动连续不停顿
 		\item 假设不考虑板凳厚度对板凳龙整体运动产生的影响，
 		\item 假设板凳龙的各板凳均位于同一平面上
-		\item
 	\end{enumerate}
 	
 	%Part Four
@@ -177,8 +180,9 @@
 			$l$ & 板凳板头长 \\
 			$d$ & 板凳宽  \\
 			$t$ & 舞龙队运动时间  \\
-			$A_i$ & 第 i 节龙身靠前把手的中心点  \\
 			$A_0$ & 龙头把手的中心点  \\
+			$A_i$ & 第 i 节龙身靠前把手的中心点  \\
+			$A_{223}$ & 龙尾后侧把手中心点  \\
 			\hline
 		\end{tabular}
 		% \hline是横线，采用\makebox设置列宽
@@ -190,47 +194,117 @@
 	\subsection{问题一模型的建立与求解}
 	\subsubsection{由龙头把手确定其余把手的位置}
 	
-	依据题意，舞龙队的行进路线由 $D = 55cm$ 的等距螺线确定。选用极坐标刻画行进路线时，该路线可以由以下方程确定：
-	
-	\begin{equation}
-		\rho = \frac{D}{2\pi}\theta, \quad \theta \in [0,+\infty)
-	\end{equation}
-	
-	使用形如 $(\rho, \theta)$ 的方式表示点的坐标，因此初始点 A 点的坐标可以表示为 $( 16 \cdot 0.55, 16 \cdot 2\pi )$。
-	
-	题设给定的初始条件中，只有龙头把手的位置是已知信息，因此需要得到龙头把手的位置和其余所有把手的位置关系才能确定其余把手的位置。通过解析可以发现：该关系难以求出解析解。因此可以考虑\textbf{从龙头把手位置逐级递推到每一把手的位置}。
-	
-	为了做到这一点，我们选用了二分查找算法，在任一把手 $A_i$ 位置已知的情况下，查找下一把手所在位置。即给定 $\theta_{i}$ ，确定 $\theta_{i+1}$ 的大小。而 $\theta_{i+1}$ 合适当且仅当两把手的间距正好等于板凳两孔中心的距离。根据极坐标下的余弦定理，两点间的位置即为：
-	
-	$$\sqrt{\rho_1^2 + \rho_2^2 - 2\rho_1 \rho_2 cos(\theta_1 - \theta_2)}$$
-	
-	二分求解过程见附录
-	
-	% TODO！！！！!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11↑
+		依据题意，舞龙队的行进路线由 $D = 55cm$ 的等距螺线确定。选用极坐标刻画行进路线时，该路线可以由以下方程确定：
+		
+		\begin{equation}
+			\rho = \frac{D}{2\pi}\theta, \quad \theta \in [0,+\infty)
+		\end{equation}
+		
+		使用形如 $(\rho, \theta)$ 的方式表示点的坐标，因此初始点 A 点的坐标可以表示为 $( 16 \cdot 0.55, 16 \cdot 2\pi )$。
+		
+		题设给定的初始条件中，只有龙头把手的位置是已知信息，因此需要得到龙头把手的位置和其余所有把手的位置关系才能确定其余把手的位置。通过解析可以发现：该关系难以求出解析解。因此可以考虑\textbf{从龙头把手位置逐级递推到每一把手的位置}。
+		
+		为了做到这一点，我们选用了二分查找算法，在任一把手 $A_i$ 位置已知的情况下，查找下一把手所在位置。即给定 $\theta_{i}$ ，确定 $\theta_{i+1}$ 的大小。而 $\theta_{i+1}$ 合适当且仅当两把手的间距正好等于板凳两孔中心的距离。根据极坐标下的余弦定理，两点间的位置即为：
+		
+		$$\Delta l = \sqrt{\rho_i^2 + \rho_{i+1}^2 - 2\rho_i \rho_{i+1} cos(\theta_i - \theta_{i+1})}$$
+		
+		代入 $\rho$ 并令 $\Delta l$ 分别减去龙头和龙身除去板头的长度，即分别减去 $L_1 - 2 \cdot l$ 和 $L_2 - 2 \cdot l$，即可得到二分查找的目标函数 $f$ ，其零点即为 $\theta_{i+1}$ 的二分查找值：
+		
+		\begin{equation}
+			f(\theta) = \frac{D}{2\pi} \sqrt{\theta^2 + \theta_i^2 - 2\theta \theta_i cos(\theta - \theta_i)} - (L_j - 2l), \quad j=1, 2
+		\end{equation} 
+		
+		目标函数 $f$ 二分查找所得的零点即为 $\theta_{i+1}$ 的数值解。
+		
+		二分求解代码见附录2 % TODO！！！！!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11↑
 	
 	\subsubsection{确定龙头把手的位置与时间关系}
 	
-	5.1.1 小节提供了由龙头把手计算其余各个把手位置的方法，因此只需要确定每一秒龙头把手的位置，利用上一小节的方法，即可得到每一秒钟各个把手的位置信息。
+		5.1.1 小节提供了由龙头把手计算其余各个把手位置的方法，因此只需要确定每一秒龙头把手的位置，利用上一小节的方法，即可得到每一秒钟各个把手的位置信息。
+		
+		极坐标下，龙头把手位置可以由 $\theta$ 参数唯一确定。因此，只需要求解出龙头的辐角 $\theta$ 与时间 $t$ 的关系即可。对等距螺线使用微元法，可以用 $d\theta$ 和 $d\rho$ 表示出螺线弧微元 $ds$：
 	
-	极坐标下，龙头把手位置可以由 $\theta$ 参数唯一确定。因此，只需要求解出龙头的辐角 $\theta$ 与时间 $t$ 的关系即可。对等距螺线使用微元法，可以用 $d\theta$ 和 $d\rho$ 表示出螺线弧微元 $ds$：
+		$$ ds = \sqrt{(d\rho)^2 + (\rho d\theta) ^ 2}$$
+		
+		而微元 $ds$ 等于龙头在 $dt$ 时间内行进的距离，即：
+		
+		\begin{equation}
+			\sqrt{(d\rho)^2 + (\rho d\theta) ^ 2} = vdt
+		\end{equation}
+		
+		联立 (1) 和 (2) 式消去 $\rho$ 即可解得龙头的辐角 $\theta$ 和时间 $t$ 满足以下关系：
+		
+		\begin{equation}
+			\frac{d}{2\pi}(-\frac{1}{2}ln(\sqrt{\theta^2+1}-\theta)+\frac{1}{2}\theta\sqrt{\theta^2+1})=vt+C
+		\end{equation}
+		
+		利用数值计算即可求得给定时刻下龙头把手的位置。
 	
-	$$ ds = \sqrt{(d\rho)^2 + (\rho d\theta) ^ 2}$$
-	
-	而微元 $ds$ 等于龙头在 $dt$ 时间内行进的距离，即：
-	
-	\begin{equation}
-		\sqrt{(d\rho)^2 + (\rho d\theta) ^ 2} = vdt
-	\end{equation}
-	
-	联立 (1) 和 (2) 式消去 $\rho$ 即可解得龙头的辐角 $\theta$ 和时间 $t$ 满足以下关系：
-	
-	\begin{equation}
-		\frac{d}{2\pi}(-\frac{1}{2}ln(\sqrt{\theta^2+1}-\theta)+\frac{1}{2}\theta\sqrt{\theta^2+1})=vt+C
-	\end{equation}
-	
-	利用数值计算即可求得给定时刻下龙头把手的位置。\\\\
-	
-	
+	\subsubsection{确定各把手的速度}
+		
+		5.1.2 小节计算出了各个把手的位置在给定时刻下的数值解，而速度是位置在时间尺度下的微元。因此，只需要取时间微元 $\Delta t$ ，并计算在给定时间 $t_1$ 两侧的 $\Delta t$ 下的把手位置的位移模长 $|\vec{x}(t_1+\Delta t) - \vec{x}(t_1 - \Delta t)|$ ，将其除以两倍的 $\Delta t$ 即可得到速度大小。
+		
+		
+		
+		具体来说，对于给定的时间 $t_1$ ，把手 $A_i$ 此时的速度大小的数值解为：
+		
+		\begin{equation}
+			v_{t1} = \frac{\sqrt{(x_i(t_1 + \Delta t) - x_i(t_1 - \Delta t))^2 + (y_i(t_1 + \Delta t) - y_i(t_1 - \Delta t))^2}}{2\Delta t}
+		\end{equation}
+		
+	% TODO: \subsubsection{模型的检验}
+		
+		利用这种方式计算出问题一中的各个把手的位置和速度见 result1.xlsx 文件。其中 0 s、60 s、120 s、180 s、240 s、300 s 时，龙头前把手、龙头后面第 1、51、101、151、201 节龙身前把手和龙尾后把手的位置和速度如下表所示：
+		
+		
+		\begin{table}[H] %[h]表示在此处添加浮动体，默认为tbf，即页面顶部、底部和空白处添加
+			\captionsetup{skip=4pt} % 设置标题与表格的间距为4pt
+			\caption{问题一的位置结果}
+			\centering
+			\setlength{\arrayrulewidth}{0.5pt} % 设置表格线条宽度为1pt
+			\begin{tabular}{|c|c|c|c|c|c|c|} %c表示居中，l表示左对齐，r表示右对齐，中间添加“|”表示竖线
+				\hline
+				% \makebox[0.15\textwidth][c]{符号} & \makebox[0.6\textwidth][c]{说明}  \\ 
+				% \hline
+				& 0 s & 60 s & 120 s & 180 s & 240 s & 300 s \\ \hline
+				龙头 x (m)      &     &      &       &       &       &       \\ \hline
+				龙头 y (m)      &     &      &       &       &       &       \\ \hline
+				第 1 节龙身 x (m) &     &      &       &       &       &       \\ \hline
+				第 1 节龙身 y (m) &     &      &       &       &       &       \\ \hline
+				第 51 节龙身 x (m) &     &      &       &       &       &       \\ \hline
+				第 51 节龙身 y (m) &     &      &       &       &       &       \\ \hline
+				第 101 节龙身 x (m) &     &      &       &       &       &       \\ \hline
+				第 101 节龙身 y (m) &     &      &       &       &       &       \\ \hline
+				第 151 节龙身 x (m) &     &      &       &       &       &       \\ \hline
+				第 151 节龙身 y (m) &     &      &       &       &       &       \\ \hline
+				第 201 节龙身 x (m) &     &      &       &       &       &       \\ \hline
+				第 201 节龙身 y (m) &     &      &       &       &       &       \\ \hline
+				龙尾（后） x (m) &     &      &       &       &       &       \\ \hline
+				龙尾（后） y (m) &     &      &       &       &       &       \\ \hline
+			\end{tabular}
+			% \hline是横线，采用\makebox设置列宽
+		\end{table}
+		
+		\begin{table}[H] %[h]表示在此处添加浮动体，默认为tbf，即页面顶部、底部和空白处添加
+		\captionsetup{skip=4pt} % 设置标题与表格的间距为4pt
+		\caption{问题一的速度结果}
+		\centering
+		\setlength{\arrayrulewidth}{0.5pt} % 设置表格线条宽度为1pt
+		\begin{tabular}{|c|c|c|c|c|c|c|} %c表示居中，l表示左对齐，r表示右对齐，中间添加“|”表示竖线
+			\hline
+			% \makebox[0.15\textwidth][c]{符号} & \makebox[0.6\textwidth][c]{说明}  \\ 
+			% \hline
+			& 0 s & 60 s & 120 s & 180 s & 240 s & 300 s \\ \hline
+			龙头 (m/s)      &     &      &       &       &       &       \\ \hline
+			第 1 节龙身 (m/s) &     &      &       &       &       &       \\ \hline
+			第 51 节龙身 (m/s) &     &      &       &       &       &       \\ \hline
+			第 101 节龙身 (m/s) &     &      &       &       &       &       \\ \hline
+			第 151 节龙身 (m/s) &     &      &       &       &       &       \\ \hline
+			第 201 节龙身 (m/s) &     &      &       &       &       &       \\ \hline
+			龙尾（后） (m/s) &     &      &       &       &       &       \\ \hline
+		\end{tabular}
+		% \hline是横线，采用\makebox设置列宽
+		\end{table}
 	
 	
 	
@@ -238,44 +312,44 @@
 	
 		
 	
-	计算公式模版：
-	\begin{equation}
-		r=\frac{\sum_{i=1}^n\left(X_i-\bar{X}\right)\left(Y_i-\bar{Y}\right)}{\sqrt{\sum_{i=1}^n\left(X_i-\bar{X}\right)^2} \sqrt{\sum_{i=1}^n\left(Y_i-\bar{Y}\right)^2}}
-	\end{equation}
-	
-	相关系数矩阵模版:
-	
-	\begin{gather*}
-		\begin{bmatrix}
-			Variable & a & b & c & d & e & f \\
-			a & 1 & 1 & 1 & 1 & 1 & 1 \\
-			b & 1 & 1 & 1 & 1 & 1 & 1 \\
-			c & 1 & 1 & 1 & 1 & 1 & 1 \\
-			d & 1 & 1 & 1 & 1 & 1 & 1 \\
-			e & 1 & 1 & 1 & 1 & 1 & 1 \\
-			f & 1 & 1 & 1 & 1 & 1 & 1 \\
-		\end{bmatrix}
-	\end{gather*}
+		计算公式模版：
+		\begin{equation}
+			r=\frac{\sum_{i=1}^n\left(X_i-\bar{X}\right)\left(Y_i-\bar{Y}\right)}{\sqrt{\sum_{i=1}^n\left(X_i-\bar{X}\right)^2} \sqrt{\sum_{i=1}^n\left(Y_i-\bar{Y}\right)^2}}
+		\end{equation}
+		
+		相关系数矩阵模版:
+		
+		\begin{gather*}
+			\begin{bmatrix}
+				Variable & a & b & c & d & e & f \\
+				a & 1 & 1 & 1 & 1 & 1 & 1 \\
+				b & 1 & 1 & 1 & 1 & 1 & 1 \\
+				c & 1 & 1 & 1 & 1 & 1 & 1 \\
+				d & 1 & 1 & 1 & 1 & 1 & 1 \\
+				e & 1 & 1 & 1 & 1 & 1 & 1 \\
+				f & 1 & 1 & 1 & 1 & 1 & 1 \\
+			\end{bmatrix}
+		\end{gather*}
 	
 	
 	\subsection{问题二模型的建立与求解}
 	
-	内容
-	
-	目标规划函数示例：
-	
-	\begin{equation}
-		\begin{aligned}
-			& \max \quad E_k=\frac{S_k \cdot Y_{i, y}-Z_k \cdot X_{i, y}}{\gamma} \\
-			& \text { s.t. }\left\{\begin{array}{l}
-				Z_k=\frac{Y_{i, y} \cdot \beta_k}{1-\alpha_k} \\
-				S_k=X_{2, y}\left(1+V_k\right)\left(1+\beta_k\right) \\
-				\beta_k \in\{1, c\} \\
-				c>1 \\
-				
-			\end{array}\right.
-		\end{aligned}
-	\end{equation}
+		内容
+		
+		目标规划函数示例：
+		
+		\begin{equation}
+			\begin{aligned}
+				& \max \quad E_k=\frac{S_k \cdot Y_{i, y}-Z_k \cdot X_{i, y}}{\gamma} \\
+				& \text { s.t. }\left\{\begin{array}{l}
+					Z_k=\frac{Y_{i, y} \cdot \beta_k}{1-\alpha_k} \\
+					S_k=X_{2, y}\left(1+V_k\right)\left(1+\beta_k\right) \\
+					\beta_k \in\{1, c\} \\
+					c>1 \\
+					
+				\end{array}\right.
+			\end{aligned}
+		\end{equation}
 	
 	\subsection{问题三模型的建立与求解}
 	

@@ -2,6 +2,8 @@ from vpython import *
 
 import numpy as np
 import config
+from scipy.optimize import fsolve
+import math
 
 # 函数
 # 根据theta计算螺线上点的位置
@@ -37,3 +39,18 @@ def find_delta_theta(theta, fixed_distance):
         else:
             high = mid
     return (low + high) / 2
+
+# 需要已知的参数 t 来求解 theta
+def theta_t(theta):
+    return -1/2 * np.log(np.sqrt(1 + theta**2) - theta) + 1/2 * theta * np.sqrt(theta ** 2 + 1)
+
+D = 0.55 # 螺距 m
+v = 1 # 龙头速度 m/s
+C = theta_t(32 * math.pi) * D / (2*math.pi) # 积分常数，不要动
+
+def equ(theta, t):
+    return - theta_t(theta) * D / (2 * math.pi) - v * t + C
+
+def t_to_theta(t):
+    initial = 0.0
+    return fsolve(equ, initial, args=(t))

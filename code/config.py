@@ -12,5 +12,5 @@ sys_length = 30
 start_time = time.time()
 integer_time = 0
 
-dis_tolerance = 0.001
+dis_tolerance = 1e-6
 time_tolerance = 1e-5

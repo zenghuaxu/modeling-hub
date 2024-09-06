@@ -1,5 +1,7 @@
 from calculate import *
+from info import *
 
+import time
 import numpy as np
 import config
 
@@ -30,7 +32,8 @@ def generate(points, lines, fixed_distances):
     # 龙头起始位置
     theta = 20 * np.pi
     while theta > 0:
-        rate(30)  # 控制移动速度
+        rate(60)  # 控制移动速度
+        record_time()
 
         # 更新第一个点的位置
         pos_1 = get_position(theta)
@@ -54,4 +57,5 @@ def generate(points, lines, fixed_distances):
 
         if theta < 0:
             theta = 20 * np.pi
+            config.start_time = time.time()
         

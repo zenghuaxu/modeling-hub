@@ -98,5 +98,3 @@ def t_to_dis(t, space):
         positions[i] = np.array([x, y])
 
     return positions
-
-print(t_to_dis(0, 55))

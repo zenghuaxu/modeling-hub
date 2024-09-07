@@ -80,7 +80,7 @@ def all_cross_check(dot_matrix):
 dot_matrix = np.empty((300, 224, 2))
 def read_from_dis_excel(time):
      # 从表格读取，后面改成从程序读取
-     file_path = 'result1_dis.xlsx'
+     file_path = '../result1_dis.xlsx'
      wb = load_workbook(file_path)
 
      # 选择工作表

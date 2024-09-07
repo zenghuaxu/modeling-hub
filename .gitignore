@@ -1,3 +1,5 @@
-.gitignore
 *.xml
 /.idea/
+__pacache__
+*.pyc
+*.xlsx

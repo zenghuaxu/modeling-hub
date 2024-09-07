@@ -4,6 +4,7 @@ from cross import cal_long_side
 
 import time
 import numpy as np
+import q4
 import config
 
 def generate_line(lines, positions):
@@ -35,7 +36,7 @@ def generate_bench_line(bench_lines, positions):
         bench_lines[3][i].append(vector(font_out[0], font_out[1], 0))
         bench_lines[3][i].append(vector(back_out[0], back_out[1], 0))
     
-def generate_spiral():
+def q1_generate_spiral():
     spiral = curve(color=color.black, radius=0.05)
 
     # 创建关键点
@@ -47,12 +48,12 @@ def generate_spiral():
         spiral.append(vector(x, y, 0))
         theta += 0.01
 
-def generate(points, lines, bench_lines):
+def q1_generate(points, lines, bench_lines):
     current_time = time.time() - config.start_time
     theta = t_to_theta(current_time)
     while theta > 0:
         rate(60)  # 控制移动速度
-        record_time()
+        record_time(current_time)
 
         # 更新第一个点的位置
         pos_1 = get_position(theta)
@@ -72,12 +73,58 @@ def generate(points, lines, bench_lines):
         generate_line(lines, positions)
         generate_bench_line(bench_lines, positions)
 
-        # 更新角度，继续移动
-        theta -= 0.05  # 控制第一个点的移动速度
-
-        if theta < 0:
-            config.start_time = time.time() - 350.0
-
         current_time = time.time() - config.start_time
         theta = t_to_theta(current_time)
-        
+
+def q4_generate_curve():
+    spiral = curve(color=color.black, radius=0.05)
+
+    # 创建关键点
+    t = config.q4_start_time
+    while t < config.q4_end_time:
+        x, y = t_to_xy_q4(t)
+        x = x * config.median
+        y = y * config.median
+        spiral.append(vector(x, y, 0))
+        t += 0.01
+
+def q4_generate(points, lines, bench_lines):
+    # current_time = time.time() - config.actual_q4_start_time
+    # end_time = time.time() - config.actual_q4_end_time
+    current_time = 5
+    end_time = 30
+    while current_time < end_time:
+        rate(60)  # 控制移动速度
+        record_time(current_time)
+
+        # 更新第一个点的位置
+        x, y = t_to_xy_q4(current_time)
+        x = x * config.median
+        y = y * config.median
+        pos_1 = vector(x, y, 0)
+        points[0].pos = pos_1
+
+        # 更新接下来的点的位置
+        ergodic_time = current_time
+        positions = [pos_1]
+        for i in range(1, len(points)):
+            st = time.time()
+            delta_time = find_delta_time(ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1])
+            et = time.time()
+            print("cal:", et - st)
+            ergodic_time -= delta_time
+            _x, _y = t_to_xy_q4(ergodic_time)
+            _x = _x * config.median
+            _y = _y * config.median
+            pos = vector(_x, _y, 0)
+            positions.append(pos)
+            points[i].pos = pos
+
+        # 更新连线
+        st = time.time()
+        generate_line(lines, positions)
+        generate_bench_line(bench_lines, positions)
+        et = time.time()
+        print("draw: ", et - st)
+
+        current_time += 2

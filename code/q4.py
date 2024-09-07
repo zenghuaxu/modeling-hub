@@ -8,9 +8,11 @@ D_q4 = 1.7 # 螺距 m
 v_q4 = 1 # 龙头速度 m/s
 
 theta0 = 2 * np.pi * R / D_q4
-# print(f"theta0 = {theta0 / (np.pi)} * pi")
+print(f"theta0 = {theta0 / (np.pi)} * pi")
+print(f"theta0 = {theta0}")
+print(f"theta0 + pi = {theta0 + np.pi}")
 k = (np.sin(theta0) + theta0 * np.cos(theta0)) / (np.cos(theta0) - theta0 * np.sin(theta0))
-# print(f"k = {k}")
+print(f"k = {k}")
 
 x0 = R * np.cos(theta0)
 y0 = R * np.sin(theta0)
@@ -18,7 +20,7 @@ y0 = R * np.sin(theta0)
 x0_ = -x0
 y0_ = -y0
 
-# print(f"(x0, y0) = ({x0}, {y0})")
+print(f"(x0, y0) = ({x0}, {y0})")
 
 A = np.array([[R * np.cos(theta0), R * np.sin(theta0)],
              [1, k]])
@@ -66,18 +68,19 @@ w1 = v_q4 / r1 # 第二段圆弧的角速度
 w2 = v_q4 / r2 # 第一段圆弧的角速度
 t1 = (theta_12 - theta_11) / w1 # 离开第一段圆弧的时刻
 t2 = t1 + (theta_22 - theta_21) / w2 # 离开第二段圆弧的时刻
+# print(f"t1={t1}, t2={t2}")
 
 def theta_t_q4(theta):
     return -1/2 * np.log(np.sqrt(1 + theta**2) - theta) + 1/2 * theta * np.sqrt(theta ** 2 + 1)
 
 C_q4_0 = theta_t_q4(theta0) * D_q4 / (2*math.pi) # 积分常数，不要动
-C_q4_3 = - theta_t_q4(theta0 + np.pi) * D_q4 / (2*math.pi) + v_q4 * t2
+C_q4_3 = - theta_t_q4(theta0) * D_q4 / (2*math.pi) + v_q4 * t2
 
 def equ_q4_0(theta, t):
     return - theta_t_q4(theta) * D_q4 / (2 * math.pi) - v_q4 * t + C_q4_0
 
 def equ_q4_3(theta, t):
-    return theta_t_q4(theta) * D_q4 / (2 * math.pi) - v_q4 * t + C_q4_3
+    return theta_t_q4(theta - np.pi) * D_q4 / (2 * math.pi) - v_q4 * t + C_q4_3
 
 def rho_q4_0(theta): # 极坐标进入路线方程
     return D_q4 / (2 * np.pi) * theta
@@ -120,8 +123,11 @@ def t_to_xy_q4(t):
         x = rho * np.cos(angle)
         y = rho * np.sin(angle)
         return x, y
-    
+
 # print(t_to_xy_q4(-0.1))
+
+# plt.style.use(['science'])
+# plt.rcParams['font.family'] = 'Microsoft YaHei'
 
 # # 定义等距螺线的角度范围
 # theta_spiral = np.linspace(theta0, 8 * np.pi, 1000)
@@ -152,15 +158,15 @@ def t_to_xy_q4(t):
 # fig, ax = plt.subplots()
 
 # # 绘制等距螺线
-# ax.plot(x_spiral, y_spiral, 'b', label='Spiral')
-# ax.plot(x_spiral_, y_spiral_, 'g', label='Spiral')
+# ax.plot(x_spiral, y_spiral, 'b', label='盘入螺线')
+# ax.plot(x_spiral_, y_spiral_, 'g', label='盘出螺线')
 
 # # 绘制以原点为中心的圆
-# ax.plot(x_circle, y_circle, 'r', label='Circle with radius 4.5')
+# ax.plot(x_circle, y_circle, 'r', label='掉头区域')
 
 # # 绘制以(x1, y1)为圆心的圆
-# ax.plot(x_circle1, y_circle1, 'orange', label='Circle centered at (x2, y2)')
-# ax.plot(x_circle2, y_circle2, 'orange', label='Circle centered at (x1, y1)')
+# ax.plot(x_circle1, y_circle1, 'orange', label='前一圆弧')
+# ax.plot(x_circle2, y_circle2, 'orange', label='后一圆弧')
 
 # # 绘制两个点
 # # ax.scatter([x3, x1], [y3, y1], color=['green', 'purple'], s=100, label=['Point (x3, y3)', 'Point (x1, y1)'])
@@ -171,14 +177,18 @@ def t_to_xy_q4(t):
 #     x, y = t_to_xy_q4(dt)
 #     # print(f"x = {x}, y = {y}")
 #     ax.scatter([x], [y], s=10, color = ["purple"])
+# # ax.plot([x1, xt], [y1, yt], color='purple')
+# # ax.plot([x1, x0], [y1, y0], color='purple')
+# # ax.plot([x2, xt], [y2, yt], color='purple')
+# # ax.plot([x2, x0_], [y2, y0_], color='purple')
 
 # # 添加图例
 # # ax.legend()
 
 # # 设置图表标题和显示图形
-# ax.set_title('Spiral, Two Circles, and Two Points in Cartesian Coordinates')
-# ax.set_xlabel('X axis')
-# ax.set_ylabel('Y axis')
+# ax.set_title('问题四行进曲线')
+# ax.set_xlabel('X 坐标')
+# ax.set_ylabel('Y 坐标')
 
 # ax.set_aspect('equal')
 

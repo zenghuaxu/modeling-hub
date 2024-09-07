@@ -1,8 +1,9 @@
 from vpython import *
-import numpy as np
+from q4 import *
 from scipy.optimize import fsolve
-import math
 
+import math
+import numpy as np
 import config
 
 # 函数
@@ -33,6 +34,23 @@ def find_delta_theta(theta, fixed_distance):
         pos1 = get_position(theta)
         pos2 = get_position(theta + mid)
         dist = cartesian_distance(pos1, pos2)
+        # dist = polar_distance(theta, theta + mid)
+        if dist < fixed_distance:
+            low = mid
+        else:
+            high = mid
+    return (low + high) / 2
+
+def find_delta_time(time, fixed_distance):
+    low = 1.5
+    high = 6
+    while high - low > config.dis_tolerance:
+        mid = (low + high) / 2
+        x1, y1 = t_to_xy_q4(time)
+        x2, y2 = t_to_xy_q4(time - mid)
+        x1, y1 = x1 * 100, y1 * 100
+        x2, y2 = x2 * 100, y2 * 100
+        dist = list_cartesian_distance([x1, y1], [x2, y2])
         # dist = polar_distance(theta, theta + mid)
         if dist < fixed_distance:
             low = mid

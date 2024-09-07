@@ -4,7 +4,7 @@ import config
 
 # 创建一个文本标签用于显示运行时间
 time_label = label(
-    pos=vector(-18, 13, 0),  # 标签的位置
+    pos=vector(-24, 20, 0),  # 标签的位置
     text="Time: 0.0s",  # 初始文本
     xoffset=1,  # 文本的X偏移量
     yoffset=1,  # 文本的Y偏移量
@@ -14,9 +14,7 @@ time_label = label(
     color=color.black  # 字体颜色
 )
 
-def record_time():
-    start_time = config.start_time
-    elapsed_time = time.time() - start_time
-    time_label.text = f"Time: {elapsed_time:.1f}s"
+def record_time(current_time):
+    time_label.text = f"Time: {current_time:.1f}s"
 
 

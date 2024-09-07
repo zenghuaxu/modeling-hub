@@ -63,8 +63,8 @@ def cross_test(edge1, edge2):
     #print(vector1, vector2)
     #print(vector3, vector4)
     if vector1 * vector2 <= 0 and vector3 * vector4 <= 0:
-        print(edge1, edge2)
-        print(vector1, vector2, vector3, vector4)
+        print(f'crossed edges:\n1:{edge1},\n2:{edge2}')
+        #print(vector1, vector2, vector3, vector4)
     return vector1 * vector2 <= 0 and vector3 * vector4 <= 0
 
 #print(cross_test(np.array([[0,0],[1,0]]),np.array([[0,-1],[0.000,0.3]])))
@@ -81,7 +81,7 @@ def all_cross_check(dot_matrix):
         for j in range(i - 3, 0, -2):
             #print(i, j)
             if cross_test(edge_list[i], edge_list[j]):
-                print(i // 2, j // 2)
+                print(f'crossed benches:{i // 2}, {j // 2}')
                 cross = True
                 break
         if cross:
@@ -97,12 +97,12 @@ def all_cross_check(dot_matrix):
 #      file_path = '../result1_dis.xlsx'
 #      wb = load_workbook(file_path)
 #
-#      # 选择工作表
-#      ws = wb.active  # 或者 wb['SheetName']
+#
+#      ws = wb.active
 #      rows_to_read = range(2, 450)
 #      cols_to_read = range(time + 2, time + 3)
 #
-#      # 如果你需要行号和列号，可以这样做：
+#
 #      for row_num in rows_to_read:
 #          for col_num in  cols_to_read:
 #              cell_value = ws.cell(row=row_num, column=col_num).value
@@ -141,27 +141,28 @@ def cal_nearest(space):
 
 #cal_nearest(45)
 
-#
-# for t in range(41240, 41260, 1):
-#     time = t / 100
-#     matrix = t_to_dis(time)
-#     #print(t_to_dis(time))
-#     print(time)
-#     print(all_cross_check(matrix))
+def local_check():
+    for t in range(41200, 41300, 5):
+        time = t / 100
+        matrix = t_to_dis(time, 55)
+        #print(t_to_dis(time))
+        print(time)
+        print(all_cross_check(matrix))
+
+# local_check()
 
 max = 30
-space = 45.5
 w = 0.5
 c1 = 0.5
 c2 = 1
-max_time = 350
-def pso(n, c1, c2):
+max_time = 500
+def pso_cal_min_distance(space, n, c1, c2):
     partical = []
     partical_v = []
     pbest    = []
     gbest    = (max_time, True)
     for i in range(n):
-        print(i)
+        print(f'initial:{i}/{n}')
         partical.append(random.random() * max_time)
         partical_v.append(random.random())
         pbest.append((partical[i], all_cross_check(t_to_dis(partical[i], space))))
@@ -189,8 +190,25 @@ def pso(n, c1, c2):
             if pbest[i][0] < gbest[0] and pbest[i][1]:
                 gbest = pbest[i]
 
+            if pbest[i][0] > gbest[0]:
+                pbest[i] = gbest * random.random() # if not best, go to a random smaller position
+
             print(f'{i}, {pbest[i]}, {gbest}')
-            print(f'{t_to_theta(gbest[0]) / 2 / np.pi * space}')
+            print(f'{t_to_theta(gbest[0], D=space / 100) / 2 / np.pi * space}')
+            if t_to_theta(gbest[0], D=space / 100) / 2 / np.pi * space > 450:
+                return False # cannot enter
 
+    return True # can enter
+#
+# smallest = 45
+# biggist  = 55
+# space = (biggist + smallest) / 2
+# for i in range(10):
+#     print(space)
+#     if pso_cal_min_distance(space, 10, c1, c2):
+#         biggist = space
+#     else :
+#         smallest = space
+#     space = (biggist + smallest) / 2
+#
 
-pso(10, c1, c2)

@@ -27,12 +27,37 @@ def polar_distance(theta_1, theta_2):
 def find_delta_theta(theta, fixed_distance):
     # 二分上下限
     low = 0
-    high = 4
+    high = np.pi - 1e-2
     while high - low > config.dis_tolerance:
         mid = (low + high) / 2
         pos1 = get_position(theta)
         pos2 = get_position(theta + mid)
         dist = cartesian_distance(pos1, pos2)
+        # dist = polar_distance(theta, theta + mid)
+        if dist < fixed_distance:
+            low = mid
+        else:
+            high = mid
+    return (low + high) / 2
+
+def list_cartesian_distance(pos1, pos2):
+    return np.sqrt((pos1[0] - pos2[0]) ** 2 + (pos1[1] - pos2[1]) ** 2)
+
+def get_actual_position(theta):
+    r = config.spacing * theta
+    x = r * np.cos(theta) / (0.4 * np.pi) * 55
+    y = r * np.sin(theta) / (0.4 * np.pi) * 55
+    return [x, y]
+
+def find_actual_delta_theta(theta, fixed_distance):
+    # 二分上下限
+    low = 0
+    high = 4
+    while high - low > config.dis_tolerance:
+        mid = (low + high) / 2
+        pos1 = get_actual_position(theta)
+        pos2 = get_actual_position(theta + mid)
+        dist = list_cartesian_distance(pos1, pos2)
         # dist = polar_distance(theta, theta + mid)
         if dist < fixed_distance:
             low = mid
@@ -54,3 +79,22 @@ def equ(theta, t):
 def t_to_theta(t):
     initial = 0.0
     return fsolve(equ, initial, args=(t))
+
+def t_to_dis(t):
+    theta = t_to_theta(t)
+    pos = get_actual_position(theta)
+    x = pos[0][0] / 100.0
+    y = pos[1][0] / 100.0
+    positions = [[x, y]]
+
+    current_theta = theta
+    for i in range(1, 224):
+        delta_theta = find_actual_delta_theta(current_theta, config.actual_fixed_distances[0 if i == 1 else 1])
+        current_theta += delta_theta
+        pos = get_actual_position(current_theta)
+        x = pos[0][0] / 100.0
+        y = pos[1][0] / 100.0
+        positions.append([x, y])
+
+    return positions
+

@@ -4,3 +4,5 @@ __pacache__
 *.pyc
 *.xlsx
 test
+.vscode
+.ipynb_checkpoints

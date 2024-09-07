@@ -73,12 +73,6 @@ def q1_generate(points, lines, bench_lines):
         generate_line(lines, positions)
         generate_bench_line(bench_lines, positions)
 
-        # 更新角度，继续移动
-        theta -= 0.05  # 控制第一个点的移动速度
-
-        if theta < 0:
-            config.start_time = time.time() - 350.0
-
         current_time = time.time() - config.start_time
         theta = t_to_theta(current_time)
 
@@ -95,8 +89,10 @@ def q4_generate_curve():
         t += 0.01
 
 def q4_generate(points, lines, bench_lines):
-    current_time = 380
-    end_time = 600
+    # current_time = time.time() - config.actual_q4_start_time
+    # end_time = time.time() - config.actual_q4_end_time
+    current_time = 5
+    end_time = 30
     while current_time < end_time:
         rate(60)  # 控制移动速度
         record_time(current_time)
@@ -131,4 +127,4 @@ def q4_generate(points, lines, bench_lines):
         et = time.time()
         print("draw: ", et - st)
 
-        current_time += 5
+        current_time += 2

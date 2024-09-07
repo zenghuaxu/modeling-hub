@@ -229,7 +229,7 @@ def q4_v_xlsx_init():
         cell.font = font_new
 
 def q4_v_fill():
-    for time in range(-100, 101):
+    for time in range(10, 12):
         dt = 1e-5
         x, y = t_to_xy_q4(time)
         _x, _y = t_to_xy_q4(time - dt)

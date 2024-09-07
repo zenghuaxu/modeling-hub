@@ -1,8 +1,12 @@
 import numpy as np
 from astropy.modeling.functional_models import Box1D
 from mpmath.math2 import sqrt2
+from numpy.matrixlib.defmatrix import matrix
 from statsmodels.tsa.statespace.simulation_smoother import check_random_state
 from openpyxl import load_workbook
+from sympy.abc import epsilon
+
+from calculate import t_to_dis
 
 # 2 dot -> 4 edge
 lambda_of_head = 27.5 / 286
@@ -52,6 +56,9 @@ def cross_test(edge1, edge2):
 
     #print(vector1, vector2)
     #print(vector3, vector4)
+    if vector1 * vector2 <= 0 and vector3 * vector4 <= 0:
+        print(edge1, edge2)
+        print(vector1, vector2, vector3, vector4)
     return vector1 * vector2 <= 0 and vector3 * vector4 <= 0
 
 #print(cross_test(np.array([[0,0],[1,0]]),np.array([[0,-1],[0.000,0.3]])))
@@ -65,7 +72,7 @@ def all_cross_check(dot_matrix):
 
     cross = False
     for i in range(2, len(edge_list), 2):
-        for j in range(i - 3, i - 20 * 2, -2):
+        for j in range(i - 3, 0, -2):
             #print(i, j)
             if cross_test(edge_list[i], edge_list[j]):
                 cross = True
@@ -104,3 +111,28 @@ def check_excel():
          print(f'{i}s')
          read_from_dis_excel(i)
          print(all_cross_check(dot_matrix[i]))
+
+delta = 0.1
+crash = 410
+epsilon = 0.01
+while delta >= epsilon:
+    low = 408
+    high = crash
+    time = low
+    while time < high:
+        time = time + delta
+        matrix = t_to_dis(time)
+        print(time)
+        print(all_cross_check(matrix))
+        if all_cross_check(matrix):
+            crash = time if time < crash else crash
+            break
+    delta /= 10
+
+#
+# for t in range(41240, 41260, 1):
+#     time = t / 100
+#     matrix = t_to_dis(time)
+#     #print(t_to_dis(time))
+#     print(time)
+#     print(all_cross_check(matrix))

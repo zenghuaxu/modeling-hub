@@ -81,11 +81,12 @@ def t_to_theta(t):
     return fsolve(equ, initial, args=(t))
 
 def t_to_dis(t):
+    positions = np.empty((224, 2))
     theta = t_to_theta(t)
     pos = get_actual_position(theta)
     x = pos[0][0] / 100.0
     y = pos[1][0] / 100.0
-    positions = [[x, y]]
+    positions[0] = np.array([x, y])
 
     current_theta = theta
     for i in range(1, 224):
@@ -94,7 +95,7 @@ def t_to_dis(t):
         pos = get_actual_position(current_theta)
         x = pos[0][0] / 100.0
         y = pos[1][0] / 100.0
-        positions.append([x, y])
+        positions[i] = np.array([x, y])
 
     return positions
 

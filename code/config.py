@@ -21,7 +21,7 @@ actual_q4_start_time = time.time() + 0
 actual_q4_end_time = time.time() - 100.0
 integer_time = 0
 
-dis_tolerance = 1e-5
+dis_tolerance = 1e-12
 time_tolerance = 1e-5
 
 ##################################

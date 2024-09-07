@@ -190,6 +190,9 @@
 			$A_0$ & 龙头把手的中心点  \\
 			$A_i$ & 第 i 节龙身靠前把手的中心点  \\
 			$A_{223}$ & 龙尾后侧把手中心点  \\
+			$B$ & 掉头曲线起始位置 \\
+			$B'$ & 掉头曲线结束位置 \\
+			$l_B$ & 掉头曲线起始位置切线 \\
 			\hline
 		\end{tabular}
 		% \hline是横线，采用\makebox设置列宽
@@ -366,9 +369,22 @@
         \subsubsection{模型的二分查找求解}
 	\subsection{问题四模型的建立与求解}
 	
+	% TODO: 先说明我们是用题目中叙述的圆弧来进行建模，再叙述建模求解过程
+	依据题意，在满足各部分相切，且前一圆弧的半径是后一圆弧半径的两倍的条件下，两圆弧的位置仅由进入和离开掉头区域的位置及方向唯一确定。因此，\textbf{两圆弧的位置不能再优化}，在掉头区域内的行进路线如图所示，。% TODO
+	
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=0.7\textwidth]{image/Figure_5412.png}
+		\caption{问题四舞龙队行进路线}
+		\label{Figure_5412}
+	\end{figure}
+	
 	\subsubsection{确定掉头曲线}
 	
-	依据题意，为了确定掉头曲线的方程使得各部分相切，\textbf{需要先求出掉头曲线的起始、结束位置的坐标和切线斜率}。由于盘出螺线和盘入螺线呈中心对称，盘入盘出螺线的极坐标方程可以表示为：
+	依据题意，为了确定掉头曲线的方程使得各部分相切，\textbf{需要先求出掉头曲线的起始、结束位置的坐标和切线斜率}。
+	并在此基础上\textbf{求解两圆弧的圆心位置即半径}
+	
+	由于盘出螺线和盘入螺线呈中心对称，盘入盘出螺线的极坐标方程可以表示为：
 	
 	\begin{equation}
 		\rho = \frac{D}{2\pi} \theta
@@ -390,15 +406,15 @@
 	换算成直角坐标即（单位：米）：
 	$$ (x_0, y_0) = (-2.711855, -3.591077) $$
 	$$ (x_0', y_0') = (2.711855, 3.591077) $$
-	确定了点 $B$ 和 $B'$ 后，还需要确定进入掉头区域时的速度方向，用以计算相切条件。由盘入盘出螺线的中心对称性可知两点处的切线平行，斜率相同，因此只需要计算盘入曲线的切线斜率 $k$ 。
+	确定了点 $B$ 和点 $B'$ 后，还需要确定进入掉头区域时的速度方向，用以计算相切条件。由盘入盘出螺线的中心对称性可知两点处的切线平行，斜率相同，因此只需要计算盘入曲线的切线斜率 $k$ 。
 	
 	盘入曲线的直角坐标表达式为：
 	
 	\begin{align}
 		\left\{
 		\begin{aligned}
-			x &= \rho \cos(\theta) = \frac{D}{2\pi} \theta \cos(\theta), \\
-			y &= \rho \sin(\theta) = \frac{D}{2\pi} \theta \sin(\theta).
+			x &= \rho \cos(\theta) = \frac{D}{2\pi} \theta \cos(\theta) \\
+			y &= \rho \sin(\theta) = \frac{D}{2\pi} \theta \sin(\theta)
 		\end{aligned}
 		\right.
 	\end{align}
@@ -409,8 +425,26 @@
 		k = \frac{dy}{dx}\Bigg|_{\theta=\theta_0} = \frac{dy}{d\theta} \frac{1}{\frac{dx}{d\theta}} \Bigg|_{\theta=\theta_0} = \frac{\sin\theta_0 + \theta_0 \cos(\theta_0)}{\cos(\theta_0) - \theta_0 \sin(\theta_0)}
 	\end{equation}
 	
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=0.5\textwidth]{image/Figure_5411.png}
+		\caption{掉头曲线示意}
+		\label{Figure_5411}
+	\end{figure}
 	
-	
+	如图所示 % TODO
+	设前一圆弧圆心为 $O_1$ 后一圆弧圆心为 $O_2$ ，掉头曲线的起始位置和结束位置分别为点 $B$ 和点 $B'$ 。延长 $B O_1$ 至点 $O'$ 使得 $O_1O' = O_2B'$ 。设前一圆弧半径为 $r_1$ ，后一圆弧半径为 $r_2$ ，则有 $r_1 = 2r_2$ 。舞龙队的沿 $\overset{\frown}{B_1 P}$, $\overset{\frown}{PB_2}$行进。 连接 $O'B'$ 可知四边形 $O'B'O_2O1$ 为平行四边形，因此有： 
+	$$ O'B'= O_1O_2 = r_1 + r_2 = 3r_2 = BO_1 + O_1O' = O'B$$
+	同时，由于第一段圆弧是和盘入螺线相切的，因此设 $B$ 点处的切线为 $l_B$ 则有 $O'B \perp l_B$。而 $l_B$ 的斜率为 $k$ ，因此 $O'B$ 的斜率为 $-\frac{1}{k}$ 。联立：
+	\begin{align}
+		\left\{
+		\begin{aligned}
+			O'B'=O'B \\
+			\frac{x_{O'} - x_B}{y_{O'} - y_B} = -\frac{1}{k}
+		\end{aligned}
+		\right.
+	\end{align}
+	即可解得点 $O'(0.215914, -0.163050)$ 。然后，由 $\overrightarrow{OO_1} = \overrightarrow{OB_1} + 2\overrightarrow{O_1O}$ ， $\overrightarrow{OO_2} = \overrightarrow{OB_2} + \overrightarrow{O'O}$ 即可解得两圆弧的圆心坐标 $O_1(x_1, y_1)$ $O_2(x_2, y_2)$
 	
 	\subsubsection{确定舞龙队行进路线的参数方程}
 	

@@ -81,8 +81,6 @@ def t_to_theta(t):
     return fsolve(equ, initial, args=(t))
 
 def t_to_dis(t, space):
-    actual_fixed_distances = [2 * config._spacing * np.pi * config.len_head / space,
-                              2 * config._spacing * np.pi * config.len_body / space]
     positions = np.empty((224, 2))
     theta = t_to_theta(t)
     pos = get_actual_position(theta, space)
@@ -92,7 +90,7 @@ def t_to_dis(t, space):
 
     current_theta = theta
     for i in range(1, 224):
-        delta_theta = find_actual_delta_theta(current_theta, actual_fixed_distances[0 if i == 1 else 1], space)
+        delta_theta = find_actual_delta_theta(current_theta, config.actual_fixed_distances[0 if i == 1 else 1], space)
         current_theta += delta_theta
         pos = get_actual_position(current_theta, space)
         x = pos[0][0] / 100.0
@@ -101,3 +99,4 @@ def t_to_dis(t, space):
 
     return positions
 
+print(t_to_dis(0, 55))

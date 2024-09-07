@@ -1,7 +1,13 @@
 import numpy as np
 from astropy.modeling.functional_models import Box1D
 from mpmath.math2 import sqrt2
+from numpy.matrixlib.defmatrix import matrix
 from statsmodels.tsa.statespace.simulation_smoother import check_random_state
+from openpyxl import load_workbook
+from sympy.abc import epsilon
+
+import config
+from calculate import t_to_dis
 
 # 2 dot -> 4 edge
 lambda_of_head = 27.5 / 286
@@ -51,6 +57,9 @@ def cross_test(edge1, edge2):
 
     #print(vector1, vector2)
     #print(vector3, vector4)
+    if vector1 * vector2 <= 0 and vector3 * vector4 <= 0:
+        print(edge1, edge2)
+        print(vector1, vector2, vector3, vector4)
     return vector1 * vector2 <= 0 and vector3 * vector4 <= 0
 
 #print(cross_test(np.array([[0,0],[1,0]]),np.array([[0,-1],[0.000,0.3]])))
@@ -65,7 +74,7 @@ def all_cross_check(dot_matrix):
     cross = False
     for i in range(2, len(edge_list), 2):
         for j in range(i - 3, 0, -2):
-            print(i, j)
+            #print(i, j)
             if cross_test(edge_list[i], edge_list[j]):
                 cross = True
                 break
@@ -75,3 +84,57 @@ def all_cross_check(dot_matrix):
     return cross
 
 #print(all_cross_check(np.array([[0,0],[386,0],[386 + 165, 0]])))
+
+dot_matrix = np.empty((300, 224, 2))
+def read_from_dis_excel(time):
+     # 从表格读取，后面改成从程序读取
+     file_path = '../result1_dis.xlsx'
+     wb = load_workbook(file_path)
+
+     # 选择工作表
+     ws = wb.active  # 或者 wb['SheetName']
+     rows_to_read = range(2, 450)
+     cols_to_read = range(time + 2, time + 3)
+
+     # 如果你需要行号和列号，可以这样做：
+     for row_num in rows_to_read:
+         for col_num in  cols_to_read:
+             cell_value = ws.cell(row=row_num, column=col_num).value
+             #print(f'Cell ({row_num}, {col_num}): {cell_value}')
+             dot_matrix[time][row_num // 2 - 1][row_num % 2] = cell_value
+
+     #print(dot_matrix)
+
+def check_excel():
+     max_time = 300
+     dot_matrix = np.empty((max_time + 1, 224, 2))
+     for i in range(290, max_time + 1):
+         print(f'{i}s')
+         read_from_dis_excel(i)
+         print(all_cross_check(dot_matrix[i]))
+
+delta = 0.1
+crash = 410
+epsilon = 0.01
+while delta >= epsilon:
+    low = 408
+    high = crash
+    time = low
+    while time < high:
+        time = time + delta
+        space = config.space  # 自行设置
+        matrix = t_to_dis(time, space)
+        print(time)
+        print(all_cross_check(matrix))
+        if all_cross_check(matrix):
+            crash = time if time < crash else crash
+            break
+    delta /= 10
+
+#
+# for t in range(41240, 41260, 1):
+#     time = t / 100
+#     matrix = t_to_dis(time)
+#     #print(t_to_dis(time))
+#     print(time)
+#     print(all_cross_check(matrix))

@@ -1,9 +1,9 @@
 from vpython import *
-
 import numpy as np
-import config
 from scipy.optimize import fsolve
 import math
+
+import config
 
 # 函数
 # 根据theta计算螺线上点的位置
@@ -69,16 +69,16 @@ def find_actual_delta_theta(theta, fixed_distance, space):
 def theta_t(theta):
     return -1/2 * np.log(np.sqrt(1 + theta**2) - theta) + 1/2 * theta * np.sqrt(theta ** 2 + 1)
 
-D = 0.55 # 螺距 m
-v = 1 # 龙头速度 m/s
-C = theta_t(32 * math.pi) * D / (2*math.pi) # 积分常数，不要动
+D_q1 = 0.55 # 螺距 m
+v_q1 = 1 # 龙头速度 m/s
+C_q1 = theta_t(32 * math.pi) * D_q1 / (2*math.pi) # 积分常数，不要动
 
-def equ(theta, t):
+def equ(theta, t, D, v, C):
     return - theta_t(theta) * D / (2 * math.pi) - v * t + C
 
-def t_to_theta(t):
+def t_to_theta(t, D=D_q1, v=v_q1, C=C_q1):
     initial = 0.0
-    return fsolve(equ, initial, args=(t))
+    return fsolve(equ, initial, args=(t, D, v, C))
 
 def t_to_dis(t, space):
     positions = np.empty((224, 2))

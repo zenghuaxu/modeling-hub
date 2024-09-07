@@ -258,7 +258,7 @@ def q4_v_fill():
 
     wb.save("result4_v.xlsx")
     
-def q4_v_fill():
+def q4_v_fill_test():
     for time in range(10, 15):
         dt = 1e-5
         x, y = t_to_xy_q4(time)
@@ -302,4 +302,6 @@ def q4_v_fill():
 # q4_dis_fill()
 
 # q4_v_xlsx_init()
-q4_v_fill()
+# q4_v_fill()
+
+q4_v_fill_test()

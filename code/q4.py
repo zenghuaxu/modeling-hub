@@ -6,8 +6,6 @@ import math
 R = 4.5 # m
 D_q4 = 1.7 # 螺距 m
 v_q4 = 1 # 龙头速度 m/s
-C_q4_0 = theta_t_q4(theta0) * D_q4 / (2*math.pi) # 积分常数，不要动
-C_q4_3 = - theta_t_q4(theta0 + np.pi) * D_q4 / (2*math.pi) + v_q4 * t2
 
 theta0 = 2 * np.pi * R / D_q4
 # print(f"theta0 = {theta0 / (np.pi)} * pi")
@@ -72,7 +70,8 @@ t2 = t1 + (theta_22 - theta_21) / w2 # 离开第二段圆弧的时刻
 def theta_t_q4(theta):
     return -1/2 * np.log(np.sqrt(1 + theta**2) - theta) + 1/2 * theta * np.sqrt(theta ** 2 + 1)
 
-
+C_q4_0 = theta_t_q4(theta0) * D_q4 / (2*math.pi) # 积分常数，不要动
+C_q4_3 = - theta_t_q4(theta0 + np.pi) * D_q4 / (2*math.pi) + v_q4 * t2
 
 def equ_q4_0(theta, t):
     return - theta_t_q4(theta) * D_q4 / (2 * math.pi) - v_q4 * t + C_q4_0

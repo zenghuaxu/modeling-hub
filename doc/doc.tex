@@ -177,8 +177,11 @@
 			$D$ & 等距螺线螺距  \\
 			$L_1$ & 龙头板凳长  \\
 			$L_2$ & 龙身龙尾板凳长  \\
-			$l$ & 板凳板头长 \\
 			$d$ & 板凳宽  \\
+			$l$ & 板凳板头长 \\
+			$R$ & 掉头区域半径大小\\
+			$r_1$ & 前一掉头圆弧半径\\
+			$r_2$ & 后一掉头圆弧半径\\
 			$t$ & 舞龙队运动时间  \\
 			$A_0$ & 龙头把手的中心点  \\
 			$A_i$ & 第 i 节龙身靠前把手的中心点  \\
@@ -206,12 +209,12 @@
 		
 		为了做到这一点，我们选用了二分查找算法，在任一把手 $A_i$ 位置已知的情况下，查找下一把手所在位置。即给定 $\theta_{i}$ ，确定 $\theta_{i+1}$ 的大小。而 $\theta_{i+1}$ 合适当且仅当两把手的间距正好等于板凳两孔中心的距离。根据极坐标下的余弦定理，两点间的位置即为：
 		
-		$$\Delta l = \sqrt{\rho_i^2 + \rho_{i+1}^2 - 2\rho_i \rho_{i+1} cos(\theta_i - \theta_{i+1})}$$
+		$$\Delta l = \sqrt{\rho_i^2 + \rho_{i+1}^2 - 2\rho_i \rho_{i+1} \cos(\theta_i - \theta_{i+1})}$$
 		
 		代入 $\rho$ 并令 $\Delta l$ 分别减去龙头和龙身除去板头的长度，即分别减去 $L_1 - 2 \cdot l$ 和 $L_2 - 2 \cdot l$，即可得到二分查找的目标函数 $f$ ，其零点即为 $\theta_{i+1}$ 的二分查找值：
 		
 		\begin{equation}
-			f(\theta) = \frac{D}{2\pi} \sqrt{\theta^2 + \theta_i^2 - 2\theta \theta_i cos(\theta - \theta_i)} - (L_j - 2l), \quad j=1, 2
+			f(\theta) = \frac{D}{2\pi} \sqrt{\theta^2 + \theta_i^2 - 2\theta \theta_i \cos(\theta - \theta_i)} - (L_j - 2l), \quad j=1, 2
 		\end{equation} 
 		
 		目标函数 $f$ 二分查找所得的零点即为 $\theta_{i+1}$ 的数值解。
@@ -235,7 +238,7 @@
 		联立 (1) 和 (3) 式消去 $\rho$ 即可解得龙头的辐角 $\theta$ 和时间 $t$ 满足以下关系：
 		
 		\begin{equation}
-			\frac{D}{2\pi}(-\frac{1}{2}ln(\sqrt{\theta^2+1}-\theta)+\frac{1}{2}\theta\sqrt{\theta^2+1})=vt+C
+			\frac{D}{2\pi}(-\frac{1}{2}\ln(\sqrt{\theta^2+1}-\theta)+\frac{1}{2}\theta\sqrt{\theta^2+1})=vt+C
 		\end{equation}
 		
 		% TODO 常数 C 需要进一步计算
@@ -279,7 +282,7 @@
 				第 101 节龙身 y (m) &-9.918311 &	-8.001384 &	-7.557638 &	-8.471614 &	7.831999 &	3.936008 \\ \hline
 				第 151 节龙身 x (m) &10.861726 &	6.682311 &	2.388757 &	1.005154 &	4.451294 &	7.040740 \\ \hline
 				第 151 节龙身 y (m) &1.828753 &	8.134544 &	9.727411 &	9.424751 &	-7.486030 &	4.393013 \\ \hline
-				第 201 节龙身 x (m) &4.555102 &	-6.619664 &	-10.627211 &	-9.287720 &	-1.731014 &	-7.458662 \\ \hlin
+				第 201 节龙身 x (m) &4.555102 &	-6.619664 &	-10.627211 &	-9.287720 &	-1.731014 &	-7.458662 \\ \hline
 				第 201 节龙身 y (m) &10.725118 &	9.025570 &	1.359847 &	-4.246673 &	9.344557 &	-5.263384 \\ \hline
 				龙尾（后） x (m)    &-5.305444 &	7.364557 &	10.974348 &	7.383896 &	7.057739 &	1.785033 \\ \hline
 				龙尾（后） y (m)    &-10.676584 &	-8.797992 &	0.843473 &	7.492370 &	-6.846021 &	9.301164 \\ \hline
@@ -307,17 +310,6 @@
 		\end{tabular}
 		% \hline是横线，采用\makebox设置列宽
 		\end{table}
-	
-	
-	
-	
-	
-		
-	
-		计算公式模版：
-		\begin{equation}
-			r=\frac{\sum_{i=1}^n\left(X_i-\bar{X}\right)\left(Y_i-\bar{Y}\right)}{\sqrt{\sum_{i=1}^n\left(X_i-\bar{X}\right)^2} \sqrt{\sum_{i=1}^n\left(Y_i-\bar{Y}\right)^2}}
-		\end{equation}
 		
 		相关系数矩阵模版:
 		
@@ -354,6 +346,60 @@
 		\end{equation}
 	
 	\subsection{问题三模型的建立与求解}
+	
+	\subsection{问题四模型的建立与求解}
+	
+	\subsubsection{确定掉头曲线}
+	
+	依据题意，为了确定掉头曲线的方程使得各部分相切，\textbf{需要先求出掉头曲线的起始、结束位置的坐标和切线斜率}。由于盘出螺线和盘入螺线呈中心对称，盘入盘出螺线的极坐标方程可以表示为：
+	
+	\begin{equation}
+		\rho = \frac{D}{2\pi} \theta
+	\end{equation}
+	
+	\begin{equation}
+		\rho = \frac{D}{2\pi} (\theta - \pi)
+	\end{equation}
+	
+	而掉头区域是直径为 $R = 9$ 米的圆形区域，其圆心为原点。其极坐标方程可以表示为：
+	
+	\begin{equation}
+		\rho = R
+	\end{equation}
+	
+	分别联立两螺线方程和圆方程可以解得掉头区域的入口 $B$ 和出口 $B'$ 的极坐标分别为：
+	$$ B(\rho, \theta) = (R, \theta_0) = (4.5, 16.631961) $$
+	$$ B'(\rho, \theta) = (R, \theta_0 + \pi) = (4.5, 19.773553)$$
+	换算成直角坐标即（单位：米）：
+	$$ (x_0, y_0) = (-2.711855, -3.591077) $$
+	$$ (x_0', y_0') = (2.711855, 3.591077) $$
+	确定了点 $B$ 和 $B'$ 后，还需要确定进入掉头区域时的速度方向，用以计算相切条件。由盘入盘出螺线的中心对称性可知两点处的切线平行，斜率相同，因此只需要计算盘入曲线的切线斜率 $k$ 。
+	
+	盘入曲线的直角坐标表达式为：
+	
+	\begin{align}
+		\left\{
+		\begin{aligned}
+			x &= \rho \cos(\theta) = \frac{D}{2\pi} \theta \cos(\theta), \\
+			y &= \rho \sin(\theta) = \frac{D}{2\pi} \theta \sin(\theta).
+		\end{aligned}
+		\right.
+	\end{align}
+	
+	在直角坐标系下取 $y$ 对 $x$ 的微分即可得到掉头曲线起始位置和结束为止的切线斜率：
+	
+	\begin{equation}
+		k = \frac{dy}{dx}\Bigg|_{\theta=\theta_0} = \frac{dy}{d\theta} \frac{1}{\frac{dx}{d\theta}} \Bigg|_{\theta=\theta_0} = \frac{\sin\theta_0 + \theta_0 \cos(\theta_0)}{\cos(\theta_0) - \theta_0 \sin(\theta_0)}
+	\end{equation}
+	
+	
+	
+	
+	\subsubsection{确定舞龙队行进路线的参数方程}
+	
+	\subsubsection{求解舞龙队的速度和位置}
+	
+	\subsection{问题五模型的建立与求解}
 	
 	
 	%Part Six

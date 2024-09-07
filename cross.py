@@ -53,7 +53,7 @@ def cross_test(edge1, edge2):
     #print(vector3, vector4)
     return vector1 * vector2 <= 0 and vector3 * vector4 <= 0
 
-#print(cross_test(np.array([[0,0],[1,1]]),np.array([[0,-1],[-1,3]])))
+#print(cross_test(np.array([[0,0],[1,0]]),np.array([[0,-1],[0.000,0.3]])))
 
 def all_cross_check(dot_matrix):
     edge_list = []
@@ -65,24 +65,13 @@ def all_cross_check(dot_matrix):
     cross = False
     for i in range(2, len(edge_list), 2):
         for j in range(i - 3, 0, -2):
+            print(i, j)
             if cross_test(edge_list[i], edge_list[j]):
                 cross = True
                 break
+        if cross:
+            break
 
     return cross
 
-print(all_cross_check(np.array([[0,0],[386,0],[386 + 165, 0]])))
-
-from openpyxl import load_workbook
-
-# 加载现有的Excel文件
-workbook = load_workbook('example.xlsx')
-# 选择工作表
-sheet = workbook.active
-# 读取单元格内容
-cell = sheet['A1']
-print(cell.value)
-# 写入单元格内容
-sheet['A2'] = 'Hello, World!'
-# 保存对Excel文件的更改
-workbook.save('example.xlsx')
+#print(all_cross_check(np.array([[0,0],[386,0],[386 + 165, 0]])))

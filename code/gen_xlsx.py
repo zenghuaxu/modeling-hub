@@ -110,8 +110,8 @@ def v_fill_xlsx():
 
     wb.save("result1_v.xlsx")
 
-dis_xlsx_init()
-dis_fill_xlsx()
+# dis_xlsx_init()
+# dis_fill_xlsx()
 
 # v_xlsx_init()
 # v_fill_xlsx()

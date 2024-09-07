@@ -8,7 +8,7 @@ import math
 # 函数
 # 根据theta计算螺线上点的位置
 def get_position(theta):
-    r = config.spacing * theta
+    r = config._spacing * theta
     x = r * np.cos(theta)
     y = r * np.sin(theta)
     return vector(x, y, 0)
@@ -19,8 +19,8 @@ def cartesian_distance(pos1, pos2):
 
 # 优化
 def polar_distance(theta_1, theta_2):
-    rho_1 = config.spacing * theta_1
-    rho_2 = config.spacing * theta_2
+    rho_1 = config._spacing * theta_1
+    rho_2 = config._spacing * theta_2
     return np.sqrt(rho_1 ** 2 + rho_2 ** 2 - 2 * rho_1 * rho_2 * np.cos(theta_1 - theta_2))
 
 # 使用二分法寻找更准确的 delta_theta
@@ -44,7 +44,7 @@ def list_cartesian_distance(pos1, pos2):
     return np.sqrt((pos1[0] - pos2[0]) ** 2 + (pos1[1] - pos2[1]) ** 2)
 
 def get_actual_position(theta):
-    r = config.spacing * theta
+    r = config._spacing * theta
     x = r * np.cos(theta) / (0.4 * np.pi) * 55
     y = r * np.sin(theta) / (0.4 * np.pi) * 55
     return [x, y]

@@ -190,9 +190,6 @@
 			$A_0$ & 龙头把手的中心点  \\
 			$A_i$ & 第 i 节龙身靠前把手的中心点  \\
 			$A_{223}$ & 龙尾后侧把手中心点  \\
-			$B$ & 掉头曲线起始位置 \\
-			$B'$ & 掉头曲线结束位置 \\
-			$l_B$ & 掉头曲线起始位置切线 \\
 			\hline
 		\end{tabular}
 		% \hline是横线，采用\makebox设置列宽
@@ -337,12 +334,45 @@
 	     针对问题二，我们建立了以板凳龙运动的最长时间为决策变量和目标函数，以板凳间不互相碰撞为约束条件的最优化模型。通过向量代数和计算几何方法将约束条件转化为跨立实验。使用了模拟粒子群算法对最优化问题进行启发式求解。
 
         \subsubsection{板凳碰撞最优化模型的建立}
-        \subsubsubsection{边界坐标的确定}
-        问题一模型确立了$t\to<pos_i,v_i>$的映射关系，故能够由时刻确定所有把手$A_{i}$位置，即$A_{i}$为t的函数，记作$A_{i}(t)$。下面建立向量代数模型，确定板凳四边界点同板凳把手$A_i(t)$的解析关系。
-        \subsubsubsection{线段相交模型的建立}
-        \subsubsubsection{跨立实验判定线段相交}
-        \subsubsubsection{最优化模型的建立}
-		以板凳龙的运动总时长t为决策变量和目标函数，结合上述线段不相交条件，最终建立了如下的单目标规划函数（其中$\phi$1-4由 /* TODO*/ 式定义）：
+    \begin{itemize}
+        \item {\textbf{边界坐标的确定}}
+        问题一模型确立了$t\to<pos_i,v_i>$的映射关系，故能够由时刻确定所有把手$A_{i}$位置，即$A_{i}$为t的函数，记作$$A_{i}(t) = (x_i, y_i)$$。下面建立向量代数模型，确定板凳四边界点同板凳把手$A_i(t)$的解析关系。如图所示，板凳前缘中央点假设为$D(x,y)$,根据向量平行关系有
+        $$
+                   \overrightarrow{A_iD} = \lambda\overrightarrow{A_{i+1}A_i}
+        ,\quad\quad \lambda = \left\{ \begin{array}{c}
+              27.5 / 286, i = 0 \\
+              27.5 / 165, i > 0
+
+        \end{array}\right.
+        $$
+
+        带入坐标可以得到$D_i = ((\lambda + 1) x_{i} - \lambda x_{i + 1}, (\lambda + 1) y_{i} - \lambda y_{i + 1})$，同理可以得到，板凳尾缘中央点$E_i = ((\lambda + 1) x_{i + 1} - \lambda x_{i}, (\lambda + 1) y_{i + 1} - \lambda y_{i})$。
+        计算同中轴线垂直的向量，根据相似关系$\Delta A_{i+ 1}A_iM \sim \Delta D_iB_iN$可以求解得到
+        $$\overrightarrow{D_i B_i} = (\lambda 1 (y_i - y_{i + 1}), \lambda 1 (x_{i + 1} - x_i)),
+        \quad \quad \lambda 1 = \left\{ \begin{array}{c}
+             15/286, i = 0  \\
+             15/165, i > 0
+        \end{array}
+        \right.$$
+
+         进一步可计算得到板凳的四个顶点直角坐标
+         \begin{equation}
+         \begin{aligned}
+         \begin{split}
+         B_i = ((\lambda + 1) x_{i} - \lambda x_{i + 1} + \lambda 1 (y_i - y_{i + 1}), (\lambda + 1) y_{i} - \lambda y_{i + 1} + \lambda 1 (x_{i + 1} - x_i)) \\= \phi 1(A_i, A_{i + 1})
+         \end{split}
+         \end{aligned}
+         \end{equation}
+         \begin{equation}\begin{aligned}\begin{split} B_{i + 1} = ((\lambda + 1) x_{i + 1} - \lambda x_{i} + \lambda 1 (y_i - y_{i + 1}), (\lambda + 1) y_{i + 1} - \lambda y_{i} + \lambda 1 (x_{i + 1} - x_i))\\ =    \phi 2(A_i, A_{i + 1})\end{split}\end{aligned}\end{equation}
+         \begin{equation}\begin{aligned}\begin{split} C_i = ((\lambda + 1) x_{i} - \lambda x_{i + 1} - \lambda 1 (y_i - y_{i + 1}), (\lambda + 1) y_{i} - \lambda y_{i + 1} - \lambda 1 (x_{i + 1} - x_i))\\ = \phi 3(A_i, A_{i + 1})\end{split}\end{aligned}\end{equation}
+         \begin{equation}\begin{aligned}\begin{split} C_{i+1} = ((\lambda + 1) x_{i + 1} - \lambda x_{i} - \lambda 1 (y_i - y_{i + 1}), (\lambda + 1) y_{i + 1} - \lambda y_{i} - \lambda 1 (x_{i + 1} - x_i))\\ = \phi 4(A_i, A_{i + 1})\end{split}\end{aligned}\end{equation}
+        \item {\textbf {线段相交模型的建立}}
+          考虑两个板凳连接处由板凳长边围成的折线，可将其延拓为一个凸集。即内部任意两点的连线依旧在内部。这意味着任意板凳，若与外圈板凳若发生碰撞，必存在板凳的长边与外界凸集边界相交,又凸集边界必为某条板凳靠内长边的一部分，故存在板凳的外部长边同外侧板凳的内部长边相交。记所有板凳外部长边为$C_iC_{i + 1}$，内部长边为$B_iB_{i + 1}$，则板凳存在碰撞等价于存在编号i不相邻的线段$C_iC_{i + 1}$和$B_jB_{j + 1}$相交。也即
+          $$ \underset{i=0}{\overset{222}{\bigcup}}\quad \underset{0\leq j \leq i - 2}{\bigcup}(B_i(t)B_{i + 1}(t) \bigcap C_j(t)C_{j + 1}(t)) = \emptyset$$
+        \item {\textbf{跨立实验判定线段相交}}
+        给定两条线段端点，为了快速判定其是否相交，可以建立跨立实验，如下图。当且仅当$A_0和A_1$分属直线$B_0B_1$两侧,且$B_0和B_1$分属直线$A_0A_1$两侧时，两线段相交。可以用\textbf{向量叉乘}的方向是否相反判断两点是否分属直线两侧。即线段$A_0A_1$和$B_0B_1$相交等价于$(\overrightarrow{A_0A_1} \times \overrightarrow{A_0B_0}) \cdot (\overrightarrow{A_0A_1} \times \overrightarrow{A_0B_1}) \leq 0$ 且 $(\overrightarrow{B_0B_1} \times \overrightarrow{B_0A_0}) \cdot (\overrightarrow{B_0B_1} \times \overrightarrow{B_0A_1}) \leq 0$
+        \item {\textbf{最优化模型的建立}}
+		以板凳龙的运动总时长t为决策变量和目标函数，结合上述线段不相交条件，最终建立了如下的单目标规划函数（其中$\phi$1-4由（6）至（9）式定义）：
 		\begin{equation}
 			\begin{aligned}
 				& \max \quad \quad t \\
@@ -362,196 +392,82 @@
 				\end{array}\right.
 			\end{aligned}
 		\end{equation}
+    \end{itemize}
 	\subsubsection{使用拟粒子群算法进行的模型求解}
         \subsubsection{使用问题一运动模型求解各把手位置坐标和速度}
 	\subsection{问题三模型的建立与求解}
 	\subsubsection{最优化模型的建立}
+ 		\begin{equation}
+			\begin{aligned}
+				& \min \quad \quad D \\
+				& \text { s.t. }\left\{\begin{array}{l}
+                        B_i(t) = \phi_1(A_i(t), A_{i + 1}(t))\\
+                        B_{i + 1}(t) = \phi_2(A_i(t), A_{i + 1}(t))\\
+                        C_i(t) = \phi_3(A_i(t), A_{i + 1}(t))\\
+                        C_{i + 1}(t) = \phi_4(A_i(t), A_{i + 1}(t))\\
+               \underset{i=0}{\overset{222}{\bigcup}}\quad \underset{0\leq j \leq i - 2}{\bigcup}(B_i(t)B_{i + 1}(t) \bigcap C_j(t)C_{j + 1}(t)) = \emptyset
+
+  \\
+					% Z_k=\frac{Y_{i, y} \cdot \beta_k}{1-\alpha_k} \\
+					% S_k=X_{2, y}\left(1+V_k\right)\left(1+\beta_k\right) \\
+					% \beta_k \in\{1, c\} \\
+					% c>1 \\
+
+				\end{array}\right.
+			\end{aligned}
+		\end{equation}
         \subsubsection{模型的二分查找求解}
 	\subsection{问题四模型的建立与求解}
-	
-		% TODO: 先说明我们是用题目中叙述的圆弧来进行建模，再叙述建模求解过程
-		依据题意，在满足各部分相切，且前一圆弧的半径是后一圆弧半径的两倍的条件下，两圆弧的位置仅由进入和离开掉头区域的位置及方向唯一确定。因此，\textbf{两圆弧的位置不能再优化}。下面将逐步\textbf{确定圆弧的位置}、建立舞龙队\textbf{行进路线的参数方程}，最终计算得到\textbf{舞龙队各把手的位置和速度}。% TODO
-		
-		\subsubsection{确定掉头曲线}
-		
-		依据题意，为了确定掉头曲线的方程使得各部分相切，\textbf{需要先求出掉头曲线的起始、结束位置的坐标和切线斜率}。
-		并在此基础上\textbf{求解两圆弧的圆心位置即半径}
-		
-		由于盘出螺线和盘入螺线呈中心对称，盘入盘出螺线的极坐标方程可以表示为：
-		
-		\begin{equation}
-			\rho = \frac{D}{2\pi} \theta
-		\end{equation}
-		
-		\begin{equation}
-			\rho = \frac{D}{2\pi} (\theta - \pi)
-		\end{equation}
-		
-		而掉头区域是直径为 $R = 9$ 米的圆形区域，其圆心为原点。其极坐标方程可以表示为：
-		
-		\begin{equation}
-			\rho = R
-		\end{equation}
-		
-		分别联立两螺线方程和圆方程可以解得掉头区域的入口 $B$ 和出口 $B'$ 的极坐标分别为：
-		$$ B(\rho, \theta) = (R, \theta_0) = (4.5, 16.631961) $$
-		$$ B'(\rho, \theta) = (R, \theta_0 + \pi) = (4.5, 19.773553)$$
-		换算成直角坐标即（单位：米）：
-		$$ (x_0, y_0) = (-2.711855, -3.591077) $$
-		$$ (x_0', y_0') = (2.711855, 3.591077) $$
-		确定了点 $B$ 和点 $B'$ 后，还需要确定进入掉头区域时的速度方向，用以计算相切条件。由盘入盘出螺线的中心对称性可知两点处的切线平行，斜率相同，因此只需要计算盘入曲线的切线斜率 $k$ 。
-		
-		盘入曲线的直角坐标表达式为：
-		
-		\begin{align}
-			\left\{
-			\begin{aligned}
-				x &= \rho \cos(\theta) = \frac{D}{2\pi} \theta \cos(\theta) \\
-				y &= \rho \sin(\theta) = \frac{D}{2\pi} \theta \sin(\theta)
-			\end{aligned}
-			\right.
-		\end{align}
-		
-		在直角坐标系下取 $y$ 对 $x$ 的微分即可得到掉头曲线起始位置和结束为止的切线斜率：
-		
-		\begin{equation}
-			k = \frac{dy}{dx}\Bigg|_{\theta=\theta_0} = \frac{dy}{d\theta} \frac{1}{\frac{dx}{d\theta}} \Bigg|_{\theta=\theta_0} = \frac{\sin\theta_0 + \theta_0 \cos(\theta_0)}{\cos(\theta_0) - \theta_0 \sin(\theta_0)}
-		\end{equation}
-		
-		\begin{figure}[h]
-			\centering
-			\includegraphics[width=0.5\textwidth]{image/Figure_5411.png}
-			\caption{掉头曲线示意}
-			\label{Figure_5411}
-		\end{figure}
-		
-		如图所示 % TODO
-		设前一圆弧圆心为 $O_1$ 后一圆弧圆心为 $O_2$ ，掉头曲线的起始位置和结束位置分别为点 $B$ 和点 $B'$ 。延长 $B O_1$ 至点 $O'$ 使得 $O_1O' = O_2B'$ 。设前一圆弧半径为 $r_1$ ，后一圆弧半径为 $r_2$ ，则有 $r_1 = 2r_2$ 。舞龙队的沿 $\overset{\frown}{B_1 P}$, $\overset{\frown}{PB_2}$行进。 连接 $O'B'$ 可知四边形 $O'B'O_2O1$ 为平行四边形，因此有： 
-		$$ O'B'= O_1O_2 = r_1 + r_2 = 3r_2 = BO_1 + O_1O' = O'B$$
-		同时，由于第一段圆弧是和盘入螺线相切的，因此设 $B$ 点处的切线为 $l_B$ 则有 $O'B \perp l_B$。而 $l_B$ 的斜率为 $k$ ，因此 $O'B$ 的斜率为 $-\frac{1}{k}$ 。联立：
-		\begin{align}
-			\left\{
-			\begin{aligned}
-				O'B'=O'B \\
-				\frac{x_{O'} - x_B}{y_{O'} - y_B} = -\frac{1}{k}
-			\end{aligned}
-			\right.
-		\end{align}
-		即可解得点 $O'(0.215914, -0.163050)$ 。然后，由 $\overrightarrow{OO_1} = \overrightarrow{OB_1} + 2\overrightarrow{O_1O}$ ， $\overrightarrow{OO_2} = \overrightarrow{OB_2} + \overrightarrow{O'O}$ 即可解得两圆弧的圆心坐标 $O_1(x_1, y_1)$ $O_2(x_2, y_2)$
-	
+
+	\subsubsection{确定掉头曲线}
+
+	依据题意，为了确定掉头曲线的方程使得各部分相切，\textbf{需要先求出掉头曲线的起始、结束位置的坐标和切线斜率}。由于盘出螺线和盘入螺线呈中心对称，盘入盘出螺线的极坐标方程可以表示为：
+
+	\begin{equation}
+		\rho = \frac{D}{2\pi} \theta
+	\end{equation}
+
+	\begin{equation}
+		\rho = \frac{D}{2\pi} (\theta - \pi)
+	\end{equation}
+
+	而掉头区域是直径为 $R = 9$ 米的圆形区域，其圆心为原点。其极坐标方程可以表示为：
+
+	\begin{equation}
+		\rho = R
+	\end{equation}
+
+	分别联立两螺线方程和圆方程可以解得掉头区域的入口 $B$ 和出口 $B'$ 的极坐标分别为：
+	$$ B(\rho, \theta) = (R, \theta_0) = (4.5, 16.631961) $$
+	$$ B'(\rho, \theta) = (R, \theta_0 + \pi) = (4.5, 19.773553)$$
+	换算成直角坐标即（单位：米）：
+	$$ (x_0, y_0) = (-2.711855, -3.591077) $$
+	$$ (x_0', y_0') = (2.711855, 3.591077) $$
+	确定了点 $B$ 和 $B'$ 后，还需要确定进入掉头区域时的速度方向，用以计算相切条件。由盘入盘出螺线的中心对称性可知两点处的切线平行，斜率相同，因此只需要计算盘入曲线的切线斜率 $k$ 。
+
+	盘入曲线的直角坐标表达式为：
+
+	\begin{align}
+		\left\{
+		\begin{aligned}
+			x &= \rho \cos(\theta) = \frac{D}{2\pi} \theta \cos(\theta), \\
+			y &= \rho \sin(\theta) = \frac{D}{2\pi} \theta \sin(\theta).
+		\end{aligned}
+		\right.
+	\end{align}
+
+	在直角坐标系下取 $y$ 对 $x$ 的微分即可得到掉头曲线起始位置和结束为止的切线斜率：
+
+	\begin{equation}
+		k = \frac{dy}{dx}\Bigg|_{\theta=\theta_0} = \frac{dy}{d\theta} \frac{1}{\frac{dx}{d\theta}} \Bigg|_{\theta=\theta_0} = \frac{\sin\theta_0 + \theta_0 \cos(\theta_0)}{\cos(\theta_0) - \theta_0 \sin(\theta_0)}
+	\end{equation}
+
+
+
+
 	\subsubsection{确定舞龙队行进路线的参数方程}
-	
-		5.4.1 节得到了舞龙队行进路线中各部分路线的具体位置、参数，但是却没有将各部分曲线合并在一起，给问题四的舞龙队的速度和位置计算带来的挑战。因此，需要建立合适的参数方程来刻画整一条行进路线，即给定现实的时间 $t$ 作为参数，需要能够得到行进路线上点的参数。同时，由于龙头在任一时刻下位置就是这条曲线的参数方程，因此可以\textbf{使用龙头把手的位置与时间的函数关系作为舞龙队行进路线的参数方程}。
-		
-		分析可知，舞龙队的行进路线可以分为四部分：盘入阶段、前圆弧阶段、后圆弧阶段和盘出阶段。前圆弧阶段和后圆弧阶段过渡的时间节点在 $t1$ 时刻，后圆弧阶段和盘出阶段过渡的时间节点在 $t2$ 时刻。类似问题一的求解过程可以得到盘入阶段的极坐标方程为：
-		
-		\begin{equation}
-			(\frac{1}{2}\ln(\sqrt{1 + \theta^2} - \theta) - \frac{1}{2} \theta \sqrt{\theta^2 + 1}) \frac{D}{2 \pi} - vt + C_0 = 0, \quad t \le 0
-		\end{equation}
-		
-		在求出方程数值解后，只需要将极坐标换算成直角坐标，即可得到盘入阶段下，给定时刻 $t$ 下龙头把手的位置。
-		
-		对于前圆弧，只需要在直角坐标系下将圆弧转换为\textbf{圆的参数方程}即可。考虑到前圆弧的运动方向是顺时针，因此参数方程中的角速度应当为负数，即 $w = -\frac{v}{r_1}$ 
-		
-		\begin{equation}
-			\begin{aligned}
-				\left\{
-					\begin{array}{l}
-						x = x_1 + r_1 \cos(\theta_1 - \frac{v}{r_1}t) \\
-						y = y_1 + r_1 \sin(\theta_1 - \frac{v}{r_1}t) \\
-					\end{array}
-				\right.
-			\end{aligned}
-			, \quad 0 < t \le t_1
-		\end{equation}
-		
-		后圆弧的计算过程与前圆弧类似。考虑到后圆弧是逆时针运动，角速度应当为正，即 $w = \frac{v}{r_2} $：
-		
-		\begin{equation}
-			\begin{aligned}
-				\left\{
-				\begin{array}{l}
-					x = x_2 + r_2 \cos(\theta_2 - \frac{v}{r_2}t) \\
-					y = y_2 + r_2 \sin(\theta_2 - \frac{v}{r_2}t) \\
-				\end{array}
-				\right.
-			\end{aligned}
-			, \quad t_1 < t \le t_2
-		\end{equation}
-		
-		在给定初相下即可得到两圆弧的参数方程。利用解析几何可计算出前圆弧参数方程中初相 $\theta_1$ 以及后圆弧参数方程的初相 $\theta_2$ 即可确定两圆弧的参数方程。
-		
-		对于盘出阶段，可以类似盘入阶段进行数值计算，得到盘出阶段在极坐标下位置和时间的关系：
-		
-		\begin{equation}
-			(- \frac{1}{2}\ln(\sqrt{1 + \theta^2} - \theta) + \frac{1}{2} \theta \sqrt{\theta^2 + 1}) \frac{D}{2 \pi} - vt + C_3 = 0, \quad t > t_2
-		\end{equation}
-		
-		综上，对舞龙队各部分路线参数方程进行汇总即可得到总的参数方程，记录在附件%TODO
-		的 t\_to\_xy\_q4() 函数中。对该函数进行绘制即可得到舞龙队的行进路线，如图%TODO
-		所示。
-		
-		\begin{figure}[h]
-			\centering
-			\includegraphics[width=0.7\textwidth]{image/Figure_5412.png}
-			\caption{问题四舞龙队行进路线}
-			\label{Figure_5412}
-		\end{figure}
-	
+
 	\subsubsection{求解舞龙队的速度和位置}
-	
-	利用舞龙队行进路线的参数方程，以及龙头把手位置与时间的关系后，结合问题一的\textbf{二分查找算法}和\textbf{微元法}即可得到舞龙队行进的速度和位置。其中，− 100 s、− 50 s、0 s、50 s、100 s 时，龙头前把手、龙头后面第 1、
-	51、101、151、201 节龙身前把手和龙尾后把手的位置和速度如表%TODO
-	所示。
-	
-	\begin{table}[H] %[h]表示在此处添加浮动体，默认为tbf，即页面顶部、底部和空白处添加
-		\captionsetup{skip=4pt} % 设置标题与表格的间距为4pt
-		\caption{问题一的位置结果}
-		\centering
-		\setlength{\arrayrulewidth}{0.5pt} % 设置表格线条宽度为1pt
-		\begin{tabular}{|c|c|c|c|c|c|} %c表示居中，l表示左对齐，r表示右对齐，中间添加“|”表示竖线
-			\hline
-			% \makebox[0.15\textwidth][c]{符号} & \makebox[0.6\textwidth][c]{说明}  \\ 
-			% \hline
-			& -100 s & -50 s & 0 s & 50 s & 100 s \\ \hline
-			龙头 x (m)          & 8.800000 &	5.799209 &	-4.084887 &	-2.963609 &	-0.818702 \\ \hline
-			龙头 y (m)          & -0.000000 &	-5.771092 &	-6.304479 &	6.094780 &	5.590600 \\ \hline
-			第 1 节龙身 x (m)   & 8.363824 &	7.456758 &	-1.445473 &	-5.237118 &	-3.469210 \\ \hline
-			第 1 节龙身 y (m)   & 2.826544 &	-3.440399 &	-7.405883 &	4.359627 &	4.516167 \\ \hline
-			第 51 节龙身 x (m)  & -9.518732 &	-8.686317 &	-5.543150 &	2.890455 &	-6.560125 301346 \\ \hline
-			第 51 节龙身 y (m)  & 1.341137 &	2.540108 &	6.377946 &	7.249289 &	1.969759 \\ \hline
-			第 101 节龙身 x (m) & 2.913983 &	5.687116 &	5.361939 &	1.898794 &	0.218823 \\ \hline
-			第 101 节龙身 y (m) & -9.918311 &	-8.001384 &	-7.557638 &	-8.471614 &	7.831999 \\ \hline
-			第 151 节龙身 x (m) & 10.861726 &	6.682311 &	2.388757 &	1.005154 &	4.451294 \\ \hline
-			第 151 节龙身 y (m) & 1.828753 &	8.134544 &	9.727411 &	9.424751 &	-7.486030 \\ \hline
-			第 201 节龙身 x (m) & 4.555102 &	-6.619664 &	-10.627211 &	-9.287720 &	-1.731014 \\ \hline
-			第 201 节龙身 y (m) & 10.725118 &	9.025570 &	1.359847 &	-4.246673 &	9.344557 \\ \hline
-			龙尾（后） x (m)    & -5.305444 &	7.364557 &	10.974348 &	7.383896 &	7.057739 \\ \hline
-			龙尾（后） y (m)    & -10.676584 &	-8.797992 &	0.843473 &	7.492370 &	-6.846021 \\ \hline
-		\end{tabular}
-		% \hline是横线，采用\makebox设置列宽
-	\end{table}
-	
-	\begin{table}[H] %[h]表示在此处添加浮动体，默认为tbf，即页面顶部、底部和空白处添加
-		\captionsetup{skip=4pt} % 设置标题与表格的间距为4pt
-		\caption{问题一的速度结果}
-		\centering
-		\setlength{\arrayrulewidth}{0.5pt} % 设置表格线条宽度为1pt
-		\begin{tabular}{|c|c|c|c|c|c|} %c表示居中，l表示左对齐，r表示右对齐，中间添加“|”表示竖线
-			\hline
-			% \makebox[0.15\textwidth][c]{符号} & \makebox[0.6\textwidth][c]{说明}  \\ 
-			% \hline
-			& -100 s & -50 s & 0 s & 50 s & 100 s \\ \hline
-			龙头 (m/s)          & 1.000000 & 1.000000 & 1.000000 & 1.000000 & 1.000000 \\ \hline
-			第 1 节龙身 (m/s)   & 0.999971 & 0.999961 & 0.999945 & 0.999917 & 0.999859 \\ \hline
-			第 51 节龙身 (m/s)  & 0.999742 & 0.999662 & 0.999540 & 0.999331 & 0.998940 \\ \hline
-			第 101 节龙身 (m/s) & 0.999575 & 0.999455 & 0.999277 & 0.998971 & 0.998436 \\ \hline
-			第 151 节龙身 (m/s) & 0.999451 & 0.999303 & 0.999082 & 0.998726 & 0.998121 \\ \hline
-			第 201 节龙身 (m/s) & 0.999352 & 0.999190 & 0.998942 & 0.998552 & 0.997902 \\ \hline
-			龙尾（后） (m/s)    & 0.999317 &	0.999143 & 0.998889 & 0.998490 & 0.997827 \\ \hline
-		\end{tabular}
-		% \hline是横线，采用\makebox设置列宽
-	\end{table}
 	
 	\subsection{问题五模型的建立与求解}
 	

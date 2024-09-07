@@ -103,13 +103,13 @@ def t_to_theta_q4_3(t):
     initial = 0.0
     return fsolve(equ_q4_3, initial, args=(t))
 
-def t_to_xy_q4(t):
+def t_to_xy_q4(t) -> (float, float):
     if t < 0 :
         angle = t_to_theta_q4_0(t)
         rho = rho_q4_0(angle)
         x = rho * np.cos(angle)
         y = rho * np.sin(angle)
-        return x, y
+        return float(x), float(y)
     elif t < t1:
         return t_to_theta_q4_1(t)
     elif t < t2:
@@ -119,7 +119,7 @@ def t_to_xy_q4(t):
         rho = rho_q4_3(angle)
         x = rho * np.cos(angle)
         y = rho * np.sin(angle)
-        return x, y
+        return float(x), float(y)
     
 # print(t_to_xy_q4(-0.1))
 

@@ -33,17 +33,28 @@ q1_v_row_names.append("龙尾（后） (m/s)")
 q1_column_names = [f"{i} s" for i in range(301)]  # 从 0 s 到 21 s
 
 # q2填充行名
-q2_row_name = ["龙头"]
+q2_row_names = ["龙头"]
 
 for i in range(1, 222):
-    q2_row_name.append(f"第{i}节龙身")
+    q2_row_names.append(f"第{i}节龙身")
 
-q2_row_name.append("龙尾")
-q2_row_name.append("龙尾（后）")
+q2_row_names.append("龙尾")
+q2_row_names.append("龙尾（后）")
 
 # q2填充列名
-q2_column_name = ["横坐标x (m)", "纵坐标y (m)", "速度 (m/s)"]
+q2_column_names = ["横坐标x (m)", "纵坐标y (m)", "速度 (m/s)"]
 
+# q4_dis填充行名
+q4_dis_row_names = q1_dis_row_names
+
+# q4_dis填充列名
+q4_dis_column_names = [f"{i} s" for i in range(-100, 101)]
+
+# q4_v填充行名
+q4_v_row_names = q1_v_row_names
+
+# q4_v填充列名
+q4_v_column_names = [f"{i} s" for i in range(-100, 101)]
 
 def dis_xlsx_init():
     for row_num, row_name in enumerate(q1_dis_row_names, start=2):
@@ -92,7 +103,6 @@ def v_xlsx_init():
         cell = ws.cell(row=1, column=col_num, value=col_name)
         cell.font = font_new
 
-
 def v_fill_xlsx():
     for time in range(301):
         dt = 1e-5
@@ -125,11 +135,11 @@ def v_fill_xlsx():
     wb.save("result1_v.xlsx")
 
 def collision_xlsx_init():
-    for row_num, row_name in enumerate(q2_row_name, start=2):
+    for row_num, row_name in enumerate(q2_row_names, start=2):
         cell = ws.cell(row=row_num, column=1, value=row_name)
         cell.font = font_song if row_num == 2 else font_new
 
-    for col_num, col_name in enumerate(q2_column_name, start=2):
+    for col_num, col_name in enumerate(q2_column_names, start=2):
         cell = ws.cell(row=1, column=col_num, value=col_name)
         cell.font = font_new
 
@@ -177,6 +187,77 @@ def collision_fill_xlsx():
 
     wb.save("result2.xlsx")
 
+def q4_dis_xlsx_init():
+    for row_num, row_name in enumerate(q4_dis_row_names, start=2):
+        cell = ws.cell(row=row_num, column=1, value=row_name)
+        cell.font = font_song if row_num == 2 else font_new
+
+    for col_num, col_name in enumerate(q4_dis_column_names, start=2):
+        cell = ws.cell(row=1, column=col_num, value=col_name)
+        cell.font = font_new
+
+def q4_dis_fill():
+    for time in range(-100, 101):
+        # 更新第一个点的位置
+        x, y = t_to_xy_q4(time)
+        cell = ws.cell(row=2, column=time + 102, value=f"{x:.6f}")
+        cell.font = font_new
+        cell = ws.cell(row=3, column=time + 102, value=f"{y:.6f}")
+        cell.font = font_new
+
+        ergodic_time = time
+        for i in range(1, 224):
+            delta_time = find_delta_time(ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1])
+            ergodic_time -= delta_time
+            _x, _y = t_to_xy_q4(ergodic_time)
+            cell = ws.cell(row=2 * (i + 1), column=time + 102, value=f"{_x:.6f}")
+            cell.font = font_new
+            cell = ws.cell(row=2 * (i + 1) + 1, column=time + 102, value=f"{_y:.6f}")
+            cell.font = font_new
+
+        print(time)
+
+    wb.save("result4_dis.xlsx")
+
+def q4_v_xlsx_init():
+    for row_num, row_name in enumerate(q4_v_row_names, start=2):
+        cell = ws.cell(row=row_num, column=1, value=row_name)
+        cell.font = font_song if row_num == 2 else font_new
+
+    for col_num, col_name in enumerate(q4_v_column_names, start=2):
+        cell = ws.cell(row=1, column=col_num, value=col_name)
+        cell.font = font_new
+
+def q4_v_fill():
+    for time in range(-100, 101):
+        dt = 1e-5
+        x, y = t_to_xy_q4(time)
+        _x, _y = t_to_xy_q4(time - dt)
+        ds = list_cartesian_distance([x, y], [_x, _y])
+        v = ds / dt
+        cell = ws.cell(row=2, column=time + 102, value=f"{v:.6f}")
+        cell.font = font_new
+
+        # 更新接下来的点的位置
+        ergodic_time = time
+        _ergodic_time = time - dt
+        for i in range(1, 224):
+            delta_time = find_delta_time(ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1])
+            ergodic_time -= delta_time
+            x, y = t_to_xy_q4(ergodic_time)
+            _delta_time = find_delta_time(_ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1])
+            _ergodic_time -= _delta_time
+            _x, _y = t_to_xy_q4(_ergodic_time)
+            ds = list_cartesian_distance([x, y], [_x, _y])
+            # print(i, ds)
+            v = ds / dt
+            cell = ws.cell(row=i + 2, column=time + 102, value=f"{v:.6f}")
+            cell.font = font_new
+
+        print(time)
+
+    wb.save("result4_v.xlsx")
+
 
 # dis_xlsx_init()
 # dis_fill_xlsx()
@@ -184,5 +265,11 @@ def collision_fill_xlsx():
 # v_xlsx_init()
 # v_fill_xlsx()
 
-collision_xlsx_init()
-collision_fill_xlsx()
+# collision_xlsx_init()
+# collision_fill_xlsx()
+
+# q4_dis_xlsx_init()
+# q4_dis_fill()
+
+# q4_v_xlsx_init()
+# q4_v_fill()

@@ -2,7 +2,6 @@ from openpyxl import Workbook
 from openpyxl.styles import Font
 from calculate import *
 
-import numpy as np
 import config
 
 wb = Workbook()
@@ -33,6 +32,7 @@ v_row_names.append("龙尾（后） (m/s)")
 # 填充列名
 column_names = [f"{i} s" for i in range(301)]  # 从 0 s 到 21 s
 
+
 def dis_xlsx_init():
     for row_num, row_name in enumerate(dis_row_names, start=2):
         cell = ws.cell(row=row_num, column=1, value=row_name)
@@ -46,7 +46,7 @@ def dis_xlsx_init():
 def dis_fill_xlsx():
     for time in range(301):
         theta = t_to_theta(time)
-        pos = get_actual_position(theta)
+        pos = get_actual_position(theta, config.space)
         x = pos[0][0] / 100.0
         y = pos[1][0] / 100.0
         cell = ws.cell(row=2, column=time + 2, value=f"{x:.6f}")
@@ -57,9 +57,9 @@ def dis_fill_xlsx():
         # 更新接下来的点的位置
         current_theta = theta
         for i in range(1, 224):
-            delta_theta = find_actual_delta_theta(current_theta, config.actual_fixed_distances[0 if i == 1 else 1])
+            delta_theta = find_actual_delta_theta(current_theta, config.actual_fixed_distances[0 if i == 1 else 1], config.space)
             current_theta += delta_theta
-            pos = get_actual_position(current_theta)
+            pos = get_actual_position(current_theta, config.space)
             x = pos[0][0] / 100.0
             y = pos[1][0] / 100.0
             print(f"{time} {i}")
@@ -70,6 +70,7 @@ def dis_fill_xlsx():
 
     wb.save("result1_dis.xlsx")
 
+
 def v_xlsx_init():
     for row_num, row_name in enumerate(v_row_names, start=2):
         cell = ws.cell(row=row_num, column=1, value=row_name)
@@ -79,13 +80,14 @@ def v_xlsx_init():
         cell = ws.cell(row=1, column=col_num, value=col_name)
         cell.font = font
 
+
 def v_fill_xlsx():
     for time in range(301):
         dt = 1e-5
         theta = t_to_theta(time)
-        pos = get_actual_position(theta)
+        pos = get_actual_position(theta, config.space)
         _theta = t_to_theta(time - dt)
-        _pos = get_actual_position(_theta)
+        _pos = get_actual_position(_theta, config.space)
         ds = list_cartesian_distance(pos, _pos) / 100.0
         print(ds)
         v = ds / dt
@@ -96,12 +98,12 @@ def v_fill_xlsx():
         current_theta = theta
         _current_theta = _theta
         for i in range(1, 224):
-            delta_theta = find_actual_delta_theta(current_theta, config.actual_fixed_distances[0 if i == 1 else 1])
+            delta_theta = find_actual_delta_theta(current_theta, config.actual_fixed_distances[0 if i == 1 else 1], config.space)
             current_theta += delta_theta
-            pos = get_actual_position(current_theta)
-            _delta_theta = find_actual_delta_theta(_current_theta, config.actual_fixed_distances[0 if i == 1 else 1])
+            pos = get_actual_position(current_theta, config.space)
+            _delta_theta = find_actual_delta_theta(_current_theta, config.actual_fixed_distances[0 if i == 1 else 1], config.space)
             _current_theta += _delta_theta
-            _pos = get_actual_position(_current_theta)
+            _pos = get_actual_position(_current_theta, config.space)
             ds = list_cartesian_distance(pos, _pos) / 100.0
             v = ds / dt
             print(time)

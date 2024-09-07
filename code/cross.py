@@ -6,6 +6,7 @@ from statsmodels.tsa.statespace.simulation_smoother import check_random_state
 from openpyxl import load_workbook
 from sympy.abc import epsilon
 
+import config
 from calculate import t_to_dis
 
 # 2 dot -> 4 edge
@@ -121,7 +122,8 @@ while delta >= epsilon:
     time = low
     while time < high:
         time = time + delta
-        matrix = t_to_dis(time)
+        space = config.space  # 自行设置
+        matrix = t_to_dis(time, space)
         print(time)
         print(all_cross_check(matrix))
         if all_cross_check(matrix):

@@ -43,20 +43,20 @@ def find_delta_theta(theta, fixed_distance):
 def list_cartesian_distance(pos1, pos2):
     return np.sqrt((pos1[0] - pos2[0]) ** 2 + (pos1[1] - pos2[1]) ** 2)
 
-def get_actual_position(theta):
+def get_actual_position(theta, space):
     r = config._spacing * theta
-    x = r * np.cos(theta) / (0.4 * np.pi) * 55
-    y = r * np.sin(theta) / (0.4 * np.pi) * 55
+    x = r * np.cos(theta) / (0.4 * np.pi) * space
+    y = r * np.sin(theta) / (0.4 * np.pi) * space
     return [x, y]
 
-def find_actual_delta_theta(theta, fixed_distance):
+def find_actual_delta_theta(theta, fixed_distance, space):
     # 二分上下限
     low = 0
     high = 4
     while high - low > config.dis_tolerance:
         mid = (low + high) / 2
-        pos1 = get_actual_position(theta)
-        pos2 = get_actual_position(theta + mid)
+        pos1 = get_actual_position(theta, space)
+        pos2 = get_actual_position(theta + mid, space)
         dist = list_cartesian_distance(pos1, pos2)
         # dist = polar_distance(theta, theta + mid)
         if dist < fixed_distance:
@@ -80,19 +80,21 @@ def t_to_theta(t):
     initial = 0.0
     return fsolve(equ, initial, args=(t))
 
-def t_to_dis(t):
+def t_to_dis(t, space):
+    actual_fixed_distances = [2 * config._spacing * np.pi * config.len_head / space,
+                              2 * config._spacing * np.pi * config.len_body / space]
     positions = np.empty((224, 2))
     theta = t_to_theta(t)
-    pos = get_actual_position(theta)
+    pos = get_actual_position(theta, space)
     x = pos[0][0] / 100.0
     y = pos[1][0] / 100.0
     positions[0] = np.array([x, y])
 
     current_theta = theta
     for i in range(1, 224):
-        delta_theta = find_actual_delta_theta(current_theta, config.actual_fixed_distances[0 if i == 1 else 1])
+        delta_theta = find_actual_delta_theta(current_theta, actual_fixed_distances[0 if i == 1 else 1], space)
         current_theta += delta_theta
-        pos = get_actual_position(current_theta)
+        pos = get_actual_position(current_theta, space)
         x = pos[0][0] / 100.0
         y = pos[1][0] / 100.0
         positions[i] = np.array([x, y])

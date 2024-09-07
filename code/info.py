@@ -4,7 +4,7 @@ import config
 
 # 创建一个文本标签用于显示运行时间
 time_label = label(
-    pos=vector(-30, 25, 0),  # 标签的位置
+    pos=vector(-18, 13, 0),  # 标签的位置
     text="Time: 0.0s",  # 初始文本
     xoffset=1,  # 文本的X偏移量
     yoffset=1,  # 文本的Y偏移量

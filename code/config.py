@@ -4,12 +4,17 @@ import numpy as np
 
 # 绘制等距螺线
 # 参数设置
-spacing = 0.2  # 控制螺线的间距
+_spacing = 0.2  # 控制螺线显示效果
+space = 55  # 控制螺距
+len_head = 286  # 龙头长度
+len_body = 165  # 龙身长度
+section_num = 20  # 龙节数
 theta_max = 32 * np.pi  # 控制螺线的最大角度
-fixed_distances = [0.4 * np.pi * 286 / 55, 0.4 * np.pi * 165 / 55]   # 龙头前把手与后把手的间距 + 龙身与龙尾前把手与后把手的间距
-actual_fixed_distances = [286, 165]   # 龙头前把手与后把手的间距 + 龙身与龙尾前把手与后把手的间距
+
+fixed_distances = [2 * _spacing * np.pi * len_head / space, 2 * _spacing * np.pi * len_body / space]   # 龙头前把手与后把手的间距 + 龙身与龙尾前把手与后把手的间距
+actual_fixed_distances = [len_head, len_body]   # 龙头前把手与后把手的间距 + 龙身与龙尾前把手与后把手的间距
 sys_length = 30
-start_time = time.time()
+start_time = time.time() - 350.0
 integer_time = 0
 
 dis_tolerance = 1e-12

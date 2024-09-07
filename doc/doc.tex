@@ -338,12 +338,45 @@
 	     针对问题二，我们建立了以板凳龙运动的最长时间为决策变量和目标函数，以板凳间不互相碰撞为约束条件的最优化模型。通过向量代数和计算几何方法将约束条件转化为跨立实验。使用了模拟粒子群算法对最优化问题进行启发式求解。
 
         \subsubsection{板凳碰撞最优化模型的建立}
-        % \subsubsubsection{边界坐标的确定}
-        问题一模型确立了$t\to<pos_i,v_i>$的映射关系，故能够由时刻确定所有把手$A_{i}$位置，即$A_{i}$为t的函数，记作$A_{i}(t)$。下面建立向量代数模型，确定板凳四边界点同板凳把手$A_i(t)$的解析关系。
-        % \subsubsubsection{线段相交模型的建立}
-        % \subsubsubsection{跨立实验判定线段相交}
-        % \subsubsubsection{最优化模型的建立}
-		以板凳龙的运动总时长t为决策变量和目标函数，结合上述线段不相交条件，最终建立了如下的单目标规划函数（其中$\phi$1-4由 /* TODO*/ 式定义）：
+    \begin{itemize}
+        \item {\textbf{边界坐标的确定}}
+        问题一模型确立了$t\to<pos_i,v_i>$的映射关系，故能够由时刻确定所有把手$A_{i}$位置，即$A_{i}$为t的函数，记作$$A_{i}(t) = (x_i, y_i)$$。下面建立向量代数模型，确定板凳四边界点同板凳把手$A_i(t)$的解析关系。如图所示，板凳前缘中央点假设为$D(x,y)$,根据向量平行关系有
+        $$
+                   \overrightarrow{A_iD} = \lambda\overrightarrow{A_{i+1}A_i}
+        ,\quad\quad \lambda = \left\{ \begin{array}{c}
+              27.5 / 286, i = 0 \\
+              27.5 / 165, i > 0
+
+        \end{array}\right.
+        $$
+
+        带入坐标可以得到$D_i = ((\lambda + 1) x_{i} - \lambda x_{i + 1}, (\lambda + 1) y_{i} - \lambda y_{i + 1})$，同理可以得到，板凳尾缘中央点$E_i = ((\lambda + 1) x_{i + 1} - \lambda x_{i}, (\lambda + 1) y_{i + 1} - \lambda y_{i})$。
+        计算同中轴线垂直的向量，根据相似关系$\Delta A_{i+ 1}A_iM \sim \Delta D_iB_iN$可以求解得到
+        $$\overrightarrow{D_i B_i} = (\lambda 1 (y_i - y_{i + 1}), \lambda 1 (x_{i + 1} - x_i)),
+        \quad \quad \lambda 1 = \left\{ \begin{array}{c}
+             15/286, i = 0  \\
+             15/165, i > 0
+        \end{array}
+        \right.$$
+
+         进一步可计算得到板凳的四个顶点直角坐标
+         \begin{equation}
+         \begin{aligned}
+         \begin{split}
+         B_i = ((\lambda + 1) x_{i} - \lambda x_{i + 1} + \lambda 1 (y_i - y_{i + 1}), (\lambda + 1) y_{i} - \lambda y_{i + 1} + \lambda 1 (x_{i + 1} - x_i)) \\= \phi 1(A_i, A_{i + 1})
+         \end{split}
+         \end{aligned}
+         \end{equation}
+         \begin{equation}\begin{aligned}\begin{split} B_{i + 1} = ((\lambda + 1) x_{i + 1} - \lambda x_{i} + \lambda 1 (y_i - y_{i + 1}), (\lambda + 1) y_{i + 1} - \lambda y_{i} + \lambda 1 (x_{i + 1} - x_i))\\ =    \phi 2(A_i, A_{i + 1})\end{split}\end{aligned}\end{equation}
+         \begin{equation}\begin{aligned}\begin{split} C_i = ((\lambda + 1) x_{i} - \lambda x_{i + 1} - \lambda 1 (y_i - y_{i + 1}), (\lambda + 1) y_{i} - \lambda y_{i + 1} - \lambda 1 (x_{i + 1} - x_i))\\ = \phi 3(A_i, A_{i + 1})\end{split}\end{aligned}\end{equation}
+         \begin{equation}\begin{aligned}\begin{split} C_{i+1} = ((\lambda + 1) x_{i + 1} - \lambda x_{i} - \lambda 1 (y_i - y_{i + 1}), (\lambda + 1) y_{i + 1} - \lambda y_{i} - \lambda 1 (x_{i + 1} - x_i))\\ = \phi 4(A_i, A_{i + 1})\end{split}\end{aligned}\end{equation}
+        \item {\textbf {线段相交模型的建立}}
+          考虑两个板凳连接处由板凳长边围成的折线，可将其延拓为一个凸集。即内部任意两点的连线依旧在内部。这意味着任意板凳，若与外圈板凳若发生碰撞，必存在板凳的长边与外界凸集边界相交,又凸集边界必为某条板凳靠内长边的一部分，故存在板凳的外部长边同外侧板凳的内部长边相交。记所有板凳外部长边为$C_iC_{i + 1}$，内部长边为$B_iB_{i + 1}$，则板凳存在碰撞等价于存在编号i不相邻的线段$C_iC_{i + 1}$和$B_jB_{j + 1}$相交。也即
+          $$ \underset{i=0}{\overset{222}{\bigcup}}\quad \underset{0\leq j \leq i - 2}{\bigcup}(B_i(t)B_{i + 1}(t) \bigcap C_j(t)C_{j + 1}(t)) = \emptyset$$
+        \item {\textbf{跨立实验判定线段相交}}
+        给定两条线段端点，为了快速判定其是否相交，可以建立跨立实验，如下图。当且仅当$A_0和A_1$分属直线$B_0B_1$两侧,且$B_0和B_1$分属直线$A_0A_1$两侧时，两线段相交。可以用\textbf{向量叉乘}的方向是否相反判断两点是否分属直线两侧。即线段$A_0A_1$和$B_0B_1$相交等价于$(\overrightarrow{A_0A_1} \times \overrightarrow{A_0B_0}) \cdot (\overrightarrow{A_0A_1} \times \overrightarrow{A_0B_1}) \leq 0$ 且 $(\overrightarrow{B_0B_1} \times \overrightarrow{B_0A_0}) \cdot (\overrightarrow{B_0B_1} \times \overrightarrow{B_0A_1}) \leq 0$
+        \item {\textbf{最优化模型的建立}}
+		以板凳龙的运动总时长t为决策变量和目标函数，结合上述线段不相交条件，最终建立了如下的单目标规划函数（其中$\phi$1-4由（6）至（9）式定义）：
 		\begin{equation}
 			\begin{aligned}
 				& \max \quad \quad t \\
@@ -363,10 +396,30 @@
 				\end{array}\right.
 			\end{aligned}
 		\end{equation}
+    \end{itemize}
 	\subsubsection{使用拟粒子群算法进行的模型求解}
         \subsubsection{使用问题一运动模型求解各把手位置坐标和速度}
 	\subsection{问题三模型的建立与求解}
 	\subsubsection{最优化模型的建立}
+ 		\begin{equation}
+			\begin{aligned}
+				& \min \quad \quad D \\
+				& \text { s.t. }\left\{\begin{array}{l}
+                        B_i(t) = \phi_1(A_i(t), A_{i + 1}(t))\\
+                        B_{i + 1}(t) = \phi_2(A_i(t), A_{i + 1}(t))\\
+                        C_i(t) = \phi_3(A_i(t), A_{i + 1}(t))\\
+                        C_{i + 1}(t) = \phi_4(A_i(t), A_{i + 1}(t))\\
+               \underset{i=0}{\overset{222}{\bigcup}}\quad \underset{0\leq j \leq i - 2}{\bigcup}(B_i(t)B_{i + 1}(t) \bigcap C_j(t)C_{j + 1}(t)) = \emptyset
+
+  \\
+					% Z_k=\frac{Y_{i, y} \cdot \beta_k}{1-\alpha_k} \\
+					% S_k=X_{2, y}\left(1+V_k\right)\left(1+\beta_k\right) \\
+					% \beta_k \in\{1, c\} \\
+					% c>1 \\
+
+				\end{array}\right.
+			\end{aligned}
+		\end{equation}
         \subsubsection{模型的二分查找求解}
 	\subsection{问题四模型的建立与求解}
 	

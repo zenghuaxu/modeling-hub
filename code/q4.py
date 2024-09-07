@@ -8,11 +8,11 @@ D_q4 = 1.7 # 螺距 m
 v_q4 = 1 # 龙头速度 m/s
 
 theta0 = 2 * np.pi * R / D_q4
-print(f"theta0 = {theta0 / (np.pi)} * pi")
-print(f"theta0 = {theta0}")
-print(f"theta0 + pi = {theta0 + np.pi}")
+# print(f"theta0 = {theta0 / (np.pi)} * pi")
+# print(f"theta0 = {theta0}")
+# print(f"theta0 + pi = {theta0 + np.pi}")
 k = (np.sin(theta0) + theta0 * np.cos(theta0)) / (np.cos(theta0) - theta0 * np.sin(theta0))
-print(f"k = {k}")
+# print(f"k = {k}")
 
 x0 = R * np.cos(theta0)
 y0 = R * np.sin(theta0)
@@ -20,7 +20,7 @@ y0 = R * np.sin(theta0)
 x0_ = -x0
 y0_ = -y0
 
-print(f"(x0, y0) = ({x0}, {y0})")
+# print(f"(x0, y0) = ({x0}, {y0})")
 
 A = np.array([[R * np.cos(theta0), R * np.sin(theta0)],
              [1, k]])

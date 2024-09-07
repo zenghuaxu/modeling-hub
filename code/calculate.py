@@ -59,7 +59,7 @@ def find_delta_time(time, fixed_distance):
     return (low + high) / 2
 
 def list_cartesian_distance(pos1, pos2):
-    return np.sqrt((pos1[0] - pos2[0]) ** 2 + (pos1[1] - pos2[1]) ** 2)
+    return float(np.sqrt((pos1[0] - pos2[0]) ** 2 + (pos1[1] - pos2[1]) ** 2))
 
 def get_actual_position(theta, space):
     r = config._spacing * theta

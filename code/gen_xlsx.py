@@ -257,6 +257,36 @@ def q4_v_fill():
         print(time)
 
     wb.save("result4_v.xlsx")
+    
+def q4_v_fill_test():
+    for time in range(10, 15):
+        dt = 1e-5
+        x, y = t_to_xy_q4(time)
+        _x, _y = t_to_xy_q4(time - dt)
+        ds = list_cartesian_distance([x, y], [_x, _y])
+        v = ds / dt
+        cell = ws.cell(row=2, column=time +2, value=f"{v:.6f}")
+        cell.font = font_new
+
+        # 更新接下来的点的位置
+        ergodic_time = time
+        _ergodic_time = time - dt
+        for i in range(1, 224):
+            delta_time = find_delta_time(ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1])
+            ergodic_time -= delta_time
+            x, y = t_to_xy_q4(ergodic_time)
+            _delta_time = find_delta_time(_ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1])
+            _ergodic_time -= _delta_time
+            _x, _y = t_to_xy_q4(_ergodic_time)
+            ds = list_cartesian_distance([x, y], [_x, _y])
+            # print(i, ds)
+            v = ds / dt
+            cell = ws.cell(row=i + 2, column=time +2, value=f"{v:.6f}")
+            cell.font = font_new
+
+        print(time)
+
+    wb.save("result4_v_test.xlsx")
 
 
 # dis_xlsx_init()
@@ -273,3 +303,5 @@ def q4_v_fill():
 
 # q4_v_xlsx_init()
 # q4_v_fill()
+
+q4_v_fill_test()

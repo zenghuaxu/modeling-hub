@@ -149,18 +149,20 @@ def local_check():
         print(time)
         print(all_cross_check(matrix))
 
-local_check()
+#local_check()
 
 max = 30
 w = 0.5
 c1 = 0.5
 c2 = 1
 max_time = 500
-def pso_cal_min_distance(space, n, c1, c2):
+def pso_cal_min_distance(space, n = 10, c1 = 0.5, c2 = 1):
     partical = []
     partical_v = []
     pbest    = []
     gbest    = (max_time, True)
+    can_enter = True
+
     for i in range(n):
         print(f'initial:{i}/{n}')
         partical.append(random.random() * max_time)
@@ -190,16 +192,16 @@ def pso_cal_min_distance(space, n, c1, c2):
             if pbest[i][0] < gbest[0] and pbest[i][1]:
                 gbest = pbest[i]
 
-            # if pbest[i][0] > gbest[0]:
-            #     partical[i] = gbest[0] * random.random()
-            #     pbest[i] = partical[i], all_cross_check(t_to_dis(partical[i], space)) # if not best, go to a random smaller position
+            if pbest[i][0] > gbest[0]:
+                partical[i] = gbest[0] * random.random()
+                pbest[i] = partical[i], all_cross_check(t_to_dis(partical[i], space)) # if not best, go to a random smaller position
 
             print(f'{i}, {pbest[i]}, {gbest}')
             print(f'{space}, {t_to_theta(gbest[0], D=space / 100) / 2 / np.pi * space}')
-            # if t_to_theta(gbest[0], D=space / 100) / 2 / np.pi * space > 450:
-            #     return False # cannot enter
 
-    return True # can enter
+    return gbest[0], t_to_theta(gbest[0], D=space / 100) / 2 / np.pi * space > 450 # can enter
+
+#print(pso_cal_min_distance(55, 10, c1, c2))
 
 smallest = 46
 biggist  = 50
@@ -216,13 +218,18 @@ biggist  = 50
 
 # pso_cal_min_distance(55, 10, c1, c2)
 #
-# smallest = 45
-# biggist  = 55
-# space = (biggist + smallest) / 2
-# for i in range(10):
-#     print(space)
-#     if pso_cal_min_distance(space, 10, c1, c2):
-#         biggist = space
-#     else :
-#         smallest = space
-#     space = (biggist + smallest) / 2
+def cal_min_D():
+    smallest = 45
+    biggist  = 46
+    space = (biggist + smallest) / 2
+    for i in range(1):
+        print(space)
+        if pso_cal_min_distance(space, 10, c1, c2)[1]:
+            biggist = space
+        else :
+            smallest = space
+        space = (biggist + smallest) / 2
+
+    return  space
+
+cal_min_D()

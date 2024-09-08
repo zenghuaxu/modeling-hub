@@ -148,11 +148,11 @@
 	\zihao{-4} %设置正文字号
 	%摘要部分
 	\begin{abstract}
-		“板凳龙”是浙闽地区的传统民俗活动，其舞龙队能够将上百条板凳螺旋式盘绕形成巨龙。在“板凳龙”的舞龙过程中，舞龙队应当保持较小的间距和较快的行进速度，以增强观赏性；同时舞龙队路径的螺距与速度需要满足一定约束条件，以保证安全。在题设要求下，通过对“板凳龙”问题的进行分析与适当建模，我们给出了所有指定时刻把手的坐标和速度，在等距螺线下求出了板凳龙的最小螺距和最大速度。
+		“板凳龙”是浙闽地区的传统民俗活动，其舞龙队能够将上百条板凳螺旋式盘绕形成巨龙。在舞龙过程中，舞龙队应保持较小的间距和较快的行进速度；在题设要求下，通过对“板凳龙”问题的进行分析与适当建模，我们给出了所有指定时刻把手的坐标和速度，在等距螺线下求出了板凳龙的最小螺距和最大速度。
 
 		\hspace{0.2em}\textbf{针对问题一}，以等距螺线为中心建立了\textbf{极坐标系}，用\textbf{参数方程}刻画舞龙队的行进位置和速度。首先，建立等距螺线和龙头速度间关系的\textbf{微分方程模型}，利用\textbf{积分法}求解出了\textbf{舞龙队龙头的坐标关于行进时间的解析式}；然后，基于已知的把手位置，建立了舞龙队伍的\textbf{几何模型}，通过不断对后一把手进行\textbf{二分查找}，\textbf{迭代}查找确定了舞龙队所有把手的坐标；接着，用\textbf{微分方程转化为差分方程}的\textbf{微元法}，得到了舞龙队在各个位置下的速度。
 
-		\textbf{针对问题二}，建立了以舞龙队\textbf{最长运动时间}为\textbf{决策变量和目标函数}的\textbf{复杂单目标优化模型}。针对板凳不能碰撞的约束条件，使用\textbf{构造凸集与向量代数方法}将其转化为\textbf{线段相交}约束，用\textbf{跨立实验}判断是否相交；接着提出了适用于本模型的\textbf{拟粒子群算法}求解出优化结果，得到了从起始位置开始舞龙队最多可以前进\textbf{412.48s}。通过可视化和灵敏度分析对模型进行了验证。最后使用问题一的模型与算法完成了位置和速度的求解。
+		\textbf{针对问题二}，建立了以舞龙队\textbf{最长运动时间}为\textbf{决策变量和目标函数}的\textbf{复杂单目标优化模型}。针对板凳不能碰撞的约束条件，使用\textbf{构造凸集与向量代数方法}将其转化为\textbf{线段相交}约束，用\textbf{跨立实验}判断是否相交；接着提出了适用于本模型的\textbf{拟粒子群算法}求解出优化结果，得到了从起始位置开始舞龙队最多可以前进\textbf{412.474213s}。通过可视化和灵敏度分析对模型进行了验证。最后完成了位置和速度的求解。
 
 		\textbf{针对问题三}，建立了以\textbf{等距螺线螺距}为\textbf{目标函数}的\textbf{单目标优化模型}。使用了问题二建立的模型和算法，求解出特定螺距下龙头与原点的\textbf{最小距离}。通过\textbf{可视化与回归分析}确认了螺距-龙头与原点最小距离函数的\textbf{单调性}。最后利用\textbf{二分查找}求解出满足题目要求的最小螺距为\textbf{46.269531cm}。
 
@@ -164,7 +164,7 @@
 		使得满足题设要求，解得满足题意的龙头\textbf{最大速度为 1.246267m/s}。  \\
 		%关键词（上文最后一段要用“\\”换行）
 		\newline
-		\noindent{\textbf{关键词：} \textbf{关键词1}\quad   \textbf{关键词2}\quad \textbf{关键词3} \quad \textbf{关键词4}\quad \textbf{关键词5}}
+		\noindent{\textbf{关键词：} \textbf{微分方程}\quad   \textbf{微元法}\quad \textbf{粒子群算法} \quad \textbf{单目标优化模型}\quad \textbf{模拟退火算法}}
 	\end{abstract}
 
 	\clearpage %换页
@@ -282,7 +282,15 @@
 
 		目标函数 $f$ 二分查找所得的零点即为 $\theta_{i+1}$ 的数值解。
 
-		二分求解代码见附录2 % TODO！！！！!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11↑
+		二分求解代码见附录 2 calculate.py 文件。将计算得到的位置绘制在直角坐标中大致如图%TODO
+		所示
+		
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.5\linewidth]{image/Figure_5111.png}
+			\caption{问题一把手位置}
+			\label{Figure_5111}
+		\end{figure}
 
 	\subsubsection{龙头把手的位置与时间关系的常微分方程模型与求解}
 
@@ -319,8 +327,17 @@
 		\begin{equation}
 			v_{t1} = \dfrac{\sqrt{(x_i(t_1 + \Delta t) - x_i(t_1 - \Delta t))^2 + (y_i(t_1 + \Delta t) - y_i(t_1 - \Delta t))^2}}{2\Delta t}
 		\end{equation}
-
-		% TODO: \subsubsection{模型的检验}
+		
+		计算出舞龙队的速度后，能发现龙头的速度略高于龙尾的速度。为问题五分析最大速度提供了数据支撑。第100s的数据如图%TODO
+		所示。
+		
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.5\linewidth]{image/Figure_5131.png}
+			\caption{100s 下把手速度随把手编号的分布}
+			\label{Figure_5131}
+		\end{figure}
+		
 
 		利用这种方式计算出问题一中的各个把手的位置和速度见 result1.xlsx 文件。其中 0 s、60 s、120 s、180 s、240 s、300 s 时，龙头前把手、龙头后面第 1、51、101、151、201 节龙身前把手和龙尾后把手的位置和速度如下表所示：
 
@@ -375,7 +392,7 @@
 		\end{table}
 
 	\subsection{问题二模型的建立与求解}
-	     针对问题二，我们建立了以板凳龙运动的最长时间为决策变量和目标函数，以板凳间不互相碰撞为约束条件的\textbf{最优化模型}。通过\textbf{构造凸集}、\textbf{向量代数}和\textbf{计算几何}方法将约束条件转化为\textbf{跨立实验}。使用了\textbf{拟粒子群算法}对最优化问题进行启发式求解。得到了从起始位置开始舞龙队最多可以前进\textbf{412.48s}。并使用问题一的模型求解了当前时刻各把手的位置与速度。
+	     针对问题二，我们建立了以板凳龙运动的最长时间为决策变量和目标函数，以板凳间不互相碰撞为约束条件的\textbf{最优化模型}。通过\textbf{构造凸集}、\textbf{向量代数}和\textbf{计算几何}方法将约束条件转化为\textbf{跨立实验}。使用了\textbf{拟粒子群算法}对最优化问题进行启发式求解。得到了从起始位置开始舞龙队最多可以前进\textbf{412.474213s}。并使用问题一的模型求解了当前时刻各把手的位置与速度。
 
         \subsubsection{板凳碰撞最优化模型的建立}
     \begin{itemize}
@@ -385,7 +402,7 @@
             \centering
             \includegraphics[width=0.5\linewidth]{image/Figure_5213.png}
             \caption{边界坐标与把手坐标关系的几何模型}
-            \label{fig:enter-label}
+            \label{fig:enter-label1}
         \end{figure}
 
         下面建立向量代数模型，确定板凳四边界点同板凳把手$A_i(t)$的解析关系。如图所示，板凳前缘中央点假设为$D(x,y)$,根据向量平行关系有
@@ -420,15 +437,15 @@
          \begin{equation}\begin{aligned}\begin{split} C_i' = ((\lambda + 1) x_{i + 1} - \lambda x_{i} - \lambda 1 (y_i - y_{i + 1}), (\lambda + 1) y_{i + 1} - \lambda y_{i} - \lambda 1 (x_{i + 1} - x_i))\\ = \phi 4(A_i, A_{i + 1})\end{split}\end{aligned}\end{equation}
         \item {\textbf {凸集构造与线段相交模型的建立}}
 
-          对任意一个板凳，考虑其后方除相邻板凳之外所有板凳的内侧长边围成的折线，可将折现变换为一个凸集的边界。变换方法是对把手$A_iA_{i+1}$确定的板凳，将内部长边$B_{i+2}B_{i+2}'$延长为射线，取距离$B_{i+2}'$最近的与折线的交点。板凳存在相撞的必要条件是存在板凳的外缘线段上的点，位于凸集外部。这意味着对任意板凳，若与外圈板凳若发生碰撞，必存在板凳的长边与外界凸集边界相交,又凸集边界必为某条板凳靠内长边的一部分，故存在板凳的外部长边同外侧板凳的内部长边相交。另一方面，如果存在某两条不相邻的板凳的长边存在交点，则必存在板凳碰撞。这就建立了板凳碰撞与线段相交的等价关系。
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.3\linewidth]{image/tuji.jpg}
-    \caption{凸集构造示意图}
-    \label{fig:enter-label}
-\end{figure}
+         对任意一个板凳，考虑其后方除相邻板凳之外所有板凳的内侧长边围成的折线，可将折现变换为一个凸集的边界。变换方法是对把手$A_iA_{i+1}$确定的板凳，将内部长边$B_{i+2}B_{i+2}'$延长为射线，取距离$B_{i+2}'$最近的与折线的交点。板凳存在相撞的必要条件是存在板凳的外缘线段上的点，位于凸集外部。这意味着对任意板凳，若与外圈板凳若发生碰撞，必存在板凳的长边与外界凸集边界相交,又凸集边界必为某条板凳靠内长边的一部分，故存在板凳的外部长边同外侧板凳的内部长边相交。另一方面，如果存在某两条不相邻的板凳的长边存在交点，则必存在板凳碰撞。这就建立了板凳碰撞与线段相交的等价关系。
+		\begin{figure}[H]
+		    \centering
+		    \includegraphics[width=0.3\linewidth]{image/tuji.jpg}
+		    \caption{凸集构造示意图}
+		    \label{fig:enter-label2}
+		\end{figure}
 
-          记所有板凳外部长边为$C_iC_{i}'$，内部长边为$B_iB_{i}'$，则板凳存在碰撞等价于存在编号i不相邻的线段$C_iC_{i}'$和$B_jB_{j}'$相交。也即
+         记所有板凳外部长边为$C_iC_{i}'$，内部长边为$B_iB_{i}'$，则板凳存在碰撞等价于存在编号i不相邻的线段$C_iC_{i}'$和$B_jB_{j}'$相交。也即
           $$ \underset{i=0}{\overset{222}{\bigcup}}\quad \underset{0\leq j \leq i - 2}{\bigcup}(B_i(t)B_{i}'(t) \bigcap C_j(t)C_{j}'(t)) = \emptyset$$
         \item {\textbf{跨立实验判定线段相交}}
         给定两条线段端点，为了快速判定其是否相交，可以建立跨立实验，如下图。当且仅当$A_0和A_1$分属直线$B_0B_1$两侧,且$B_0和B_1$分属直线$A_0A_1$两侧时，两线段相交。可以用\textbf{向量叉乘}的方向是否相反判断两点是否分属直线两侧。即线段$A_0A_1$和$B_0B_1$相交等价于$$(\overrightarrow{A_0A_1} \times \overrightarrow{A_0B_0}) \cdot (\overrightarrow{A_0A_1} \times \overrightarrow{A_0B_1}) \leq 0$$ 且 $$(\overrightarrow{B_0B_1} \times \overrightarrow{B_0A_0}) \cdot (\overrightarrow{B_0B_1} \times \overrightarrow{B_0A_1}) \leq 0$$
@@ -461,7 +478,7 @@
     \centering
     \includegraphics[width=0.8\linewidth]{image/prcess_2.png}
     \caption{拟粒子群算法流程}
-    \label{fig:enter-label}
+    \label{fig:enter-label3}
 \end{figure}
 
         \begin{itemize}
@@ -472,8 +489,60 @@
         \end{itemize}
 该过程的代码见附录二。
         \subsubsection{使用问题一运动模型求解各把手位置坐标和速度}
+        
+        
+        
+        \begin{table}[H] %[h]表示在此处添加浮动体，默认为tbf，即页面顶部、底部和空白处添加
+        	\captionsetup{skip=4pt} % 设置标题与表格的间距为4pt
+        	\caption{问题二的位置结果}
+        	\centering
+        	\setlength{\arrayrulewidth}{0.5pt} % 设置表格线条宽度为1pt
+        	\begin{tabular}{|c|c|} %c表示居中，l表示左对齐，r表示右对齐，中间添加“|”表示竖线
+        		\hline
+        		% \makebox[0.15\textwidth][c]{符号} & \makebox[0.6\textwidth][c]{说明}  \\
+        		% \hline
+        						    & 412.474213 s \\ \hline
+        		龙头 x (m)           &  1.210242 \\ \hline 
+        		龙头 y (m)           &  1.942574 \\ \hline
+        		第 1 节龙身 x (m)    &  -1.643511 \\ \hline 
+        		第 1 节龙身 y (m)    &  1.753644 \\ \hline
+        		第 51 节龙身 x (m)   &  1.281550 \\ \hline 
+        		第 51 节龙身 y (m)   &  4.326477 \\ \hline
+        		第 101 节龙身 x (m)  &  -0.536610 \\ \hline 
+        		第 101 节龙身 y (m)  &  -5.880099 \\ \hline
+        		第 151 节龙身 x (m)  &  0.968478 \\ \hline 
+        		第 151 节龙身 y (m)  &  -6.957525 \\ \hline
+        		第 201 节龙身 x (m)  &  -7.893214 \\ \hline 
+        		第 201 节龙身 y (m)  &  -1.230402 \\ \hline
+        		龙尾（后） x (m)     &  0.956579 \\ \hline 
+        		龙尾（后） y (m)     &  8.322691 \\ \hline
+        	\end{tabular}
+        	% \hline是横线，采用\makebox设置列宽
+        \end{table}
+        
+        \begin{table}[H] %[h]表示在此处添加浮动体，默认为tbf，即页面顶部、底部和空白处添加
+        	\captionsetup{skip=4pt} % 设置标题与表格的间距为4pt
+        	\caption{问题二的速度结果}
+        	\centering
+        	\setlength{\arrayrulewidth}{0.5pt} % 设置表格线条宽度为1pt
+        	\begin{tabular}{|c|c|} %c表示居中，l表示左对齐，r表示右对齐，中间添加“|”表示竖线
+        		\hline
+        		% \makebox[0.15\textwidth][c]{符号} & \makebox[0.6\textwidth][c]{说明}  \\
+        		% \hline
+        		                   &  412.474213 s \\ \hline
+        		龙头 (m/s)         &  1.000000 \\ \hline
+        		第 1 节龙身 (m/s)   & 0.991550 \\ \hline
+        		第 51 节龙身 (m/s)  & 0.976858 \\ \hline
+        		第 101 节龙身 (m/s) & 0.974551 \\ \hline
+        		第 151 节龙身 (m/s) & 0.973608 \\ \hline
+        		第 201 节龙身 (m/s) & 0.973091 \\ \hline
+        		龙尾（后） (m/s)    & 0.972932 \\ \hline
+        	\end{tabular}
+        	% \hline是横线，采用\makebox设置列宽
+        \end{table}
+        
         \subsubsection{模型验证与螺距的灵敏度分析}
-        将运动过程可视化，可验证412.48s处板凳发生碰撞，且在此之前无板凳发生碰撞——对412.48s之前接近碰撞，肉眼难以判断的运动系统格局进行了局部细粒度验证，证实不发生碰撞，从而验证了模型的可靠性。
+        将运动过程可视化，可验证412.474213s处板凳发生碰撞，且在此之前无板凳发生碰撞——对412.474213s之前接近碰撞，肉眼难以判断的运动系统格局进行了局部细粒度验证，证实不发生碰撞，从而验证了模型的可靠性。
 
         该单目标优化模型主要受到参数等距螺线螺距的影响。我们上下调整螺距，对比改变前后的板凳碰撞时间，同时对比龙头前把手与原点的最小距离。
 \begin{figure}[h]
@@ -817,15 +886,28 @@
 		\begin{equation}
 			t_{i+1} = t_i + random(-1, 1) \cdot T
 		\end{equation}
-		如果 $t{i+1}$ 的计算结果超出了求解范围边界，则可以在 $t_i$ 和边界之间随机选取一点作为 $t_{i+1}。若 $v_{max}(t_1) \ge v_{max}(t_0)$，则将 $t_0$ 更新为 $t_1$ ；否则，将 $t_0$ 更新为 $t_1$ 的概率由 Metropolis 算法决定，即概率 $P$ 为：
+		如果 $t{i+1}$ 的计算结果超出了求解范围边界，则可以在 $t_i$ 和边界之间随机选取一点作为 $t_{i+1}$ 。若 $v_{max}(t_1) \ge v_{max}(t_0)$，则将 $t_{i+1}$ 更新为 $t_1$ ；否则，将 $t_0$ 更新为 $t_1$ 的概率由 Metropolis 算法决定，即概率 $P$ 为：
 		\begin{equation}
 			P = \exp(-\dfrac{f(t_1) - f(t_0)}{T})
 		\end{equation}
-		然后，对自变量进行了多次迭代更新后，将温度 $T$ 等比减小以模拟降低温度
 		
+		对自变量进行了多次迭代更新后，将温度 $T$ 等比减小以模拟降低温度，即
+		$$T_{i+1} = \alpha_t T_i$$
+		随着温度的降低，自变量会更稳定地向最大值点收拢。取 $10^{-5}$ 作为最低温度。当温度 $T$ 下降至该温度后即停止迭代运算。
 		
-	\subsubsection{利用模拟退火算法对速度最大值进行检验}
+		模拟退火算法的相关代码在附录%
+		的 sa.py 文件中给出了具体求解过程。
 		
+		取定初始值为 $T = 4$，$l=9.0$，$right=18.0$，$\alpha_t = 0.95$，$t_0 = \frac{l + r}{2} = 13.5$。经过降温 252 次迭代解得：当龙头速度为 $v_0 = 1$m/s 时，舞龙队的最大速度为 $v_m = 1.604793$m/s ，\textbf{在 14.480391s 时的第三、四、五、六、七节龙身的前把手处取得行进速度最大值。}多节把手速度完全相同的原因是第三、四、五、六节龙身均在半径为 $r1$ 的前一圆弧上
+		
+		依照题意，龙身各把手的最大速度不能超过 $v_{\text{把手}max} = 2$m/s ，因此满足题意的龙头的最大速度可以通过下式计算：
+		$$ \dfrac{v_{\text{龙头}max}}{v_{\text{把手}max}} = \dfrac{v_0}{v_m} $$
+		代入数据解得：
+		\begin{equation}
+			v_{\text{龙头}max} = 1.246267 \text{m/s}
+		\end{equation}
+		
+		因此，\textbf{当龙头速度为 $v_{\text{龙头}max}= 1.246267$m/s 时，第三、四、五、六、七节把手在 14.480391s 处恰好达到速度最大值。并且能够保证在任一时间下各个把手的速度均不会超过 2m/s}
 		
 		
 	%Part Six
@@ -862,11 +944,775 @@
 	附录1：支撑材料的文件列表
 	
 	
+	
 	附录2：初始化代码和数据处理代码
- 	\begin{lstlisting}[language=python,columns=fullflexible,frame=shadowbox]
- \end{lstlisting}
- cross.py 这个文件处理所有与板凳碰撞有关的问题
+	
+	main.py 用于指定运行求解各题目的函数。使用时对于每一题需单独运行相关代码，并注释掉无关代码。
 	\begin{lstlisting}[language=python,columns=fullflexible,frame=shadowbox]
+# main.py
+from gen_xlsx import *
+from sa import *
+from cross import *
+from trisection import *
+
+import generate
+import config
+
+if __name__ == "__main__":
+	print("请打开当前目录下的main.py文件，根据注释运行各问代码，查看输出结果")
+	# 未运行倒数两个可视化代码会弹出仅有坐标系和时间标签的网页，请关闭后继续查看标准输出框的结果
+	# 第一问数据生成
+	# 初始时刻到 300s 为止，每秒整个舞龙队的位置，储存在当前目录下的result1_dis.xlsx中
+	# dis_xlsx_init()
+	# dis_fill_xlsx()
+	
+	# 初始时刻到 300s 为止，每秒整个舞龙队的速度，储存在当前目录下的result1_v.xlsx中
+	# v_xlsx_init()
+	# v_fill_xlsx()
+	
+	# 第二问数据生成
+	# 舞龙队盘入恰好使得板凳之间不发生碰撞的时刻下舞龙队的位置和速度，储存在当前目录下的result2.xlsx中
+	collision_xlsx_init()
+	# time, if_in = pso_cal_min_distance(55)
+	# print(f"在{time}s恰好发生碰撞")
+	collision_fill_xlsx(412.4742127430167)
+	
+	# 第三问验证函数
+	# print("问题三最小螺距：", cal_min_D())
+	
+	# 第四问数据生成
+	# 以调头开始时间为零时刻，从 −100s 开始到 100s 为止，每秒舞龙队的位置，储存在当前目录下的result4_dis.xlsx中
+	# q4_dis_xlsx_init()
+	# q4_dis_fill()
+	
+	# 以调头开始时间为零时刻，从 −100s 开始到 100s 为止，每秒舞龙队的速度，储存在当前目录下的result4_v.xlsx中
+	# q4_v_xlsx_init()
+	# q4_v_fill()
+	
+	# 第五问验证算法
+	# 模拟退火算法
+	# sa()
+	# 三分算法
+	# print(f"{trisection_max(f)}")
+	
+	# 网页弹出后，网页部分内容为黑色，表明正在加载，请稍等片刻后，等待图像基本加载完毕，使用鼠标拖动边框或在可视化界面中滑动滚轮调节图像大小
+	# 第一问可视化
+	# generate.q1_generate_spiral()
+	# generate.q1_generate(points, lines, bench_lines)
+	
+	# 第四问可视化
+	# generate.q4_generate_curve()
+	# generate.q4_generate(points, lines, bench_lines)
+ 	\end{lstlisting}
+ 	
+ 	config.py 文件为配置文件，用于存储计算精度要求、全局常量等参数信息
+	\begin{lstlisting}[language=python,columns=fullflexible,frame=shadowbox]
+# config.py
+import time
+
+import numpy as np
+
+# 绘制等距螺线
+# 参数设置
+_spacing = 0.2  # 控制螺线显示效果
+space = 55  # 控制螺距
+len_head = 286  # 龙头长度
+len_body = 165  # 龙身长度
+section_num = 223  # 龙节数
+theta_max = 32 * np.pi  # 控制螺线的最大角度
+q4_start_time = -100
+q4_end_time = 100
+
+fixed_distances = [2 * _spacing * np.pi * len_head / space, 2 * _spacing * np.pi * len_body / space]   # 龙头前把手与后把手的间距 + 龙身与龙尾前把手与后把手的间距
+actual_fixed_distances = [len_head, len_body]   # 龙头前把手与后把手的间距 + 龙身与龙尾前把手与后把手的间距
+sys_length = 45
+start_time = time.time()
+actual_q4_start_time = time.time() + 100.0
+actual_q4_end_time = time.time() - 100.0
+
+dis_tolerance = 1e-12
+
+##################################
+
+# q4
+median = 2.5
+	
+def set_spacing(space):
+	global _spacing
+	_spacing = space
+	
+	
+	\end{lstlisting}
+ 	
+ 	gen\_xlsx.py 文件用于迭代计算舞龙队位置和速度并输出到xlsx文件中
+	\begin{lstlisting}[language=python,columns=fullflexible,frame=shadowbox]
+# gen_xlsx.py
+from openpyxl import Workbook
+from openpyxl.styles import Font
+from calculate import *
+
+import config
+
+wb = Workbook()
+ws = wb.active
+font_new = Font(name='Times New Roman', size=10)
+font_song = Font(name='宋体', size=10)
+
+# q1填充行名
+q1_dis_row_names = ["龙头x (m)", "龙头y (m)"]
+
+for i in range(1, 222):
+q1_dis_row_names.append(f"第{i}节龙身x (m)")
+q1_dis_row_names.append(f"第{i}节龙身y (m)")
+
+q1_dis_row_names.append("龙尾x (m)")
+q1_dis_row_names.append("龙尾y (m)")
+q1_dis_row_names.append("龙尾（后）x (m)")
+q1_dis_row_names.append("龙尾（后）y (m)")
+
+q1_v_row_names = ["龙头 (m/s)"]
+
+for i in range(1, 222):
+q1_v_row_names.append(f"第{i}节龙身  (m/s)")
+
+q1_v_row_names.append("龙尾  (m/s)")
+q1_v_row_names.append("龙尾（后） (m/s)")
+
+# q1填充列名
+q1_column_names = [f"{i} s" for i in range(301)]  # 从 0 s 到 21 s
+
+# q2填充行名
+q2_row_names = ["龙头"]
+
+for i in range(1, 222):
+q2_row_names.append(f"第{i}节龙身")
+
+q2_row_names.append("龙尾")
+q2_row_names.append("龙尾（后）")
+
+# q2填充列名
+q2_column_names = ["横坐标x (m)", "纵坐标y (m)", "速度 (m/s)"]
+
+# q4_dis填充行名
+q4_dis_row_names = q1_dis_row_names
+
+# q4_dis填充列名
+q4_dis_column_names = [f"{i} s" for i in range(-100, 101)]
+
+# q4_v填充行名
+q4_v_row_names = q1_v_row_names
+
+# q4_v填充列名
+q4_v_column_names = [f"{i} s" for i in range(-100, 101)]
+
+def dis_xlsx_init():
+for row_num, row_name in enumerate(q1_dis_row_names, start=2):
+cell = ws.cell(row=row_num, column=1, value=row_name)
+cell.font = font_new
+
+for col_num, col_name in enumerate(q1_column_names, start=2):
+cell = ws.cell(row=1, column=col_num, value=col_name)
+cell.font = font_new
+
+
+def dis_fill_xlsx():
+	for time in range(301):
+		theta = t_to_theta(time)
+		pos = get_actual_position(theta, config.space)
+		x = pos[0][0] / 100.0
+		y = pos[1][0] / 100.0
+		cell = ws.cell(row=2, column=time + 2, value=f"{x:.6f}")
+		cell.font = font_new
+		cell = ws.cell(row=3, column=time + 2, value=f"{y:.6f}")
+		cell.font = font_new
+
+		# 更新接下来的点的位置
+		current_theta = theta
+		for i in range(1, 224):
+			delta_theta = find_actual_delta_theta(current_theta, config.actual_fixed_distances[0 if i == 1 else 1], config.space)
+			current_theta += delta_theta
+			pos = get_actual_position(current_theta, config.space)
+			x = pos[0][0] / 100.0
+			y = pos[1][0] / 100.0
+			print(f"{time} {i}")
+			cell = ws.cell(row=2 * (i + 1), column=time + 2, value=f"{x:.6f}")
+			cell.font = font_new
+			cell = ws.cell(row=2 * (i + 1) + 1, column=time + 2, value=f"{y:.6f}")
+			cell.font = font_new
+
+	wb.save("result1_dis.xlsx")
+
+
+def v_xlsx_init():
+	for row_num, row_name in enumerate(q1_v_row_names, start=2):
+		cell = ws.cell(row=row_num, column=1, value=row_name)
+		cell.font = font_new
+
+	for col_num, col_name in enumerate(q1_column_names, start=2):
+		cell = ws.cell(row=1, column=col_num, value=col_name)
+		cell.font = font_new
+
+def v_fill_xlsx():
+	for time in range(301):
+		dt = 1e-5
+		theta = t_to_theta(time)
+		pos = get_actual_position(theta, config.space)
+		_theta = t_to_theta(time - dt)
+		_pos = get_actual_position(_theta, config.space)
+		ds = list_cartesian_distance(pos, _pos) / 100.0
+		print(ds)
+		v = ds / dt
+		cell = ws.cell(row=2, column=time + 2, value=f"{v[0]:.6f}")
+		cell.font = font_new
+
+		# 更新接下来的点的位置
+		current_theta = theta
+		_current_theta = _theta
+		for i in range(1, 224):
+		delta_theta = find_actual_delta_theta(current_theta, config.actual_fixed_distances[0 if i == 1 else 1], config.space)
+		current_theta += delta_theta
+		pos = get_actual_position(current_theta, config.space)
+		_delta_theta = find_actual_delta_theta(_current_theta, config.actual_fixed_distances[0 if i == 1 else 1], config.space)
+		_current_theta += _delta_theta
+		_pos = get_actual_position(_current_theta, config.space)
+		ds = list_cartesian_distance(pos, _pos) / 100.0
+		v = ds / dt
+		print(time)
+		cell = ws.cell(row=i + 2, column=time + 2, value=f"{v[0]:.6f}")
+		cell.font = font_new
+		
+	wb.save("result1_v.xlsx")
+
+def collision_xlsx_init():
+	for row_num, row_name in enumerate(q2_row_names, start=2):
+		cell = ws.cell(row=row_num, column=1, value=row_name)
+		cell.font = font_song if row_num == 2 else font_new
+
+	for col_num, col_name in enumerate(q2_column_names, start=2):
+		cell = ws.cell(row=1, column=col_num, value=col_name)
+		cell.font = font_new
+
+def collision_fill_xlsx(t):
+	time = t
+	dt = 1e-5
+	theta = t_to_theta(time)
+	pos = get_actual_position(theta, config.space)
+	x = pos[0][0] / 100.0
+	y = pos[1][0] / 100.0
+	print(x, y)
+	cell = ws.cell(row=2, column=2, value=f"{x:.6f}")
+	cell.font = font_new
+	cell = ws.cell(row=2, column=3, value=f"{y:.6f}")
+	cell.font = font_new
+	_theta = t_to_theta(time - dt)
+	_pos = get_actual_position(_theta, config.space)
+	ds = list_cartesian_distance(pos, _pos) / 100.0
+	v = ds / dt
+	cell = ws.cell(row=2, column=4, value=f"{v[0]:.6f}")
+	cell.font = font_new
+
+	# 更新接下来的点的位置
+	current_theta = theta
+	_current_theta = _theta
+	for i in range(1, 224):
+		delta_theta = find_actual_delta_theta(current_theta, config.actual_fixed_distances[0 if i == 1 else 1],
+		config.space)
+		current_theta += delta_theta
+		pos = get_actual_position(current_theta, config.space)
+		x = pos[0][0] / 100.0
+		y = pos[1][0] / 100.0
+		print(x, y)
+		cell = ws.cell(row=i + 2, column=2, value=f"{x:.6f}")
+		cell.font = font_new
+		cell = ws.cell(row=i + 2, column=3, value=f"{y:.6f}")
+		cell.font = font_new
+		_delta_theta = find_actual_delta_theta(_current_theta, config.actual_fixed_distances[0 if i == 1 else 1],
+		config.space)
+		_current_theta += _delta_theta
+		_pos = get_actual_position(_current_theta, config.space)
+		ds = list_cartesian_distance(pos, _pos) / 100.0
+		v = ds / dt
+		cell = ws.cell(row=i + 2, column=4, value=f"{v[0]:.6f}")
+		cell.font = font_new
+		
+	wb.save("result2.xlsx")
+
+def q4_dis_xlsx_init():
+	for row_num, row_name in enumerate(q4_dis_row_names, start=2):
+	cell = ws.cell(row=row_num, column=1, value=row_name)
+	cell.font = font_song if row_num == 2 else font_new
+	
+	for col_num, col_name in enumerate(q4_dis_column_names, start=2):
+	cell = ws.cell(row=1, column=col_num, value=col_name)
+	cell.font = font_new
+
+def q4_dis_fill():
+	dis_tolerance = 1e-12
+	for time in range(-100, 101):
+		# 更新第一个点的位置
+		x, y = t_to_xy_q4(time)
+		cell = ws.cell(row=2, column=time + 102, value=f"{x:.6f}")
+		cell.font = font_new
+		cell = ws.cell(row=3, column=time + 102, value=f"{y:.6f}")
+		cell.font = font_new
+
+		ergodic_time = time
+		for i in range(1, 224):
+			delta_time = find_delta_time(ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1], dis_tolerance)
+			ergodic_time -= delta_time
+			_x, _y = t_to_xy_q4(ergodic_time)
+			cell = ws.cell(row=2 * (i + 1), column=time + 102, value=f"{_x:.6f}")
+			cell.font = font_new
+			cell = ws.cell(row=2 * (i + 1) + 1, column=time + 102, value=f"{_y:.6f}")
+			cell.font = font_new
+
+		print(time)
+
+	wb.save("result4_dis.xlsx")
+
+def q4_v_xlsx_init():
+	for row_num, row_name in enumerate(q4_v_row_names, start=2):
+	cell = ws.cell(row=row_num, column=1, value=row_name)
+	cell.font = font_song if row_num == 2 else font_new
+	
+	for col_num, col_name in enumerate(q4_v_column_names, start=2):
+	cell = ws.cell(row=1, column=col_num, value=col_name)
+	cell.font = font_new
+
+def q4_v_fill():
+	dis_tolerance = 1e-12
+	for time in range(-100, 101):
+		dt = 1e-5
+		x, y = t_to_xy_q4(time)
+		_x, _y = t_to_xy_q4(time - dt)
+		ds = list_cartesian_distance([x, y], [_x, _y])
+		v = ds / dt
+		cell = ws.cell(row=2, column=time + 102, value=f"{v:.6f}")
+		cell.font = font_new
+		
+		# 更新接下来的点的位置
+		ergodic_time = time
+		_ergodic_time = time - dt
+		for i in range(1, 224):
+			delta_time = find_delta_time(ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1], dis_tolerance)
+			ergodic_time -= delta_time
+			x, y = t_to_xy_q4(ergodic_time)
+			_delta_time = find_delta_time(_ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1], dis_tolerance)
+			_ergodic_time -= _delta_time
+			_x, _y = t_to_xy_q4(_ergodic_time)
+			ds = list_cartesian_distance([x, y], [_x, _y])
+			# print(i, ds)
+			v = ds / dt
+			cell = ws.cell(row=i + 2, column=time + 102, value=f"{v:.6f}")
+			cell.font = font_new
+	
+		print(time)
+	
+	wb.save("result4_v.xlsx")
+
+def q4_v_fill_test():
+	dis_tolerance = 1e-12
+	col = 1
+	time = 381
+	end_time = 384
+	while time < end_time:
+		dt = 1e-5
+		x, y = t_to_xy_q4(time)
+		_x, _y = t_to_xy_q4(time - dt)
+		ds = list_cartesian_distance([x, y], [_x, _y])
+		v = ds / dt
+		cell = ws.cell(row=2, column=col, value=f"{v:.6f}")
+		cell.font = font_new
+	
+		# 更新接下来的点的位置
+		ergodic_time = time
+		_ergodic_time = time - dt
+		for i in range(1, 224):
+			delta_time = find_delta_time(ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1], dis_tolerance)
+			ergodic_time -= delta_time
+			x, y = t_to_xy_q4(ergodic_time)
+			_delta_time = find_delta_time(_ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1], dis_tolerance)
+			_ergodic_time -= _delta_time
+			_x, _y = t_to_xy_q4(_ergodic_time)
+			ds = list_cartesian_distance([x, y], [_x, _y])
+			v = ds / dt
+			cell = ws.cell(row=i + 2, column=col, value=f"{v:.6f}")
+			cell.font = font_new
+			
+		col += 1
+		time += 0.2
+		print(time)
+	
+	wb.save("result4_v_t.xlsx")
+
+def q5_v_find_test():
+	dis_tolerance = 1e-12
+	col=1
+	time: float = 14.45
+	cell = ws.cell(row=1, column=1, value="时间 （s）")
+	while (time < 14.55):
+		time += 0.0001
+		col += 1
+		dt = 1e-5
+		x, y = t_to_xy_q4(time)
+		_x, _y = t_to_xy_q4(time - dt)
+		ds = list_cartesian_distance([x, y], [_x, _y])
+		v = ds / dt
+		cell = ws.cell(row=1, column=col, value=time)
+		cell = ws.cell(row=2, column=col, value=f"{v:.6f}")
+		cell.font = font_new
+		
+		# 更新接下来的点的位置
+		ergodic_time = time
+		_ergodic_time = time - dt
+		for i in range(1, 11):
+			delta_time = find_delta_time(ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1], dis_tolerance)
+			ergodic_time -= delta_time
+			x, y = t_to_xy_q4(ergodic_time)
+			_delta_time = find_delta_time(_ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1], dis_tolerance)
+			_ergodic_time -= _delta_time
+			_x, _y = t_to_xy_q4(_ergodic_time)
+			ds = list_cartesian_distance([x, y], [_x, _y])
+			v = ds / dt
+			cell = ws.cell(row=i + 2, column=col, value=f"{v:.6f}")
+			cell.font = font_new
+	
+		print("calculating:", time)
+	
+	wb.save("result5_v_test.xlsx")
+
+	\end{lstlisting}
+ 	
+	calculate.py 文件存放基础计算方法，如二分查找，极坐标距离等公式
+	\begin{lstlisting}[language=python,columns=fullflexible,frame=shadowbox]
+# calculate.py
+from vpython import *
+from q4 import *
+from scipy.optimize import fsolve
+
+import math
+import numpy as np
+import config
+
+# 函数
+# 根据theta计算螺线上点的位置
+def get_position(theta):
+    r = config._spacing * theta
+    x = r * np.cos(theta)
+    y = r * np.sin(theta)
+    return vector(x, y, 0)
+
+# 计算两点之间的距离
+def cartesian_distance(pos1, pos2):
+    return np.sqrt((pos1.x - pos2.x) ** 2 + (pos1.y - pos2.y) ** 2)
+
+# 优化
+def polar_distance(theta_1, theta_2):
+    rho_1 = config._spacing * theta_1
+    rho_2 = config._spacing * theta_2
+    return np.sqrt(rho_1 ** 2 + rho_2 ** 2 - 2 * rho_1 * rho_2 * np.cos(theta_1 - theta_2))
+
+# 使用二分法寻找更准确的 delta_theta
+def find_delta_theta(theta, fixed_distance, dis_tolerance):
+    # 二分上下限
+    low = 0
+    high = np.pi - 1e-2
+    while high - low > dis_tolerance:
+        mid = (low + high) / 2
+        pos1 = get_position(theta)
+        pos2 = get_position(theta + mid)
+        dist = cartesian_distance(pos1, pos2)
+        # dist = polar_distance(theta, theta + mid)
+        if dist < fixed_distance:
+            low = mid
+        else:
+            high = mid
+    return (low + high) / 2
+
+def find_delta_time(time, fixed_distance, dis_tolerance):
+    low = 1.5
+    high = 6
+    while high - low > dis_tolerance:
+        mid = (low + high) / 2
+        x1, y1 = t_to_xy_q4(time)
+        x2, y2 = t_to_xy_q4(time - mid)
+        x1, y1 = x1 * 100, y1 * 100
+        x2, y2 = x2 * 100, y2 * 100
+        dist = list_cartesian_distance([x1, y1], [x2, y2])
+        # dist = polar_distance(theta, theta + mid)
+        if dist < fixed_distance:
+            low = mid
+        else:
+            high = mid
+    return (low + high) / 2
+
+def list_cartesian_distance(pos1, pos2):
+    return np.sqrt((pos1[0] - pos2[0]) ** 2 + (pos1[1] - pos2[1]) ** 2)
+
+def get_actual_position(theta, space):
+    r = config._spacing * theta
+    x = r * np.cos(theta) / (2 * config._spacing * np.pi) * space
+    y = r * np.sin(theta) / (2 * config._spacing * np.pi) * space
+    return [x, y]
+
+def find_actual_delta_theta(theta, fixed_distance, space):
+    # 二分上下限
+    low = 0
+    high = 4
+    while high - low > config.dis_tolerance:
+        mid = (low + high) / 2
+        pos1 = get_actual_position(theta, space)
+        pos2 = get_actual_position(theta + mid, space)
+        dist = list_cartesian_distance(pos1, pos2)
+        # dist = polar_distance(theta, theta + mid)
+        if dist < fixed_distance:
+            low = mid
+        else:
+            high = mid
+    return (low + high) / 2
+
+# 需要已知的参数 t 来求解 theta
+def theta_t(theta):
+    return -1/2 * np.log(np.sqrt(1 + theta**2) - theta) + 1/2 * theta * np.sqrt(theta ** 2 + 1)
+
+D_q1 = 0.55 # 螺距 m
+v_q1 = 1 # 龙头速度 m/s
+C_q1 = theta_t(32 * math.pi) * D_q1 / (2*math.pi) # 积分常数，不要动
+
+def equ(theta, t, D, v, C):
+    return - theta_t(theta) * D / (2 * math.pi) - v * t + C
+
+def t_to_theta(t, D=D_q1, v=v_q1, C=C_q1):
+    initial = 0.0
+    return fsolve(equ, initial, args=(t, D, v, C))
+
+def t_to_dis(t, space):
+    positions = np.empty((224, 2))
+    theta = t_to_theta(t)
+    pos = get_actual_position(theta, space)
+    x = pos[0][0] / 100.0
+    y = pos[1][0] / 100.0
+    positions[0] = np.array([x, y])
+
+    current_theta = theta
+    for i in range(1, 224):
+        delta_theta = find_actual_delta_theta(current_theta, config.actual_fixed_distances[0 if i == 1 else 1], space)
+        current_theta += delta_theta
+        pos = get_actual_position(current_theta, space)
+        x = pos[0][0] / 100.0
+        y = pos[1][0] / 100.0
+        positions[i] = np.array([x, y])
+
+    return positions
+	\end{lstlisting}
+ 	
+	q4.py 文件存储着和第四题第五题有关的函数
+	\begin{lstlisting}[language=python,columns=fullflexible,frame=shadowbox]
+# q4.py
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.optimize import fsolve
+import math
+
+R = 4.5 # m
+D_q4 = 1.7 # 螺距 m
+v_q4 = 1 # 龙头速度 m/s
+
+theta0 = 2 * np.pi * R / D_q4
+# print(f"theta0 = {theta0 / (np.pi)} * pi")
+# print(f"theta0 = {theta0}")
+# print(f"theta0 + pi = {theta0 + np.pi}")
+k = (np.sin(theta0) + theta0 * np.cos(theta0)) / (np.cos(theta0) - theta0 * np.sin(theta0))
+# print(f"k = {k}")
+
+x0 = R * np.cos(theta0)
+y0 = R * np.sin(theta0)
+
+x0_ = -x0
+y0_ = -y0
+
+# print(f"(x0, y0) = ({x0}, {y0})")
+
+A = np.array([[R * np.cos(theta0), R * np.sin(theta0)],
+				[1, k]])
+
+b = np.array([0, k * R * np.sin(theta0) + R * np.cos(theta0)])
+
+x3, y3 = np.linalg.solve(A, b)
+
+# print(f"(x3, y3) = ({x3}, {y3})")
+
+x1 = 1.0 / 3.0 * x0 + 2.0 / 3.0 * x3
+y1 = 1.0 / 3.0 * y0 + 2.0 / 3.0 * y3
+
+# print(f"(x1, y1) = ({x1}, {y1})")
+
+x2 = - x0 + (x1 - x3)
+y2 = - y0 + (y1 - y3)
+
+# print(f"(x2, y2) = ({x2}, {y2})")
+
+r2 = np.sqrt((x1 - x3) ** 2 + (y1 - y3) ** 2)
+r1 = 2 * r2
+
+# print(f"r2 = {r2}, r1 = {r1}")
+
+xt = 2.0 / 3.0 * x2 + 1.0 / 3.0 * x1
+yt = 2.0 / 3.0 * y2 + 1.0 / 3.0 * y1
+
+# print(f"tangent_point = ({xt}, {yt})")
+
+def arctan3(y, x):
+	ret0 = np.arctan2(y, x)
+	if ret0 < 0:
+		return ret0 + 2 * np.pi
+	else:
+		return ret0
+
+theta_11 = arctan3(yt - y1, xt - x1)
+theta_12 = arctan3(y0 - y1, x0 - x1)
+	
+theta_21 = np.arctan2(yt - y2, xt - x2)
+theta_22 = np.arctan2(y0_ - y2, x0_ - x2)
+
+w1 = v_q4 / r1 # 第二段圆弧的角速度
+w2 = v_q4 / r2 # 第一段圆弧的角速度
+t1 = (theta_12 - theta_11) / w1 # 离开第一段圆弧的时刻
+t2 = t1 + (theta_22 - theta_21) / w2 # 离开第二段圆弧的时刻
+# print(f"t1={t1}, t2={t2}")
+
+def theta_t_q4(theta):
+	return -1/2 * np.log(np.sqrt(1 + theta**2) - theta) + 1/2 * theta * np.sqrt(theta ** 2 + 1)
+
+C_q4_0 = theta_t_q4(theta0) * D_q4 / (2*math.pi) # 积分常数，不要动
+C_q4_3 = - theta_t_q4(theta0) * D_q4 / (2*math.pi) + v_q4 * t2
+
+def equ_q4_0(theta, t):
+	return - theta_t_q4(theta) * D_q4 / (2 * math.pi) - v_q4 * t + C_q4_0
+
+def equ_q4_3(theta, t):
+	return theta_t_q4(theta - np.pi) * D_q4 / (2 * math.pi) - v_q4 * t + C_q4_3
+
+def rho_q4_0(theta): # 极坐标进入路线方程
+	return D_q4 / (2 * np.pi) * theta
+
+def rho_q4_3(theta) :
+	return D_q4 / (2 * np.pi) * (theta - np.pi)
+
+def t_to_theta_q4_0(t):
+	initial = 0.0
+	return fsolve(equ_q4_0, initial, args=(t))
+
+def t_to_theta_q4_1(t):
+	x = x1 + r1 * np.cos(theta_12 - w1 * t) # 顺时针旋转，角速度为负
+	y = y1 + r1 * np.sin(theta_12 - w1 * t)
+	return x, y
+
+def t_to_theta_q4_2(t):
+	x = x2 + r2 * np.cos(theta_21 + w2 * (t - t1))
+	y = y2 + r2 * np.sin(theta_21 + w2 * (t - t1))
+	return x, y
+
+def t_to_theta_q4_3(t):
+	initial = 0.0
+	return fsolve(equ_q4_3, initial, args=(t))
+
+def t_to_xy_q4(t):
+	if t < 0 :
+		angle = t_to_theta_q4_0(t)
+		rho = rho_q4_0(angle)
+		x = rho * np.cos(angle)
+		y = rho * np.sin(angle)
+		return float(x), float(y)
+	elif t < t1:
+		return t_to_theta_q4_1(t)
+	elif t < t2:
+		return t_to_theta_q4_2(t)
+	else:
+		angle = t_to_theta_q4_3(t)
+		rho = rho_q4_3(angle)
+		x = rho * np.cos(angle)
+		y = rho * np.sin(angle)
+		return float(x), float(y)
+
+# print(t_to_xy_q4(-0.1))
+
+# plt.style.use(['science'])
+# plt.rcParams['font.family'] = 'Microsoft YaHei'
+
+# # 定义等距螺线的角度范围
+# theta_spiral = np.linspace(theta0, 8 * np.pi, 1000)
+# rho_spiral = (1.7 / (2 * np.pi)) * theta_spiral
+# x_spiral = rho_spiral * np.cos(theta_spiral)
+# y_spiral = rho_spiral * np.sin(theta_spiral)
+
+# theta_spiral_ = np.linspace(theta0 - np.pi, 7 * np.pi, 1000)
+# rho_spiral_ = (1.7 / (2 * np.pi)) * (theta_spiral_ + np.pi)
+# x_spiral_ = rho_spiral_ * np.cos(theta_spiral_)
+# y_spiral_ = rho_spiral_ * np.sin(theta_spiral_)
+
+# # 圆的半径
+# r = 4.5
+# theta_circle = np.linspace(0, 2 * np.pi, 100)
+# x_circle = r * np.cos(theta_circle)
+# y_circle = r * np.sin(theta_circle)
+
+# # 圆心的半径
+# theta_circle1 = np.linspace(theta_21, theta_22, 1000)
+# x_circle1 = (r2 * np.cos(theta_circle1)) + x2
+# y_circle1 = (r2 * np.sin(theta_circle1)) + y2
+# theta_circle2 = np.linspace(theta_11, theta_12, 1000)
+# x_circle2 = (r1 * np.cos(theta_circle2)) + x1
+# y_circle2 = (r1 * np.sin(theta_circle2)) + y1
+
+# # 创建图形和坐标轴
+# fig, ax = plt.subplots()
+
+# # 绘制等距螺线
+# ax.plot(x_spiral, y_spiral, 'b', label='盘入螺线')
+# ax.plot(x_spiral_, y_spiral_, 'g', label='盘出螺线')
+
+# # 绘制以原点为中心的圆
+# ax.plot(x_circle, y_circle, 'r', label='掉头区域')
+
+# # 绘制以(x1, y1)为圆心的圆
+# ax.plot(x_circle1, y_circle1, 'orange', label='前一圆弧')
+# ax.plot(x_circle2, y_circle2, 'orange', label='后一圆弧')
+
+# # 绘制两个点
+# # ax.scatter([x3, x1], [y3, y1], color=['green', 'purple'], s=100, label=['Point (x3, y3)', 'Point (x1, y1)'])
+# # ax.scatter([xt], [yt], color=['green'], s=10, label=['(xt, yt)'])
+# # ax.scatter([x1], [y1], color=['green'], s=10, label=['(x1, y1)'])
+# # ax.scatter([x2], [y2], color=['green'], s=10, label=['(x2, y2)'])
+# for dt in range(-100, 100, 1):
+#     x, y = t_to_xy_q4(dt)
+#     # print(f"x = {x}, y = {y}")
+#     ax.scatter([x], [y], s=10, color = ["purple"])
+# # ax.plot([x1, xt], [y1, yt], color='purple')
+# # ax.plot([x1, x0], [y1, y0], color='purple')
+# # ax.plot([x2, xt], [y2, yt], color='purple')
+# # ax.plot([x2, x0_], [y2, y0_], color='purple')
+
+# # 添加图例
+# # ax.legend()
+
+# # 设置图表标题和显示图形
+# ax.set_title('问题四行进曲线')
+# ax.set_xlabel('X 坐标')
+# ax.set_ylabel('Y 坐标')
+
+# ax.set_aspect('equal')
+
+# plt.grid(True)
+# plt.show()
+	\end{lstlisting}
+ 	
+	\begin{lstlisting}[language=python,columns=fullflexible,frame=shadowbox]
+	\end{lstlisting}
+ 	
+ cross.py 用于处理所有与板凳碰撞有关的问题
+	\begin{lstlisting}[language=python,columns=fullflexible,frame=shadowbox]
+# cross.py
 import random
 
 import numpy as np
@@ -1080,6 +1926,104 @@ def cal_min_D():
 # cal_min_D()
 
 	\end{lstlisting}
+ 	
+	sa.py 文件用于存储和第五题模拟退火算法有关的函数和变量
 	\begin{lstlisting}[language=python,columns=fullflexible,frame=shadowbox]
- \end{lstlisting}
+# sa.py
+import numpy as np
+import random as rd
+import math
+
+import config
+from q4 import t_to_xy_q4
+from calculate import find_delta_time, list_cartesian_distance
+
+right =18.0
+left  =9.0
+alpha =0.95
+T     =4.0
+initial_t = (right + left) / 2
+iteration = 5 # 每个温度下迭代次数
+node_num = 10 # 默认只计算前十节的最大速度以加快计算
+
+def next_time(x):
+    x_next = x + T * 2 * (rd.random()-0.5)
+    if x_next < left:
+        temp = rd.random()
+        return temp*left+(1-temp)*x
+    elif x_next > left and x_next <= right:
+        return x_next
+    else:
+        temp = rd.random()
+        return temp*right+(1-temp)*x
+
+
+def evaluate_function(t, dt=1e-5, node_num=node_num):
+    # print(f"maximum velocity at {t:.6f}s is...", end='')
+    dis_tolerance = 1e-12
+    vmax = 0
+    index_max: int
+    
+    x, y = t_to_xy_q4(t)
+    _x, _y = t_to_xy_q4(t - dt)
+    ds = list_cartesian_distance([x, y], [_x, _y])
+    v = ds / dt
+    
+    if v > vmax:
+        vmax = v
+        index_max = 0
+
+    # 更新接下来的点的位置
+    ergodic_time = t
+    _ergodic_time = t - dt
+    for i in range(1, 11):
+        delta_time = find_delta_time(ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1], dis_tolerance)
+        ergodic_time -= delta_time
+        x, y = t_to_xy_q4(ergodic_time)
+        _delta_time = find_delta_time(_ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1], dis_tolerance)
+        _ergodic_time -= _delta_time
+        _x, _y = t_to_xy_q4(_ergodic_time)
+        ds = list_cartesian_distance([x, y], [_x, _y])
+        v = ds / dt
+    
+        if v > vmax:
+            vmax = v
+            index_max = i
+    # print(f"{vmax:.6f}m/s")
+    return vmax, i
+
+
+# 使用 Metropolis 算法计算概率
+def p(t, t_next):
+    return math.exp(-abs(evaluate_function(t)[0]-evaluate_function(t_next)[0])/(T * 0.01))
+
+def sa():
+    global T
+    time_tolerance = 1e-5
+    rd.seed(1234)
+    t = initial_t
+    iter = 0
+    total_iter = int(np.log(time_tolerance / T) / np.log(alpha))
+    f_t, index_t = evaluate_function(t)
+    print(index_t.__class__)
+    f_next: float
+    while T > time_tolerance:
+        iter += 1
+        print(f"\033[32mRound ({iter}/{total_iter}): {f_t:.6f}m/s at {t:.6f}s when T={T:.06f}\033[0m")
+        for i in range(iteration):
+            t_next = next_time(t)
+            f_t, index_t = evaluate_function(t)
+            f_next, index_next = evaluate_function(t_next)
+            if f_next >= f_t:
+                print(f"{f_next:.6f}m/s at {t_next:.06f}s is faster and accpected")
+                t = t_next
+                index_t = index_next
+            elif rd.random() <= p(t, t_next):
+                print(f"{f_next:.6f}m/s at {t_next:.06f}s is ramdomly accepted")
+                t = t_next
+                index_t = index_next
+        T *= alpha
+    print(f'最大值为：{evaluate_function(t)[0]:.6f}m/s, 最大值点为：{t}s, 把手号为：{index_t}')
+
+	\end{lstlisting}
 \end{document}

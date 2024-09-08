@@ -143,8 +143,8 @@ def collision_xlsx_init():
         cell = ws.cell(row=1, column=col_num, value=col_name)
         cell.font = font_new
 
-def collision_fill_xlsx():
-    time = 412.48
+def collision_fill_xlsx(t):
+    time = t
     dt = 1e-5
     theta = t_to_theta(time)
     pos = get_actual_position(theta, config.space)

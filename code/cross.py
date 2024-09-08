@@ -196,8 +196,8 @@ def pso_cal_min_distance(space, n = 10, c1 = 0.5, c2 = 1):
                 partical[i] = gbest[0] * random.random()
                 pbest[i] = partical[i], all_cross_check(t_to_dis(partical[i], space)) # if not best, go to a random smaller position
 
-            print(f'{i}, {pbest[i]}, {gbest}')
-            print(f'{space}, {t_to_theta(gbest[0], D=space / 100) / 2 / np.pi * space}')
+            # print(f'{i}, {pbest[i]}, {gbest}')
+            # print(f'{space}, {t_to_theta(gbest[0], D=space / 100) / 2 / np.pi * space}')
 
     return gbest[0], t_to_theta(gbest[0], D=space / 100) / 2 / np.pi * space > 450 # can enter
 
@@ -230,6 +230,6 @@ def cal_min_D():
             smallest = space
         space = (biggist + smallest) / 2
 
-    return  space
+    return space
 
 # cal_min_D()

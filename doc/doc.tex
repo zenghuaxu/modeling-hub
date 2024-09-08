@@ -326,18 +326,7 @@
 
 		\begin{equation}
 			v_{t1} = \dfrac{\sqrt{(x_i(t_1 + \Delta t) - x_i(t_1 - \Delta t))^2 + (y_i(t_1 + \Delta t) - y_i(t_1 - \Delta t))^2}}{2\Delta t}
-		\end{equation}
-		
-		计算出舞龙队的速度后，能发现龙头的速度略高于龙尾的速度。为问题五分析最大速度提供了数据支撑。第100s的数据如图%TODO
-		所示。
-		
-		\begin{figure}[H]
-			\centering
-			\includegraphics[width=0.5\linewidth]{image/Figure_5131.png}
-			\caption{100s 下把手速度随把手编号的分布}
-			\label{Figure_5131}
-		\end{figure}
-		
+		\end{equation}		
 
 		利用这种方式计算出问题一中的各个把手的位置和速度见 result1.xlsx 文件。其中 0 s、60 s、120 s、180 s、240 s、300 s 时，龙头前把手、龙头后面第 1、51、101、151、201 节龙身前把手和龙尾后把手的位置和速度如下表所示：
 
@@ -390,6 +379,20 @@
 		\end{tabular}
 		% \hline是横线，采用\makebox设置列宽
 		\end{table}
+		
+		\subsubsection{模型灵敏度验证}
+		
+		取速度作为因变量。随把手编号的增大，把手速度随之发生变化。第 100s 下的速度关于把手编号的函数图像如图%TODO
+		所示。
+		
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.5\linewidth]{image/Figure_5131.png}
+			\caption{100s 下把手速度随把手编号的分布}
+			\label{Figure_5131}
+		\end{figure}
+		
+		调整把手编号，比对各把手的速度可知：随着把手编号增大，把手的行进速度逐渐稳定单调降低，进而说明构建模型的灵敏性较高。此外，据此可发现龙头的速度略高于龙尾速度。这位问题五分析最大速度提供了数据支撑
 
 	\subsection{问题二模型的建立与求解}
 	     针对问题二，我们建立了以板凳龙运动的最长时间为决策变量和目标函数，以板凳间不互相碰撞为约束条件的\textbf{最优化模型}。通过\textbf{构造凸集}、\textbf{向量代数}和\textbf{计算几何}方法将约束条件转化为\textbf{跨立实验}。使用了\textbf{拟粒子群算法}对最优化问题进行启发式求解。得到了从起始位置开始舞龙队最多可以前进\textbf{412.474213s}。并使用问题一的模型求解了当前时刻各把手的位置与速度。
@@ -440,7 +443,7 @@
          对任意一个板凳，考虑其后方除相邻板凳之外所有板凳的内侧长边围成的折线，可将折现变换为一个凸集的边界。变换方法是对把手$A_iA_{i+1}$确定的板凳，将内部长边$B_{i+2}B_{i+2}'$延长为射线，取距离$B_{i+2}'$最近的与折线的交点。板凳存在相撞的必要条件是存在板凳的外缘线段上的点，位于凸集外部。这意味着对任意板凳，若与外圈板凳若发生碰撞，必存在板凳的长边与外界凸集边界相交,又凸集边界必为某条板凳靠内长边的一部分，故存在板凳的外部长边同外侧板凳的内部长边相交。另一方面，如果存在某两条不相邻的板凳的长边存在交点，则必存在板凳碰撞。这就建立了板凳碰撞与线段相交的等价关系。
 		\begin{figure}[H]
 		    \centering
-		    \includegraphics[width=0.3\linewidth]{image/tuji.jpg}
+		    \includegraphics[width=0.4\linewidth]{image/tuji.jpg}
 		    \caption{凸集构造示意图}
 		    \label{fig:enter-label2}
 		\end{figure}
@@ -449,6 +452,14 @@
           $$ \underset{i=0}{\overset{222}{\bigcup}}\quad \underset{0\leq j \leq i - 2}{\bigcup}(B_i(t)B_{i}'(t) \bigcap C_j(t)C_{j}'(t)) = \emptyset$$
         \item {\textbf{跨立实验判定线段相交}}
         给定两条线段端点，为了快速判定其是否相交，可以建立跨立实验，如下图。当且仅当$A_0和A_1$分属直线$B_0B_1$两侧,且$B_0和B_1$分属直线$A_0A_1$两侧时，两线段相交。可以用\textbf{向量叉乘}的方向是否相反判断两点是否分属直线两侧。即线段$A_0A_1$和$B_0B_1$相交等价于$$(\overrightarrow{A_0A_1} \times \overrightarrow{A_0B_0}) \cdot (\overrightarrow{A_0A_1} \times \overrightarrow{A_0B_1}) \leq 0$$ 且 $$(\overrightarrow{B_0B_1} \times \overrightarrow{B_0A_0}) \cdot (\overrightarrow{B_0B_1} \times \overrightarrow{B_0A_1}) \leq 0$$
+        
+        \begin{figure}[H]
+        	\centering
+        	\includegraphics[width=0.5\linewidth]{image/Figure_5212.png}
+        	\caption{跨立实验示意图}
+        	\label{Figure_5212}
+        \end{figure}
+        
         \item {\textbf{最优化模型的建立}}
 		以板凳龙的运动总时长t为决策变量和目标函数，结合上述线段不相交条件，最终建立了如下的单目标规划函数（其中$\phi$1-4由（6）至（9）式定义）：
 		\begin{equation}
@@ -618,7 +629,7 @@
     \centering
     \includegraphics[width=0.5\linewidth]{image/analasis_3.png}
     \caption{45cm-55cm螺距下龙头前把手与原点最近距离}
-    \label{fig:enter-label}
+    \label{fig:enter-label4}
 \end{figure}
 
         因此直接采用二分查找的方式搜索$$\rho -4.5 = \frac{D}{2 \pi} g^{-1}(\tau(D)) - 4.5$$的零点，求得当D = 46.26953125cm时，$\rho$为449.94774549cm，满足题意；当D更小时$\rho$超过450cm。故满足题意的\textbf{螺距最小值为46.26953125cm}。
@@ -628,7 +639,7 @@
      \centering
      \includegraphics[width=0.5\linewidth]{image/search_3.png}
      \caption{二分查找过程示意图}
-     \label{fig:enter-label}
+     \label{fig:enter-label5}
  \end{figure}
 	\subsection{问题四模型的建立与求解}
 最后，仿照问题二，将运动过程可视化，可验证龙头前把手与原点距离 449.9477cm 处板凳发生碰撞，且在此之前无板凳发生碰撞，从而验证了模型的可靠性。

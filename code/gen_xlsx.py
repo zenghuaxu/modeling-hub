@@ -343,10 +343,7 @@ collision_fill_xlsx()
 # q4_v_xlsx_init()
 # q4_v_fill()
 
-<<<<<<< HEAD
 # q4_v_fill_test()
-=======
 # q4_v_fill_test()
 
 q5_v_find_test()
->>>>>>> 3ea9ace3bcd2a4ac21096d60ac560097df787c84

@@ -11,10 +11,8 @@ from calculate import find_delta_time, list_cartesian_distance
 plt.ion()#这里需要把matplotlib改为交互状态
 
 #初始值设定
-hi=18
-lo=9
-alf=0.95
-T=0.1
+right = 18
+left = 9
 
 #目标函数
 def f(t, dt=1e-5, node_num=10):
@@ -45,9 +43,9 @@ def f(t, dt=1e-5, node_num=10):
     print(f"{vmax:.6f}m/s")
     return vmax
 
-def trisection_max(f, lo=lo, hi=hi):
-    l = float(lo)
-    r = float(hi)
+def trisection_max(f, left=left, right=right):
+    l = float(left)
+    r = float(right)
     lmid = 2.0/3*l + 1/3 * r
     rmid = 1.0/3*l + 2/3 * r
     print(f"lmid = {lmid:.6f}, rmid = {rmid:.6f}")

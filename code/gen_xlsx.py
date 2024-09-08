@@ -150,6 +150,7 @@ def collision_fill_xlsx():
     pos = get_actual_position(theta, config.space)
     x = pos[0][0] / 100.0
     y = pos[1][0] / 100.0
+    print(x, y)
     cell = ws.cell(row=2, column=2, value=f"{x:.6f}")
     cell.font = font_new
     cell = ws.cell(row=2, column=3, value=f"{y:.6f}")
@@ -171,6 +172,7 @@ def collision_fill_xlsx():
         pos = get_actual_position(current_theta, config.space)
         x = pos[0][0] / 100.0
         y = pos[1][0] / 100.0
+        print(x, y)
         cell = ws.cell(row=i + 2, column=2, value=f"{x:.6f}")
         cell.font = font_new
         cell = ws.cell(row=i + 2, column=3, value=f"{y:.6f}")
@@ -181,7 +183,6 @@ def collision_fill_xlsx():
         _pos = get_actual_position(_current_theta, config.space)
         ds = list_cartesian_distance(pos, _pos) / 100.0
         v = ds / dt
-        print(time)
         cell = ws.cell(row=i + 2, column=4, value=f"{v[0]:.6f}")
         cell.font = font_new
 
@@ -259,13 +260,16 @@ def q4_v_fill():
     wb.save("result4_v.xlsx")
     
 def q4_v_fill_test():
-    for time in range(415, 420):
+    col = 1
+    time = 381
+    end_time = 384
+    while time < end_time:
         dt = 1e-5
         x, y = t_to_xy_q4(time)
         _x, _y = t_to_xy_q4(time - dt)
         ds = list_cartesian_distance([x, y], [_x, _y])
         v = ds / dt
-        cell = ws.cell(row=2, column=time + 2, value=f"{v:.6f}")
+        cell = ws.cell(row=2, column=col, value=f"{v:.6f}")
         cell.font = font_new
 
         # 更新接下来的点的位置
@@ -280,12 +284,14 @@ def q4_v_fill_test():
             _x, _y = t_to_xy_q4(_ergodic_time)
             ds = list_cartesian_distance([x, y], [_x, _y])
             v = ds / dt
-            cell = ws.cell(row=i + 2, column=time +2, value=f"{v:.6f}")
+            cell = ws.cell(row=i + 2, column=col, value=f"{v:.6f}")
             cell.font = font_new
 
+        col += 1
+        time += 0.2
         print(time)
 
-    wb.save("result4_v_test.xlsx")
+    wb.save("result4_v_t.xlsx")
 
 def q5_v_find_test():
     col=1
@@ -321,22 +327,3 @@ def q5_v_find_test():
         print("calculating:", time)
 
     wb.save("result5_v_test.xlsx")
-
-# dis_xlsx_init()
-# dis_fill_xlsx()
-
-# v_xlsx_init()
-# v_fill_xlsx()
-
-# collision_xlsx_init()
-# collision_fill_xlsx()
-
-# q4_dis_xlsx_init()
-# q4_dis_fill()
-
-q4_v_xlsx_init()
-q4_v_fill()
-
-# q4_v_fill_test()
-
-# q5_v_find_test()

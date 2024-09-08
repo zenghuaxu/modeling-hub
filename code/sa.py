@@ -1,25 +1,34 @@
-#本功能实现最小值的求解#
-
-from matplotlib import pyplot as plt
 import numpy as np
-import random
+import random as rd
 import math
 
 import config
 from q4 import t_to_xy_q4
 from calculate import find_delta_time, list_cartesian_distance
-plt.ion()#这里需要把matplotlib改为交互状态
 
-#初始值设定
-hi=20
-lo=-1
-alf=0.95
-T=0.1
+right =18.0
+left  =9.0
+alpha =0.95
+T     =4.0
+initial_t = (right + left) / 2
+iteration = 5 # 每个温度下迭代次数
+node_num = 10 # 默认只计算前十节的最大速度以加快计算
 
-#目标函数
-def f(t, dt=1e-5, node_num=10):
+def next_time(x):
+    x_next = x + T * 2 * (rd.random()-0.5)
+    if x_next < left:
+        temp = rd.random()
+        return temp*left+(1-temp)*x
+    elif x_next > left and x_next <= right:
+        return x_next
+    else:
+        temp = rd.random()
+        return temp*right+(1-temp)*x
+
+
+def evaluate_function(t, dt=1e-5, node_num=node_num):
+    # print(f"maximum velocity at {t:.6f}s is...", end='')
     dis_tolerance = 1e-12
-    print(f"maximum velocity at {t:.6f}s is...", end='')
     vmax = 0
     
     x, y = t_to_xy_q4(t)
@@ -43,55 +52,35 @@ def f(t, dt=1e-5, node_num=10):
         v = ds / dt
         
         vmax = v if v > vmax else vmax
-    print(f"{vmax:.6f}m/s")
-    return -vmax
-    
+    # print(f"{vmax:.6f}m/s")
+    return vmax
 
-#可视化函数（开始清楚一次然后重复的画）
-def visual(x):
-    plt.cla()
-    plt.axis([lo-1,hi+1,-20,20])
-    m=np.arange(lo,hi,0.0001)
-    # plt.plot(m,f(m))
-    # plt.plot(x,f(x),marker='o',color='black',markersize='4')
-    plt.title('temperature={}'.format(T))
-    plt.pause(0.1)#如果不停啥都看不见
 
-#随机产生初始值
-def init():
-    return 14.5
+# 使用 Metropolis 算法计算概率
+def p(t, t_next):
+    return math.exp(-abs(evaluate_function(t)-evaluate_function(t_next))/(T * 0.01))
 
-#新解的随机产生
-def new(x):
-    x1=x+T*random.uniform(-1,1)
-    if (x1<=hi)&(x1>=lo):
-        return x1
-    elif x1<lo:
-        rand=random.uniform(-1,1)
-        return rand*lo+(1-rand)*x
-    else:
-        rand=random.uniform(-1,1)
-        return rand*hi+(1-rand)*x
-
-#p函数
-def p(x,x1):
-    return math.exp(-abs(f(x)-f(x1))/(T * 0.01))
-
-def main():
-    global x
+def sa():
     global T
-    x=init()
-    while T>0.0001:
-        # visual(x)
-        print(f"t = {x:.6f}s at Tempreture {T}")
-        for i in range(5):
-            x1=new(x)
-            # print(f"checking position {x1}")
-            if f(x1)<=f(x):
-                print(f"{x1:.06f} is better and accpected")
-                x=x1
-            elif random.random()<=p(x,x1):
-                print(f"{x1:.06f} is ramdomly accepted")
-                x=x1
-        T=T*alf
-    print(f'最大值为：{-f(x)}, 最大值点为：{x}')
+    rd.seed(1234)
+    t = initial_t
+    iter = 0
+    total_iter = int(np.log(config.time_tolerance / T) / np.log(alpha))
+    f_t = evaluate_function(t)
+    f_next: float
+    while T > config.time_tolerance:
+        iter += 1
+        print(f"\033[32mRound ({iter}/{total_iter}): {f_t:.6f}m/s at {t:.6f}s when T={T:.06f}\033[0m")
+        for i in range(iteration):
+            t_next = next_time(t)
+            f_t = evaluate_function(t)
+            f_next = evaluate_function(t_next)
+            if f_next >= f_t:
+                print(f"{f_next:.6f}m/s at {t_next:.06f}s is faster and accpected")
+                t = t_next
+            elif rd.random() <= p(t, t_next):
+                print(f"{f_next:.6f}m/s at {t_next:.06f}s is ramdomly accepted")
+                t = t_next
+        T *= alpha
+    print(f'最大值为：{evaluate_function(t):.6f}m/s, 最大值点为：{t}s')
+

@@ -232,4 +232,4 @@ def cal_min_D():
 
     return  space
 
-cal_min_D()
+# cal_min_D()

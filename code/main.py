@@ -23,7 +23,7 @@ bench_lines = [for_bench_line, beh_bench_line, left_bench_line, right_bench_line
 
 
 if __name__ == "__main__":
-    generate.q1_generate_spiral()
-    generate.q1_generate(points, lines, bench_lines)
-    # generate.q4_generate_curve()
-    # generate.q4_generate(points, lines, bench_lines)
+    # generate.q1_generate_spiral()
+    # generate.q1_generate(points, lines, bench_lines)
+    generate.q4_generate_curve()
+    generate.q4_generate(points, lines, bench_lines)

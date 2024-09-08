@@ -91,8 +91,8 @@ def q4_generate_curve():
 def q4_generate(points, lines, bench_lines):
     # current_time = time.time() - config.actual_q4_start_time
     # end_time = time.time() - config.actual_q4_end_time
-    current_time = 5
-    end_time = 30
+    current_time = 380
+    end_time = 500
     while current_time < end_time:
         rate(60)  # 控制移动速度
         record_time(current_time)
@@ -127,4 +127,4 @@ def q4_generate(points, lines, bench_lines):
         et = time.time()
         print("draw: ", et - st)
 
-        current_time += 2
+        current_time += 1

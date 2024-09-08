@@ -112,7 +112,7 @@ def t_to_xy_q4(t):
         rho = rho_q4_0(angle)
         x = rho * np.cos(angle)
         y = rho * np.sin(angle)
-        return x, y
+        return float(x), float(y)
     elif t < t1:
         return t_to_theta_q4_1(t)
     elif t < t2:

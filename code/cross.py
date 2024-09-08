@@ -191,21 +191,24 @@ def pso_cal_min_distance(space, n, c1, c2):
                 gbest = pbest[i]
 
             if pbest[i][0] > gbest[0]:
-                pbest[i] = gbest[0] * random.random(), True # if not best, go to a random smaller position
+                partical[i] = gbest[0] * random.random()
+                pbest[i] = partical[i], all_cross_check(t_to_dis(partical[i], space)) # if not best, go to a random smaller position
 
             print(f'{i}, {pbest[i]}, {gbest}')
             print(f'{space}, {t_to_theta(gbest[0], D=space / 100) / 2 / np.pi * space}')
-            # if t_to_theta(gbest[0], D=space / 100) / 2 / np.pi * space > 450:
-            #     return False # cannot enter
+            if t_to_theta(gbest[0], D=space / 100) / 2 / np.pi * space > 450:
+                return False # cannot enter
 
     return True # can enter
 
-smallest = 45
-biggist  = 55
+smallest = 46
+biggist  = 50
 
-for i in range(smallest, biggist + 1, 2):
+for i in range(smallest, biggist + 1, 1):
     pso_cal_min_distance(i, 10, c1, c2)
+    pso_cal_min_distance(i + 0.5, 10, c1, c2)
 
+# pso_cal_min_distance(55, 10, c1, c2)
 #
 # smallest = 45
 # biggist  = 55
@@ -217,5 +220,3 @@ for i in range(smallest, biggist + 1, 2):
 #     else :
 #         smallest = space
 #     space = (biggist + smallest) / 2
-#
-

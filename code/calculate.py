@@ -63,8 +63,8 @@ def list_cartesian_distance(pos1, pos2):
 
 def get_actual_position(theta, space):
     r = config._spacing * theta
-    x = r * np.cos(theta) / (0.4 * np.pi) * space
-    y = r * np.sin(theta) / (0.4 * np.pi) * space
+    x = r * np.cos(theta) / (2 * config._spacing * np.pi) * space
+    y = r * np.sin(theta) / (2 * config._spacing * np.pi) * space
     return [x, y]
 
 def find_actual_delta_theta(theta, fixed_distance, space):

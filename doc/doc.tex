@@ -2,9 +2,54 @@
 \documentclass[a4paper]{article}
 \usepackage{geometry}
 \geometry{a4paper,left=2.7cm,right=2.7cm,top=2.54cm,bottom=2.54cm}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows}
+\usepackage{wrapfig}
 
 %导入ctex包
 \usepackage[UTF8,heading=true]{ctex}
+\tikzset{
+    startstop/.style={
+        rectangle,
+        rounded corners,
+        minimum width=3cm,
+        minimum height=1cm,
+        text centered,
+        draw=black,
+        fill=red!30
+    },
+    io/.style={
+        trapezium,
+        trapezium left angle=70,
+        trapezium right angle=110,
+        minimum width=3cm,
+        minimum height=1cm,
+        text centered,
+        draw=black,
+        fill=blue!30
+    },
+    process/.style={
+        rectangle,
+        minimum width=3cm,
+        minimum height=1cm,
+        text centered,
+        draw=black,
+        fill=orange!30
+    },
+    decision/.style={
+        diamond,
+        aspect=2, % 控制菱形的宽高比
+        minimum width=3cm,
+        minimum height=1cm,
+        text centered,
+        draw=black,
+        fill=green!30
+    },
+    arrow/.style={
+        thick,
+        -Stealth % 使用Stealth箭头样式
+    }
+}
 
 %设置摘要格式
 \usepackage{abstract}
@@ -348,7 +393,7 @@
         \subsubsection{板凳碰撞最优化模型的建立}
     \begin{itemize}
         \item {\textbf{边界坐标的确定}}
-        问题一模型确立了$t\to<pos_i,v_i>$的映射关系，故能够由时刻确定所有把手$A_{i}$位置，即$A_{i}$为t的函数，记作$$A_{i}(t) = (x_i, y_i)$$。
+        问题一模型确立了$t\to<pos_i,v_i>$的映射关系，故能够由时刻确定所有把手$A_{i}$位置，即$A_{i}$为t的函数，记作:$$A_{i}(t) = (x_i, y_i)$$
         \begin{figure}[H]
             \centering
             \includegraphics[width=0.5\linewidth]{image/Figure_5211.png}
@@ -422,8 +467,25 @@
 			\end{aligned}
 		\end{equation}
     \end{itemize}
-	\subsubsection{使用拟粒子群算法进行的模型求解}
+	\subsubsection{使用拟粒子群算法进行模型求解}
  通过可视化建模，初步确认板凳碰撞真值随时间增大既可能由真变假，也可能由假变真，因此通过遍历方法进行搜索需要极细粒度，计算时间过长。因此结合真值位于多个不相交区间的特点，采用粒子群算法进行求解。\textbf{其中为了求解本模型，不要求粒子位置满足约束条件，而是向最优解更新的条件中添加了约束条件，同时调整了粒子位置更新的条件。我们将调整后的算法命名为拟粒子群算法。}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{image/prcess_2.png}
+    \caption{拟粒子群算法流程}
+    \label{fig:enter-label}
+\end{figure}
+
+        \begin{itemize}
+            \item 第一步：初始化所有粒子的位置partical[i]与速度partical\_v[i]，其中位置在0-500之间随机生成，速度在0-1间随机生成(容易验证500s时保证已经有板凳相撞)。
+            \item 第二步：对每个粒子所代表的时刻对应的舞龙队形态，用跨立实验判定是否相撞，如果相撞则将其与粒子的局部最小解pbest[i]比较，如更小则更新。
+            \item 第三步：利用局部最小解更新全局最小解。
+            \item 第四步：判断迭代次数是否达到，如达到则以全局最小解作为优化问题的解；否则更新粒子的位置，当粒子的位置超过全局最小解$\alpha$时，将其随机移动到0-$\alpha$的某一位置，以提高搜索效率。移动后回到第二步。
+        \end{itemize}
+该过程的代码见附录二。
+\par
+\par
         \subsubsection{使用问题一运动模型求解各把手位置坐标和速度}
         \subsubsection{模型验证与螺距的灵敏度分析}
         将运动过程可视化，可验证412.48s处板凳发生碰撞，且在此之前无板凳发生碰撞，从而验证了模型的可靠性。

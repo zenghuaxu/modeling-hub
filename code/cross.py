@@ -142,14 +142,14 @@ def cal_nearest(space):
 #cal_nearest(45)
 
 def local_check():
-    for t in range(41200, 41300, 5):
+    for t in range(40950, 41200, 5):
         time = t / 100
         matrix = t_to_dis(time, 55)
         #print(t_to_dis(time))
         print(time)
         print(all_cross_check(matrix))
 
-# local_check()
+local_check()
 
 max = 30
 w = 0.5
@@ -200,12 +200,12 @@ def pso_cal_min_distance(space, n, c1, c2):
             #     return False # cannot enter
 
     return True # can enter
-
-smallest = 545
-biggist  = 555
-
-for i in range(smallest, biggist + 1, 1):
-    pso_cal_min_distance(i / 10, 10, c1, c2)
+#
+# smallest = 545
+# biggist  = 555
+#
+# for i in range(smallest, biggist + 1, 1):
+#     pso_cal_min_distance(i / 10, 10, c1, c2)
 
 # pso_cal_min_distance(55, 10, c1, c2)
 #

@@ -14,7 +14,6 @@ initial_t = (right + left) / 2
 iteration = 5 # 每个温度下迭代次数
 node_num = 10 # 默认只计算前十节的最大速度以加快计算
 
-
 def next_time(x):
     x_next = x + T * 2 * (rd.random()-0.5)
     if x_next < left:
@@ -29,6 +28,7 @@ def next_time(x):
 
 def evaluate_function(t, dt=1e-5, node_num=node_num):
     # print(f"maximum velocity at {t:.6f}s is...", end='')
+    dis_tolerance = 1e-12
     vmax = 0
     
     x, y = t_to_xy_q4(t)
@@ -41,11 +41,11 @@ def evaluate_function(t, dt=1e-5, node_num=node_num):
     # 更新接下来的点的位置
     ergodic_time = t
     _ergodic_time = t - dt
-    for i in range(1, node_num):
-        delta_time = find_delta_time(ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1])
+    for i in range(1, 11):
+        delta_time = find_delta_time(ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1], dis_tolerance)
         ergodic_time -= delta_time
         x, y = t_to_xy_q4(ergodic_time)
-        _delta_time = find_delta_time(_ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1])
+        _delta_time = find_delta_time(_ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1], dis_tolerance)
         _ergodic_time -= _delta_time
         _x, _y = t_to_xy_q4(_ergodic_time)
         ds = list_cartesian_distance([x, y], [_x, _y])
@@ -60,15 +60,16 @@ def evaluate_function(t, dt=1e-5, node_num=node_num):
 def p(t, t_next):
     return math.exp(-abs(evaluate_function(t)-evaluate_function(t_next))/(T * 0.01))
 
-
-if __name__ == "__main__":
+def sa():
+    global T
+    time_tolerance = 1e-5
     rd.seed(1234)
     t = initial_t
     iter = 0
-    total_iter = int(np.log(config.time_tolerance / T) / np.log(alpha))
+    total_iter = int(np.log(time_tolerance / T) / np.log(alpha))
     f_t = evaluate_function(t)
     f_next: float
-    while T > config.time_tolerance:
+    while T > time_tolerance:
         iter += 1
         print(f"\033[32mRound ({iter}/{total_iter}): {f_t:.6f}m/s at {t:.6f}s when T={T:.06f}\033[0m")
         for i in range(iteration):
@@ -83,3 +84,4 @@ if __name__ == "__main__":
                 t = t_next
         T *= alpha
     print(f'最大值为：{evaluate_function(t):.6f}m/s, 最大值点为：{t}s')
+

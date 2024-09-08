@@ -149,8 +149,6 @@ def local_check():
         print(time)
         print(all_cross_check(matrix))
 
-local_check()
-
 max = 30
 w = 0.5
 c1 = 0.5

@@ -198,6 +198,7 @@ def q4_dis_xlsx_init():
         cell.font = font_new
 
 def q4_dis_fill():
+    dis_tolerance = 1e-12
     for time in range(-100, 101):
         # 更新第一个点的位置
         x, y = t_to_xy_q4(time)
@@ -208,7 +209,7 @@ def q4_dis_fill():
 
         ergodic_time = time
         for i in range(1, 224):
-            delta_time = find_delta_time(ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1])
+            delta_time = find_delta_time(ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1], dis_tolerance)
             ergodic_time -= delta_time
             _x, _y = t_to_xy_q4(ergodic_time)
             cell = ws.cell(row=2 * (i + 1), column=time + 102, value=f"{_x:.6f}")
@@ -230,6 +231,7 @@ def q4_v_xlsx_init():
         cell.font = font_new
 
 def q4_v_fill():
+    dis_tolerance = 1e-12
     for time in range(-100, 101):
         dt = 1e-5
         x, y = t_to_xy_q4(time)
@@ -243,10 +245,10 @@ def q4_v_fill():
         ergodic_time = time
         _ergodic_time = time - dt
         for i in range(1, 224):
-            delta_time = find_delta_time(ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1])
+            delta_time = find_delta_time(ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1], dis_tolerance)
             ergodic_time -= delta_time
             x, y = t_to_xy_q4(ergodic_time)
-            _delta_time = find_delta_time(_ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1])
+            _delta_time = find_delta_time(_ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1], dis_tolerance)
             _ergodic_time -= _delta_time
             _x, _y = t_to_xy_q4(_ergodic_time)
             ds = list_cartesian_distance([x, y], [_x, _y])
@@ -260,6 +262,7 @@ def q4_v_fill():
     wb.save("result4_v.xlsx")
     
 def q4_v_fill_test():
+    dis_tolerance = 1e-12
     col = 1
     time = 381
     end_time = 384
@@ -276,10 +279,10 @@ def q4_v_fill_test():
         ergodic_time = time
         _ergodic_time = time - dt
         for i in range(1, 224):
-            delta_time = find_delta_time(ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1])
+            delta_time = find_delta_time(ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1], dis_tolerance)
             ergodic_time -= delta_time
             x, y = t_to_xy_q4(ergodic_time)
-            _delta_time = find_delta_time(_ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1])
+            _delta_time = find_delta_time(_ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1], dis_tolerance)
             _ergodic_time -= _delta_time
             _x, _y = t_to_xy_q4(_ergodic_time)
             ds = list_cartesian_distance([x, y], [_x, _y])
@@ -294,6 +297,7 @@ def q4_v_fill_test():
     wb.save("result4_v_t.xlsx")
 
 def q5_v_find_test():
+    dis_tolerance = 1e-12
     col=1
     time: float = 14.45
     cell = ws.cell(row=1, column=1, value="时间 （s）")
@@ -313,10 +317,10 @@ def q5_v_find_test():
         ergodic_time = time
         _ergodic_time = time - dt
         for i in range(1, 11):
-            delta_time = find_delta_time(ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1])
+            delta_time = find_delta_time(ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1], dis_tolerance)
             ergodic_time -= delta_time
             x, y = t_to_xy_q4(ergodic_time)
-            _delta_time = find_delta_time(_ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1])
+            _delta_time = find_delta_time(_ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1], dis_tolerance)
             _ergodic_time -= _delta_time
             _x, _y = t_to_xy_q4(_ergodic_time)
             ds = list_cartesian_distance([x, y], [_x, _y])

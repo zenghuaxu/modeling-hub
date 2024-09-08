@@ -18,6 +18,7 @@ T=0.1
 
 #目标函数
 def f(t, dt=1e-5, node_num=10):
+    dis_tolerance = 1e-12
     print(f"maximum velocity at {t:.6f}s is...", end='')
     vmax = 0
     
@@ -32,10 +33,10 @@ def f(t, dt=1e-5, node_num=10):
     ergodic_time = t
     _ergodic_time = t - dt
     for i in range(1, node_num+1):
-        delta_time = find_delta_time(ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1])
+        delta_time = find_delta_time(ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1], dis_tolerance)
         ergodic_time -= delta_time
         x, y = t_to_xy_q4(ergodic_time)
-        _delta_time = find_delta_time(_ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1])
+        _delta_time = find_delta_time(_ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1], dis_tolerance)
         _ergodic_time -= _delta_time
         _x, _y = t_to_xy_q4(_ergodic_time)
         ds = list_cartesian_distance([x, y], [_x, _y])
@@ -67,6 +68,3 @@ def trisection_max(f, lo=lo, hi=hi):
         print(f"lmid = {lmid:.6f}, rmid = {rmid:.6f}")
         print(f"l = {l:.6f}, r = {r:.6f}")
     return (l+r)/2
-
-if __name__ == '__main__':
-    print(f"{trisection_max(f)}")

@@ -1,4 +1,7 @@
 from gen_xlsx import *
+from sa import *
+from cross import *
+from trisection import *
 
 import generate
 import config
@@ -23,6 +26,7 @@ bench_lines = [for_bench_line, beh_bench_line, left_bench_line, right_bench_line
 
 
 if __name__ == "__main__":
+    print("请打开当前目录下的main.py文件，根据注释运行各问代码，查看输出结果")
     # 第一问数据生成
     # 初始时刻到 300s 为止，每秒整个舞龙队的位置，储存在当前目录下的result1_dis.xlsx中
     # dis_xlsx_init()
@@ -39,6 +43,7 @@ if __name__ == "__main__":
 
     # 第三问验证函数
     # pso_cal_min_distance(...)
+    # local_check()
 
     # 第四问数据生成
     # 以调头开始时间为零时刻，从 −100s 开始到 100s 为止，每秒舞龙队的位置，储存在当前目录下的result4_dis.xlsx中
@@ -49,12 +54,15 @@ if __name__ == "__main__":
     # q4_v_xlsx_init()
     # q4_v_fill()
 
-    # 第五问验证函数
-    # q5_v_find_test()
+    # 第五问验证算法
+    # 模拟退火算法
+    # main()
+    # 三分算法
+    # print(f"{trisection_max(f)}")
 
     # 第一问可视化
-    generate.q1_generate_spiral()
-    generate.q1_generate(points, lines, bench_lines)
+    # generate.q1_generate_spiral()
+    # generate.q1_generate(points, lines, bench_lines)
 
     # 第四问可视化
     # generate.q4_generate_curve()

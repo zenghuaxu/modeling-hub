@@ -293,6 +293,40 @@ def q4_v_fill_test():
 
     wb.save("result4_v_t.xlsx")
 
+def q5_v_find_test():
+    col=1
+    time: float = 14.45
+    cell = ws.cell(row=1, column=1, value="时间 （s）")
+    while (time < 14.55):
+        time += 0.0001
+        col += 1
+        dt = 1e-5
+        x, y = t_to_xy_q4(time)
+        _x, _y = t_to_xy_q4(time - dt)
+        ds = list_cartesian_distance([x, y], [_x, _y])
+        v = ds / dt
+        cell = ws.cell(row=1, column=col, value=time)
+        cell = ws.cell(row=2, column=col, value=f"{v:.6f}")
+        cell.font = font_new
+
+        # 更新接下来的点的位置
+        ergodic_time = time
+        _ergodic_time = time - dt
+        for i in range(1, 11):
+            delta_time = find_delta_time(ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1])
+            ergodic_time -= delta_time
+            x, y = t_to_xy_q4(ergodic_time)
+            _delta_time = find_delta_time(_ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1])
+            _ergodic_time -= _delta_time
+            _x, _y = t_to_xy_q4(_ergodic_time)
+            ds = list_cartesian_distance([x, y], [_x, _y])
+            v = ds / dt
+            cell = ws.cell(row=i + 2, column=col, value=f"{v:.6f}")
+            cell.font = font_new
+
+        print("calculating:", time)
+
+    wb.save("result5_v_test.xlsx")
 
 # dis_xlsx_init()
 # dis_fill_xlsx()
@@ -309,4 +343,10 @@ collision_fill_xlsx()
 # q4_v_xlsx_init()
 # q4_v_fill()
 
+<<<<<<< HEAD
 # q4_v_fill_test()
+=======
+# q4_v_fill_test()
+
+q5_v_find_test()
+>>>>>>> 3ea9ace3bcd2a4ac21096d60ac560097df787c84

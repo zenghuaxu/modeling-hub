@@ -4,7 +4,7 @@ import numpy as np
 
 # 绘制等距螺线
 # 参数设置
-_spacing = 0.22  # 控制螺线显示效果
+_spacing = 0.2  # 控制螺线显示效果
 space = 55  # 控制螺距
 len_head = 286  # 龙头长度
 len_body = 165  # 龙身长度

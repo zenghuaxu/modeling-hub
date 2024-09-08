@@ -105,11 +105,11 @@
 
 		\hspace{0.2em}\textbf{针对问题一}，以等距螺线为中心建立了\textbf{极坐标系}，用\textbf{参数方程}刻画舞龙队的行进位置和速度。首先，建立等距螺线和龙头速度间关系的\textbf{微分方程模型}，利用\textbf{积分法}求解出了\textbf{舞龙队龙头的坐标关于行进时间的解析式}；然后，基于已知的把手位置，建立了舞龙队伍的\textbf{几何模型}，通过不断对后一把手进行\textbf{二分查找}，\textbf{迭代}查找确定了舞龙队所有把手的坐标；接着，用\textbf{微分方程转化为差分方程}的\textbf{微元法}，得到了舞龙队在各个位置下的速度。
 
-		\textbf{针对问题二}，建立了以舞龙队\textbf{最长运动时间}为\textbf{决策变量和目标函数}的\textbf{复杂单目标优化模型}。针对板凳不能碰撞的约束条件，使用\textbf{证明与解析几何方法}将其转化为\textbf{线段相交}约束，用\textbf{跨立实验}判断是否相交；接着提出了适用于本模型的\textbf{拟粒子群算法}求解出优化结果，得到了从起始位置开始舞龙队最多可以前进\textbf{412.48s}。通过可视化和灵敏度分析对模型进行了验证。/*TODO 敏感分析 可视化*/最后使用问题一的模型与算法完成了位置和速度的求解。
+		\textbf{针对问题二}，建立了以舞龙队\textbf{最长运动时间}为\textbf{决策变量和目标函数}的\textbf{复杂单目标优化模型}。针对板凳不能碰撞的约束条件，使用\textbf{构造凸集与向量代数方法}将其转化为\textbf{线段相交}约束，用\textbf{跨立实验}判断是否相交；接着提出了适用于本模型的\textbf{拟粒子群算法}求解出优化结果，得到了从起始位置开始舞龙队最多可以前进\textbf{412.48s}。通过可视化和灵敏度分析对模型进行了验证。/*TODO 敏感分析 可视化*/最后使用问题一的模型与算法完成了位置和速度的求解。
 
 		\textbf{针对问题三}，建立了以\textbf{等距螺线螺距}为\textbf{目标函数}的\textbf{单目标优化模型}。使用了问题二建立的模型和算法，求解出特定螺距下龙头与原点的\textbf{最小距离}。通过\textbf{可视化与回归分析}确认了螺距-龙头与原点最小距离函数的\textbf{单调性}。最后利用\textbf{二分查找}求解出满足题目要求的最小螺距为\textbf{46.269531cm}。/* TODO 回归？*/
 
-		\textbf{针对问题四}，首先，按照题目要求计算出了舞龙队盘入路线、盘出路线和掉头路线的圆弧位置，利用\textbf{解析几何和计算几何}的方法确定了舞龙队的\textbf{掉头路线方程}。然后，取\textbf{时间作为参数}，建立了舞龙队\textbf{行进路线的参数方程}。最后，利用\textbf{二分查找算法}和\textbf{微元法}，计算出了舞龙队各把手在各个时刻下的位置和速度的数值解。
+		\textbf{针对问题四}，首先，按照题目要求计算出了舞龙队盘入路线、盘出路线和掉头路线的圆弧位置，利用\textbf{解析几何}的方法确定了舞龙队的\textbf{掉头路线方程}。然后，取\textbf{时间作为参数}，建立了舞龙队\textbf{行进路线的参数方程}。最后，利用\textbf{二分查找算法}和\textbf{微元法}，计算出了舞龙队各把手在各个时刻下的位置和速度的数值解。
 
 		\textbf{针对问题五}，首先，通过建立\textbf{运动曲线几何模型}，得到把手间的\textbf{速度大小和螺线轨迹曲率的关系}，进而确定把手速度最大值的分布规律% TODO
 		。然后，建立以把手全局最大速度为目标函数的单目标优化模型，绘制出\textbf{最大速度-时间分布图}%TODO
@@ -207,7 +207,7 @@
 	%Part Five
 	\section{模型的建立与求解}
 	\subsection{问题一模型的建立与求解}
-	\subsubsection{由龙头把手确定其余把手的位置}
+	\subsubsection{龙头把手与其余把手的位置的几何递推模型与求解}
 
 		依据题意，舞龙队的行进路线由 $D = 55cm$ 的等距螺线确定。选用极坐标刻画行进路线时，该路线可以由以下方程确定：
 
@@ -233,7 +233,7 @@
 
 		二分求解代码见附录2 % TODO！！！！!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11↑
 
-	\subsubsection{确定龙头把手的位置与时间关系}
+	\subsubsection{龙头把手的位置与时间关系的常微分方程模型与求解}
 
 		5.1.1 小节提供了由龙头把手计算其余各个把手位置的方法，因此只需要确定每一秒龙头把手的位置，利用上一小节的方法，即可得到每一秒钟各个把手的位置信息。
 
@@ -257,7 +257,7 @@
 
 		带入初值条件$$g(32  \pi) = C$$,利用数值计算即可求得给定时刻下龙头把手的位置。
 
-	\subsubsection{确定各把手的速度}
+	\subsubsection{各把手的速度的差分方程模型与求解}
 
 		5.1.2 小节计算出了各个把手的位置在给定时刻下的数值解，而速度是位置在时间尺度下的微元。因此，只需要取时间微元 $\Delta t$ ，并计算在给定时间 $t_1$ 两侧的 $\Delta t$ 下的把手位置的位移模长 $|\vec{x}(t_1+\Delta t) - \vec{x}(t_1 - \Delta t)|$ ，将其除以两倍的 $\Delta t$ 即可得到速度大小。
 
@@ -339,7 +339,7 @@
 
 
 	\subsection{问题二模型的建立与求解}
-	     针对问题二，我们建立了以板凳龙运动的最长时间为决策变量和目标函数，以板凳间不互相碰撞为约束条件的最优化模型。通过向量代数和计算几何方法将约束条件转化为跨立实验。使用了模拟粒子群算法对最优化问题进行启发式求解。
+	     针对问题二，我们建立了以板凳龙运动的最长时间为决策变量和目标函数，以板凳间不互相碰撞为约束条件的\textbf{最优化模型}。通过\textbf{构造凸集}、\textbf{向量代数}和\textbf{计算几何}方法将约束条件转化为\textbf{跨立实验}。使用了\textbf{拟粒子群算法}对最优化问题进行启发式求解。得到了从起始位置开始舞龙队最多可以前进\textbf{412.48s}。并使用问题一的模型求解了当前时刻各把手的位置与速度。
 
         \subsubsection{板凳碰撞最优化模型的建立}
     \begin{itemize}
@@ -374,8 +374,8 @@
          \begin{equation}\begin{aligned}\begin{split} B_{i + 1} = ((\lambda + 1) x_{i + 1} - \lambda x_{i} + \lambda 1 (y_i - y_{i + 1}), (\lambda + 1) y_{i + 1} - \lambda y_{i} + \lambda 1 (x_{i + 1} - x_i))\\ =    \phi 2(A_i, A_{i + 1})\end{split}\end{aligned}\end{equation}
          \begin{equation}\begin{aligned}\begin{split} C_i = ((\lambda + 1) x_{i} - \lambda x_{i + 1} - \lambda 1 (y_i - y_{i + 1}), (\lambda + 1) y_{i} - \lambda y_{i + 1} - \lambda 1 (x_{i + 1} - x_i))\\ = \phi 3(A_i, A_{i + 1})\end{split}\end{aligned}\end{equation}
          \begin{equation}\begin{aligned}\begin{split} C_{i+1} = ((\lambda + 1) x_{i + 1} - \lambda x_{i} - \lambda 1 (y_i - y_{i + 1}), (\lambda + 1) y_{i + 1} - \lambda y_{i} - \lambda 1 (x_{i + 1} - x_i))\\ = \phi 4(A_i, A_{i + 1})\end{split}\end{aligned}\end{equation}
-        \item {\textbf {线段相交模型的建立}}
-          考虑两个板凳连接处由板凳长边围成的折线，可将其延拓为一个凸集。即内部任意两点的连线依旧在内部。这意味着任意板凳，若与外圈板凳若发生碰撞，必存在板凳的长边与外界凸集边界相交,又凸集边界必为某条板凳靠内长边的一部分，故存在板凳的外部长边同外侧板凳的内部长边相交。记所有板凳外部长边为$C_iC_{i + 1}$，内部长边为$B_iB_{i + 1}$，则板凳存在碰撞等价于存在编号i不相邻的线段$C_iC_{i + 1}$和$B_jB_{j + 1}$相交。也即
+        \item {\textbf {凸集构造与线段相交模型的建立}}
+          对任意一个板凳，考虑其后方除相邻板凳之外所有板凳的内侧长边围成的折线，可将折现变换为一个凸集的边界。变换方是对第$A_iA_{i+1}$把手确定的板凳，将$B_{i+2}B_{i+3}$延长为射线，取首个与折线的交点。板凳存在相撞的必要条件是板凳的外缘线段部分位于凸集外部。这意味着对任意板凳，若与外圈板凳若发生碰撞，必存在板凳的长边与外界凸集边界相交,又凸集边界必为某条板凳靠内长边的一部分，故存在板凳的外部长边同外侧板凳的内部长边相交。另一方面，如果存在板凳的长边存在交点，则必存在板凳碰撞。这就建立了板凳碰撞与线段相交的等价关系记所有板凳外部长边为$C_iC_{i + 1}$，内部长边为$B_iB_{i + 1}$，则板凳存在碰撞等价于存在编号i不相邻的线段$C_iC_{i + 1}$和$B_jB_{j + 1}$相交。也即
           $$ \underset{i=0}{\overset{222}{\bigcup}}\quad \underset{0\leq j \leq i - 2}{\bigcup}(B_i(t)B_{i + 1}(t) \bigcap C_j(t)C_{j + 1}(t)) = \emptyset$$
         \item {\textbf{跨立实验判定线段相交}}
         给定两条线段端点，为了快速判定其是否相交，可以建立跨立实验，如下图。当且仅当$A_0和A_1$分属直线$B_0B_1$两侧,且$B_0和B_1$分属直线$A_0A_1$两侧时，两线段相交。可以用\textbf{向量叉乘}的方向是否相反判断两点是否分属直线两侧。即线段$A_0A_1$和$B_0B_1$相交等价于$(\overrightarrow{A_0A_1} \times \overrightarrow{A_0B_0}) \cdot (\overrightarrow{A_0A_1} \times \overrightarrow{A_0B_1}) \leq 0$ 且 $(\overrightarrow{B_0B_1} \times \overrightarrow{B_0A_0}) \cdot (\overrightarrow{B_0B_1} \times \overrightarrow{B_0A_1}) \leq 0$
@@ -383,7 +383,7 @@
 		以板凳龙的运动总时长t为决策变量和目标函数，结合上述线段不相交条件，最终建立了如下的单目标规划函数（其中$\phi$1-4由（6）至（9）式定义）：
 		\begin{equation}
 			\begin{aligned}
-				& \max \quad \quad t \\
+				& \min \quad \quad t \\
 				& \text { s.t. }\left\{\begin{array}{l}
                         B_i(t) = \phi_1(A_i(t), A_{i + 1}(t))\\
                         B_{i + 1}(t) = \phi_2(A_i(t), A_{i + 1}(t))\\
@@ -402,18 +402,21 @@
 		\end{equation}
     \end{itemize}
 	\subsubsection{使用拟粒子群算法进行的模型求解}
+ 通过可视化建模，初步确认板凳碰撞真值随时间增大既可能由真变假，也可能由假变真，因此通过遍历方法进行搜索需要极细粒度，计算时间过长。因此结合真值位于多个不相交区间的特点，采用粒子群算法进行求解。\textbf{其中为了求解本模型，不要求粒子位置满足约束条件，而是向最优解更新的条件中添加了约束条件，同时调整了粒子位置更新的条件。我们将调整后的算法命名为拟粒子群算法。}
         \subsubsection{使用问题一运动模型求解各把手位置坐标和速度}
 	\subsection{问题三模型的建立与求解}
+ 我们建立了以\textbf{等距螺线螺距}为\textbf{目标函数}的\textbf{单目标优化模型}。使用了问题二建立的模型和算法，求解出特定螺距下龙头与原点的\textbf{最小距离}。通过\textbf{可视化与回归分析}确认了螺距-龙头与原点最小距离函数的\textbf{单调性}。最后利用\textbf{二分查找}求解出满足题目要求的最小螺距为\textbf{46.269531cm}。
 	\subsubsection{最优化模型的建立}
+ 根据问题二的模型，添加螺距作为点的参数，我们得到某一螺距下碰撞最小时间同螺距的函数关系，即：
  		\begin{equation}
-			\begin{aligned}
-				& \min \quad \quad D \\
+   \begin{aligned}
+				& \tau(D) = \min \quad \quad t \\
 				& \text { s.t. }\left\{\begin{array}{l}
-                        B_i(t) = \phi_1(A_i(t), A_{i + 1}(t))\\
-                        B_{i + 1}(t) = \phi_2(A_i(t), A_{i + 1}(t))\\
-                        C_i(t) = \phi_3(A_i(t), A_{i + 1}(t))\\
-                        C_{i + 1}(t) = \phi_4(A_i(t), A_{i + 1}(t))\\
-               \underset{i=0}{\overset{222}{\bigcup}}\quad \underset{0\leq j \leq i - 2}{\bigcup}(B_i(t)B_{i + 1}(t) \bigcap C_j(t)C_{j + 1}(t)) = \emptyset
+                        B_i(t) = \phi_1(A_i(t, D), A_{i + 1}(t, D))\\
+                        B_{i + 1}(t, D) = \phi_2(A_i(t, D), A_{i + 1}(t, D))\\
+                        C_i(t, D) = \phi_3(A_i(t, D), A_{i + 1}(t, D))\\
+                        C_{i + 1}(t, D) = \phi_4(A_i(t, D), A_{i + 1}(t, D))\\
+               \underset{i=0}{\overset{222}{\bigcup}}\quad \underset{0\leq j \leq i - 2}{\bigcup}(B_i(t, D)B_{i + 1}(t, D)\bigcap C_j(t,D)C_{j + 1}(t, D) = \emptyset
 
   \\
 					% Z_k=\frac{Y_{i, y} \cdot \beta_k}{1-\alpha_k} \\
@@ -422,35 +425,45 @@
 					% c>1 \\
 
 				\end{array}\right.
-			\end{aligned}
+    \end{aligned}
 		\end{equation}
+ 问题三可建模为如下优化问题：求D的最小值，使得板凳龙首次碰撞的时候龙头把手与原点的距离小于4.5m。约束条件的计算分为两步，首先使用问题二的模型计算某螺距下运行时间的最小值，其次使用问题一的模型计算某时刻龙头把手距离圆心的距离。模型的形式化描述如下：
+   		\begin{equation}
+   \begin{aligned}
+				& \min \quad \quad D \\
+				& \text { s.t. }
+    \rho = \frac{D}{2 \pi} g^{-1}(\tau(D))< 4.5
+    \end{aligned}
+		\end{equation}
+      D其中函数$g$由（4）式决定，$\tau$由（11）式决定。
         \subsubsection{模型的二分查找求解}
+        使用问题二的模型，对45cm至55cm螺距下板凳龙碰撞时刻龙头把手距离原点的距离进行数据分析，可以发现$\rho$关于D递增。因此直接采用二分查找的方式寻找$\rho = \frac{D}{2 \pi} g^{-1}(\tau(D))< 4.5$，求得当D = 46.26953125cm时，$\rho$为449.94774549cm，满足题意；当D更小时$\rho$超过450cm。故满足提题意的\textbf{螺距最小值为46.26953125cm}。
 	\subsection{问题四模型的建立与求解}
-	
+
 		% TODO: 先说明我们是用题目中叙述的圆弧来进行建模，再叙述建模求解过程
 		依据题意，在满足各部分相切，且前一圆弧的半径是后一圆弧半径的两倍的条件下，两圆弧的位置仅由进入和离开掉头区域的位置及方向唯一确定。因此，\textbf{两圆弧的位置不能再优化}。下面将逐步\textbf{确定圆弧的位置}、建立舞龙队\textbf{行进路线的参数方程}，最终计算得到\textbf{舞龙队各把手的位置和速度}。% TODO
-		
-		\subsubsection{确定掉头曲线}
-		
-		依据题意，为了确定掉头曲线的方程使得各部分相切，\textbf{需要先求出掉头曲线的起始、结束位置的坐标和切线斜率}。
+
+		\subsubsection{掉头曲线的几何模型及其求解}
+
+		为了确定掉头曲线的方程使得各部分相切，\textbf{需要先求出掉头曲线的起始、结束位置的坐标和切线斜率}。
 		并在此基础上\textbf{求解两圆弧的圆心位置即半径}
-		
+
 		由于盘出螺线和盘入螺线呈中心对称，盘入盘出螺线的极坐标方程可以表示为：
-		
+
 		\begin{equation}
 			\rho = \frac{D}{2\pi} \theta
 		\end{equation}
-		
+
 		\begin{equation}
 			\rho = \frac{D}{2\pi} (\theta - \pi)
 		\end{equation}
-		
+
 		而掉头区域是直径为 $R = 9$ 米的圆形区域，其圆心为原点。其极坐标方程可以表示为：
-		
+
 		\begin{equation}
 			\rho = R
 		\end{equation}
-		
+
 		分别联立两螺线方程和圆方程可以解得掉头区域的入口 $B$ 和出口 $B'$ 的极坐标分别为：
 		$$ B(\rho, \theta) = (R, \theta_0) = (4.5, 16.631961) $$
 		$$ B'(\rho, \theta) = (R, \theta_0 + \pi) = (4.5, 19.773553)$$
@@ -458,9 +471,9 @@
 		$$ (x_0, y_0) = (-2.711855, -3.591077) $$
 		$$ (x_0', y_0') = (2.711855, 3.591077) $$
 		确定了点 $B$ 和点 $B'$ 后，还需要确定进入掉头区域时的速度方向，用以计算相切条件。由盘入盘出螺线的中心对称性可知两点处的切线平行，斜率相同，因此只需要计算盘入曲线的切线斜率 $k$ 。
-		
+
 		盘入曲线的直角坐标表达式为：
-		
+
 		\begin{align}
 			\left\{
 			\begin{aligned}
@@ -469,9 +482,9 @@
 			\end{aligned}
 			\right.
 		\end{align}
-		
+
 		在直角坐标系下取 $y$ 对 $x$ 的微分即可得到掉头曲线起始位置和结束为止的切线斜率：
-		
+
 		\begin{equation}
 			k = \frac{dy}{dx}\Bigg|_{\theta=\theta_0} = \frac{dy}{d\theta} \frac{1}{\frac{dx}{d\theta}} \Bigg|_{\theta=\theta_0} = \frac{\sin\theta_0 + \theta_0 \cos(\theta_0)}{\cos(\theta_0) - \theta_0 \sin(\theta_0)}
 		\end{equation}
@@ -482,9 +495,9 @@
 			\caption{掉头曲线示意}
 			\label{Figure_5411}
 		\end{figure}
-		
+
 		如图所示 % TODO
-		设前一圆弧圆心为 $O_1$ 后一圆弧圆心为 $O_2$ ，掉头曲线的起始位置和结束位置分别为点 $B$ 和点 $B'$ 。延长 $B O_1$ 至点 $O'$ 使得 $O_1O' = O_2B'$ 。设前一圆弧半径为 $r_1$ ，后一圆弧半径为 $r_2$ ，则有 $r_1 = 2r_2$ 。舞龙队的沿 $\overset{\frown}{B_1 P}$, $\overset{\frown}{PB_2}$行进。 连接 $O'B'$ 可知四边形 $O'B'O_2O1$ 为平行四边形，因此有： 
+		设前一圆弧圆心为 $O_1$ 后一圆弧圆心为 $O_2$ ，掉头曲线的起始位置和结束位置分别为点 $B$ 和点 $B'$ 。延长 $B O_1$ 至点 $O'$ 使得 $O_1O' = O_2B'$ 。设前一圆弧半径为 $r_1$ ，后一圆弧半径为 $r_2$ ，则有 $r_1 = 2r_2$ 。舞龙队的沿 $\overset{\frown}{B_1 P}$, $\overset{\frown}{PB_2}$行进。 连接 $O'B'$ 可知四边形 $O'B'O_2O1$ 为平行四边形，因此有：
 		$$ O'B'= O_1O_2 = r_1 + r_2 = 3r_2 = BO_1 + O_1O' = O'B$$
 		同时，由于第一段圆弧是和盘入螺线相切的，因此设 $B$ 点处的切线为 $l_B$ 则有 $O'B \perp l_B$。而 $l_B$ 的斜率为 $k$ ，因此 $O'B$ 的斜率为 $-\frac{1}{k}$ 。联立：
 		\begin{align}
@@ -496,8 +509,8 @@
 			\right.
 		\end{align}
 		即可解得点 $O'(0.215914, -0.163050)$ 。然后，由 $\overrightarrow{OO_1} = \overrightarrow{OB_1} + 2\overrightarrow{O_1O}$ ， $\overrightarrow{OO_2} = \overrightarrow{OB_2} + \overrightarrow{O'O}$ 即可解得两圆弧的圆心坐标 $O_1(x_1, y_1)$ $O_2(x_2, y_2)$
-	
-	\subsubsection{确定舞龙队行进路线的参数方程}
+
+	\subsubsection{舞龙队行进路线的参数方程模型及求解}
 	
 		5.4.1 节得到了舞龙队行进路线中各部分路线的具体位置、参数，但是却没有将各部分曲线合并在一起，给问题四的舞龙队的速度和位置计算带来的挑战。因此，需要建立合适的参数方程来刻画整一条行进路线，即给定现实的时间 $t$ 作为参数，需要能够得到行进路线上点的参数。同时，由于龙头在任一时刻下位置就是这条曲线的参数方程，因此可以\textbf{使用龙头把手的位置与时间的函数关系作为舞龙队行进路线的参数方程}。
 		

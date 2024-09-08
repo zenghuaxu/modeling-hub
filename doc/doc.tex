@@ -2,9 +2,54 @@
 \documentclass[a4paper]{article}
 \usepackage{geometry}
 \geometry{a4paper,left=2.7cm,right=2.7cm,top=2.54cm,bottom=2.54cm}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows}
+\usepackage{wrapfig}
 
 %导入ctex包
 \usepackage[UTF8,heading=true]{ctex}
+\tikzset{
+    startstop/.style={
+        rectangle,
+        rounded corners,
+        minimum width=3cm,
+        minimum height=1cm,
+        text centered,
+        draw=black,
+        fill=red!30
+    },
+    io/.style={
+        trapezium,
+        trapezium left angle=70,
+        trapezium right angle=110,
+        minimum width=3cm,
+        minimum height=1cm,
+        text centered,
+        draw=black,
+        fill=blue!30
+    },
+    process/.style={
+        rectangle,
+        minimum width=3cm,
+        minimum height=1cm,
+        text centered,
+        draw=black,
+        fill=orange!30
+    },
+    decision/.style={
+        diamond,
+        aspect=2, % 控制菱形的宽高比
+        minimum width=3cm,
+        minimum height=1cm,
+        text centered,
+        draw=black,
+        fill=green!30
+    },
+    arrow/.style={
+        thick,
+        -Stealth % 使用Stealth箭头样式
+    }
+}
 
 %设置摘要格式
 \usepackage{abstract}
@@ -105,13 +150,16 @@
 
 		\hspace{0.2em}\textbf{针对问题一}，以等距螺线为中心建立了\textbf{极坐标系}，用\textbf{参数方程}刻画舞龙队的行进位置和速度。首先，建立等距螺线和龙头速度间关系的\textbf{微分方程模型}，利用\textbf{积分法}求解出了\textbf{舞龙队龙头的坐标关于行进时间的解析式}；然后，基于已知的把手位置，建立了舞龙队伍的\textbf{几何模型}，通过不断对后一把手进行\textbf{二分查找}，\textbf{迭代}查找确定了舞龙队所有把手的坐标；接着，用\textbf{微分方程转化为差分方程}的\textbf{微元法}，得到了舞龙队在各个位置下的速度。
 
-		\textbf{针对问题二}，建立了以舞龙队\textbf{最长运动时间}为\textbf{决策变量和目标函数}的\textbf{复杂单目标优化模型}。针对板凳不能碰撞的约束条件，使用\textbf{构造凸集与向量代数方法}将其转化为\textbf{线段相交}约束，用\textbf{跨立实验}判断是否相交；接着提出了适用于本模型的\textbf{拟粒子群算法}求解出优化结果，得到了从起始位置开始舞龙队最多可以前进\textbf{412.48s}。通过可视化和灵敏度分析对模型进行了验证。/*TODO 敏感分析 可视化*/最后使用问题一的模型与算法完成了位置和速度的求解。
+		\textbf{针对问题二}，建立了以舞龙队\textbf{最长运动时间}为\textbf{决策变量和目标函数}的\textbf{复杂单目标优化模型}。针对板凳不能碰撞的约束条件，使用\textbf{构造凸集与向量代数方法}将其转化为\textbf{线段相交}约束，用\textbf{跨立实验}判断是否相交；接着提出了适用于本模型的\textbf{拟粒子群算法}求解出优化结果，得到了从起始位置开始舞龙队最多可以前进\textbf{412.48s}。通过可视化和灵敏度分析对模型进行了验证。最后使用问题一的模型与算法完成了位置和速度的求解。
 
-		\textbf{针对问题三}，建立了以\textbf{等距螺线螺距}为\textbf{目标函数}的\textbf{单目标优化模型}。使用了问题二建立的模型和算法，求解出特定螺距下龙头与原点的\textbf{最小距离}。通过\textbf{可视化与回归分析}确认了螺距-龙头与原点最小距离函数的\textbf{单调性}。最后利用\textbf{二分查找}求解出满足题目要求的最小螺距为\textbf{46.269531cm}。/* TODO 回归？*/
+		\textbf{针对问题三}，建立了以\textbf{等距螺线螺距}为\textbf{目标函数}的\textbf{单目标优化模型}。使用了问题二建立的模型和算法，求解出特定螺距下龙头与原点的\textbf{最小距离}。通过\textbf{可视化与回归分析}确认了螺距-龙头与原点最小距离函数的\textbf{单调性}。最后利用\textbf{二分查找}求解出满足题目要求的最小螺距为\textbf{46.269531cm}。
 
-		\textbf{针对问题四}，首先，按照题目要求计算出了舞龙队盘入路线、盘出路线和掉头路线的圆弧位置，利用\textbf{解析几何}的方法确定了舞龙队的\textbf{掉头路线方程}。然后，取\textbf{时间作为参数}，建立了舞龙队\textbf{行进路线的参数方程}。最后，利用\textbf{二分查找算法}和\textbf{微元法}，计算出了舞龙队各把手在各个时刻下的位置和速度的数值解。
+		\textbf{针对问题四}，首先，\textbf{严格按照问题要求的全体约束条件}计算出了舞龙队盘入路线、盘出路线和掉头路线的圆弧位置，利用\textbf{解析几何}的方法确定了舞龙队的\textbf{掉头路线方程}，\textbf{确认了在约束条件下圆弧位置固定因而不可优化}。然后，取\textbf{时间作为参数}，建立了舞龙队\textbf{行进路线的参数方程}。最后，利用\textbf{二分查找算法}和\textbf{微元法}，计算出了舞龙队各把手在各个时刻下的位置和速度的数值解。
 
-		\textbf{针对问题五}，...\\
+		\textbf{针对问题五}，首先，通过建立\textbf{运动曲线几何模型}，得到把手间的\textbf{速度大小和螺线轨迹曲率的关系}，进而确定把手速度最大值的分布规律% TODO
+		。然后，建立以把手全局最大速度为目标函数的单目标优化模型，绘制出\textbf{最大速度-时间分布图}%TODO
+		。最后，利用\textbf{模拟退火算法}，求解出\textbf{最大速度把手的时空位置}，将最大速度与龙头速度在\textbf{时间尺度下进行缩放}%TODO
+		使得满足题设要求，解得满足题意的龙头\textbf{最大速度为 1.246267m/s}。  \\
 		%关键词（上文最后一段要用“\\”换行）
 		\newline
 		\noindent{\textbf{关键词：} \textbf{关键词1}\quad   \textbf{关键词2}\quad \textbf{关键词3} \quad \textbf{关键词4}\quad \textbf{关键词5}}
@@ -141,7 +189,7 @@
 
 		\textbf{问题四：}在题目给定的掉头路线的基础上，试寻找符合要求的掉头路线使路线长度更短。同时，在题目指定的掉头路线基础上，求解舞龙队各把手在 -100s 到 100s 内每一秒的位置和速度。
 
-		\textbf{问题五：}
+		\textbf{问题五：}在问题四的设定路线上，确定龙头行进的最大速度，使得每一把手的行进速度都不超过 2m/s
 
 	%Part Two
 	\section{问题分析}
@@ -150,20 +198,21 @@
 	\subsection{问题二的分析}
         问题二要求我们确定板凳之间首次发生碰撞时各个把手的位置和速度。由于问题一模型的建立，已经建立了映射关系$t\to<pos_i,v_i>$。因此只需要计算板凳发生碰撞的最小时间。该问题可分解为两个小问题，首先是\textbf{给定所有点的位置格局，板凳是否碰撞的判定问题}，使用了向量代数和几何方法给出了判定，该问题的解答给出了优化模型的约束条件；其次是\textbf{搜索满足板凳碰撞约束条件的最小速度的优化问题}。结合满足约束条件的t在实数域内为\textbf{多个}连续区间这一特征，难以遍历搜索得到最小值，可以借鉴\textbf{多个}粒子分别搜索的\textbf{粒子群算法}，通过一定改造得到了本问题的求解方法。
 	\subsection{问题三的分析}
-        问题三要求我们找到最小的螺距，使得板凳龙首次碰撞时，龙头前把手位于中央半径为4.5m的圆内部。我们建立了以螺距为决策目标、首次碰撞时龙头距离圆心长度小于4.5m为约束条件的单目标优化模型。试探性地使用问题二中的求解方法计算出了不同螺距下板凳龙龙头距离原点的最小长度，通过可视化分析，得到最小长度与螺距呈现单调的函数关系。因此，直接采用二分查找的算法得到螺距的最小值。并通过运动的可视化验证了模型。
+        问题三要求我们找到最小的螺距，使得板凳龙首次碰撞时，龙头前把手位于中央半径为4.5m的圆内部。我们建立了\textbf{以螺距为决策目标、首次碰撞时龙头距离圆心长度小于4.5m为约束条件的单目标优化模型}。试探性地使用问题二中的求解方法计算出了不同螺距下板凳龙龙头距离原点的最小长度，通过可视化分析，得到最小长度与螺距呈现\textbf{单调的函数关系}。因此，直接采用\textbf{二分查找的算法得到螺距的最小值}。并通过可视化的运动系统验证了模型。
 	\subsection{问题四的分析}
 		问题四要求我们确定在给定行进路线下的舞龙队各把手在给定时间下的位置和行进速度。首先，需要计算出掉头范围内两圆弧的圆心和半径，以及盘入螺线和盘出螺线的方程。然后，综合分析两圆弧和盘入盘出等距螺线，\textbf{建立舞龙队行进路线的参数方程}。最后，利用\textbf{二分查找算法迭代}确定每个把手的位置，再利用微元法计算出把手速度的数值解。
 	\subsection{问题五的分析}
+		问题五要求在问题四的设定路线上，求解龙头的最大速度使得每个把手的速度在任一时刻都不超过 2m/s。由于各个把手依托“板凳龙”构成\textbf{速度关联模型}，\textbf{只需要求解给定龙头速度下把手的最大速度}，再沿时间对龙头速度进行缩放即可得到最大龙头速度。因此，首先根据\textbf{曲线下速度关联的几何性质}，确定\textbf{最大速度的时间分布规律}，将优化目标函数降为一元函数。然后根据得到的目标函数，进一步\textbf{缩小最大值的查找范围}。接着，利用\textbf{模拟退火算法}、\textbf{三分极值算法}求得速度最大值。最后，对龙头速度进行等比例\textbf{缩放}，即可得到满足题意要求的最大龙头速度
 
 	%Part Three
 	\section{模型假设}
 	%假设的列表
 	\begin{enumerate}
-		\item 假设板凳龙盘入与盘出时，龙头、各节龙身以及龙尾之间连接牢固，旋转润滑，运动连续不停顿
-		\item 假设不考虑板凳厚度对板凳龙整体运动产生的影响
-		\item 假设板凳龙的各板凳均位于同一平面上，不考虑板凳间搭接导致的板凳高度起伏，不考虑地面的高度起伏
-            \item 假设运动模型中所有被纳入考虑的位置均空旷，不存在障碍物阻挡或不可到达的区域
-            \item 在建立碰撞模型时，不考虑举板凳的人所占据的空间，假设舞龙队发生碰撞当且仅当板凳发生碰撞
+		\item 假设板凳龙盘入与盘出时，龙头、各节龙身以及龙尾之间连接牢固，旋转润滑，运动连续不停顿。
+		\item 假设不考虑板凳厚度对板凳龙整体运动产生的影响。
+		\item 假设板凳龙的各板凳均位于同一平面上，不考虑板凳间搭接导致的板凳高度起伏，不考虑地面的高度起伏。
+        \item 假设运动模型中所有被纳入考虑的位置均空旷，不存在障碍物阻挡或不可到达的区域。
+        \item 在建立碰撞模型时，不考虑举板凳的人所占据的空间，假设舞龙队发生碰撞当且仅当板凳发生碰撞。
 	\end{enumerate}
 
 	%Part Four
@@ -191,6 +240,10 @@
 			$A_0$ & 龙头把手的中心点  \\
 			$A_i$ & 第 i 节龙身靠前把手的中心点  \\
 			$A_{223}$ & 龙尾后侧把手中心点  \\
+			$B_i$ & 第i结龙身行进方向右前方端点 \\
+			$B_i'$ &  第i结龙身行进方向后方端点 \\
+			$C_i$ & 第i结龙身行进方向左前方端点 \\
+			$C_i'$ & 第i结龙身行进方向左后方端点 \\
 			$B$ & 掉头曲线起始位置 \\
 			$B'$ & 掉头曲线结束位置 \\
 			$l_B$ & 掉头曲线起始位置切线 \\
@@ -340,7 +393,15 @@
         \subsubsection{板凳碰撞最优化模型的建立}
     \begin{itemize}
         \item {\textbf{边界坐标的确定}}
-        问题一模型确立了$t\to<pos_i,v_i>$的映射关系，故能够由时刻确定所有把手$A_{i}$位置，即$A_{i}$为t的函数，记作$$A_{i}(t) = (x_i, y_i)$$。下面建立向量代数模型，确定板凳四边界点同板凳把手$A_i(t)$的解析关系。如图所示，板凳前缘中央点假设为$D(x,y)$,根据向量平行关系有
+        问题一模型确立了$t\to<pos_i,v_i>$的映射关系，故能够由时刻确定所有把手$A_{i}$位置，即$A_{i}$为t的函数，记作:$$A_{i}(t) = (x_i, y_i)$$
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.5\linewidth]{image/Figure_5211.png}
+            \caption{边界坐标与把手坐标关系的几何模型}
+            \label{fig:enter-label}
+        \end{figure}
+
+        下面建立向量代数模型，确定板凳四边界点同板凳把手$A_i(t)$的解析关系。如图所示，板凳前缘中央点假设为$D(x,y)$,根据向量平行关系有
         $$
                    \overrightarrow{A_iD} = \lambda\overrightarrow{A_{i+1}A_i}
         ,\quad\quad \lambda = \left\{ \begin{array}{c}
@@ -367,14 +428,23 @@
          \end{split}
          \end{aligned}
          \end{equation}
-         \begin{equation}\begin{aligned}\begin{split} B_{i + 1} = ((\lambda + 1) x_{i + 1} - \lambda x_{i} + \lambda 1 (y_i - y_{i + 1}), (\lambda + 1) y_{i + 1} - \lambda y_{i} + \lambda 1 (x_{i + 1} - x_i))\\ =    \phi 2(A_i, A_{i + 1})\end{split}\end{aligned}\end{equation}
+         \begin{equation}\begin{aligned}\begin{split} B_{i}' = ((\lambda + 1) x_{i + 1} - \lambda x_{i} + \lambda 1 (y_i - y_{i + 1}), (\lambda + 1) y_{i + 1} - \lambda y_{i} + \lambda 1 (x_{i + 1} - x_i))\\ =    \phi 2(A_i, A_{i + 1})\end{split}\end{aligned}\end{equation}
          \begin{equation}\begin{aligned}\begin{split} C_i = ((\lambda + 1) x_{i} - \lambda x_{i + 1} - \lambda 1 (y_i - y_{i + 1}), (\lambda + 1) y_{i} - \lambda y_{i + 1} - \lambda 1 (x_{i + 1} - x_i))\\ = \phi 3(A_i, A_{i + 1})\end{split}\end{aligned}\end{equation}
-         \begin{equation}\begin{aligned}\begin{split} C_{i+1} = ((\lambda + 1) x_{i + 1} - \lambda x_{i} - \lambda 1 (y_i - y_{i + 1}), (\lambda + 1) y_{i + 1} - \lambda y_{i} - \lambda 1 (x_{i + 1} - x_i))\\ = \phi 4(A_i, A_{i + 1})\end{split}\end{aligned}\end{equation}
+         \begin{equation}\begin{aligned}\begin{split} C_i' = ((\lambda + 1) x_{i + 1} - \lambda x_{i} - \lambda 1 (y_i - y_{i + 1}), (\lambda + 1) y_{i + 1} - \lambda y_{i} - \lambda 1 (x_{i + 1} - x_i))\\ = \phi 4(A_i, A_{i + 1})\end{split}\end{aligned}\end{equation}
         \item {\textbf {凸集构造与线段相交模型的建立}}
-          对任意一个板凳，考虑其后方除相邻板凳之外所有板凳的内侧长边围成的折线，可将折现变换为一个凸集的边界。变换方是对第$A_iA_{i+1}$把手确定的板凳，将$B_{i+2}B_{i+3}$延长为射线，取首个与折线的交点。板凳存在相撞的必要条件是板凳的外缘线段部分位于凸集外部。这意味着对任意板凳，若与外圈板凳若发生碰撞，必存在板凳的长边与外界凸集边界相交,又凸集边界必为某条板凳靠内长边的一部分，故存在板凳的外部长边同外侧板凳的内部长边相交。另一方面，如果存在板凳的长边存在交点，则必存在板凳碰撞。这就建立了板凳碰撞与线段相交的等价关系记所有板凳外部长边为$C_iC_{i + 1}$，内部长边为$B_iB_{i + 1}$，则板凳存在碰撞等价于存在编号i不相邻的线段$C_iC_{i + 1}$和$B_jB_{j + 1}$相交。也即
-          $$ \underset{i=0}{\overset{222}{\bigcup}}\quad \underset{0\leq j \leq i - 2}{\bigcup}(B_i(t)B_{i + 1}(t) \bigcap C_j(t)C_{j + 1}(t)) = \emptyset$$
+
+          对任意一个板凳，考虑其后方除相邻板凳之外所有板凳的内侧长边围成的折线，可将折现变换为一个凸集的边界。变换方法是对把手$A_iA_{i+1}$确定的板凳，将内部长边$B_{i+2}B_{i+2}'$延长为射线，取距离$B_{i+2}'$最近的与折线的交点。板凳存在相撞的必要条件是存在板凳的外缘线段上的点，位于凸集外部。这意味着对任意板凳，若与外圈板凳若发生碰撞，必存在板凳的长边与外界凸集边界相交,又凸集边界必为某条板凳靠内长边的一部分，故存在板凳的外部长边同外侧板凳的内部长边相交。另一方面，如果存在某两条不相邻的板凳的长边存在交点，则必存在板凳碰撞。这就建立了板凳碰撞与线段相交的等价关系。
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\linewidth]{image/tuji.jpg}
+    \caption{凸集构造示意图}
+    \label{fig:enter-label}
+\end{figure}
+
+          记所有板凳外部长边为$C_iC_{i}'$，内部长边为$B_iB_{i}'$，则板凳存在碰撞等价于存在编号i不相邻的线段$C_iC_{i}'$和$B_jB_{j}'$相交。也即
+          $$ \underset{i=0}{\overset{222}{\bigcup}}\quad \underset{0\leq j \leq i - 2}{\bigcup}(B_i(t)B_{i}'(t) \bigcap C_j(t)C_{j}'(t)) = \emptyset$$
         \item {\textbf{跨立实验判定线段相交}}
-        给定两条线段端点，为了快速判定其是否相交，可以建立跨立实验，如下图。当且仅当$A_0和A_1$分属直线$B_0B_1$两侧,且$B_0和B_1$分属直线$A_0A_1$两侧时，两线段相交。可以用\textbf{向量叉乘}的方向是否相反判断两点是否分属直线两侧。即线段$A_0A_1$和$B_0B_1$相交等价于$(\overrightarrow{A_0A_1} \times \overrightarrow{A_0B_0}) \cdot (\overrightarrow{A_0A_1} \times \overrightarrow{A_0B_1}) \leq 0$ 且 $(\overrightarrow{B_0B_1} \times \overrightarrow{B_0A_0}) \cdot (\overrightarrow{B_0B_1} \times \overrightarrow{B_0A_1}) \leq 0$
+        给定两条线段端点，为了快速判定其是否相交，可以建立跨立实验，如下图。当且仅当$A_0和A_1$分属直线$B_0B_1$两侧,且$B_0和B_1$分属直线$A_0A_1$两侧时，两线段相交。可以用\textbf{向量叉乘}的方向是否相反判断两点是否分属直线两侧。即线段$A_0A_1$和$B_0B_1$相交等价于$$(\overrightarrow{A_0A_1} \times \overrightarrow{A_0B_0}) \cdot (\overrightarrow{A_0A_1} \times \overrightarrow{A_0B_1}) \leq 0$$ 且 $$(\overrightarrow{B_0B_1} \times \overrightarrow{B_0A_0}) \cdot (\overrightarrow{B_0B_1} \times \overrightarrow{B_0A_1}) \leq 0$$
         \item {\textbf{最优化模型的建立}}
 		以板凳龙的运动总时长t为决策变量和目标函数，结合上述线段不相交条件，最终建立了如下的单目标规划函数（其中$\phi$1-4由（6）至（9）式定义）：
 		\begin{equation}
@@ -382,10 +452,10 @@
 				& \min \quad \quad t \\
 				& \text { s.t. }\left\{\begin{array}{l}
                         B_i(t) = \phi_1(A_i(t), A_{i + 1}(t))\\
-                        B_{i + 1}(t) = \phi_2(A_i(t), A_{i + 1}(t))\\
+                        B_{i}'(t) = \phi_2(A_i(t), A_{i + 1}(t))\\
                         C_i(t) = \phi_3(A_i(t), A_{i + 1}(t))\\
-                        C_{i + 1}(t) = \phi_4(A_i(t), A_{i + 1}(t))\\
-               \underset{i=0}{\overset{222}{\bigcup}}\quad \underset{0\leq j \leq i - 2}{\bigcup}(\overline{B_i(t)B_{i + 1}(t)} \bigcap \overline{C_j(t)C_{j + 1}(t)}) = \emptyset
+                        C_{i}'(t) = \phi_4(A_i(t), A_{i + 1}(t))\\
+               \underset{i=0}{\overset{222}{\bigcup}}\quad \underset{0\leq j \leq i - 2}{\bigcup}(\overline{B_i(t)B_{i}'(t)} \bigcap \overline{C_j(t)C_{j}'(t)}) = \emptyset
 
   \\
 					% Z_k=\frac{Y_{i, y} \cdot \beta_k}{1-\alpha_k} \\
@@ -397,22 +467,45 @@
 			\end{aligned}
 		\end{equation}
     \end{itemize}
-	\subsubsection{使用拟粒子群算法进行的模型求解}
+	\subsubsection{使用拟粒子群算法进行模型求解}
  通过可视化建模，初步确认板凳碰撞真值随时间增大既可能由真变假，也可能由假变真，因此通过遍历方法进行搜索需要极细粒度，计算时间过长。因此结合真值位于多个不相交区间的特点，采用粒子群算法进行求解。\textbf{其中为了求解本模型，不要求粒子位置满足约束条件，而是向最优解更新的条件中添加了约束条件，同时调整了粒子位置更新的条件。我们将调整后的算法命名为拟粒子群算法。}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{image/prcess_2.png}
+    \caption{拟粒子群算法流程}
+    \label{fig:enter-label}
+\end{figure}
+
+        \begin{itemize}
+            \item 第一步：初始化所有粒子的位置partical[i]与速度partical\_v[i]，其中位置在0-500之间随机生成，速度在0-1间随机生成(容易验证500s时保证已经有板凳相撞)。
+            \item 第二步：对每个粒子所代表的时刻对应的舞龙队形态，用跨立实验判定是否相撞，如果相撞则将其与粒子的局部最小解pbest[i]比较，如更小则更新。
+            \item 第三步：利用局部最小解更新全局最小解。
+            \item 第四步：判断迭代次数是否达到，如达到则以全局最小解作为优化问题的解；否则更新粒子的位置，当粒子的位置超过全局最小解$\alpha$时，将其随机移动到0-$\alpha$的某一位置，以提高搜索效率。移动后回到第二步。
+        \end{itemize}
+该过程的代码见附录二。
+\par
+\par
         \subsubsection{使用问题一运动模型求解各把手位置坐标和速度}
+        \subsubsection{模型验证与螺距的灵敏度分析}
+        将运动过程可视化，可验证412.48s处板凳发生碰撞，且在此之前无板凳发生碰撞，从而验证了模型的可靠性。
+
+        该单目标优化模型主要受到参数等距螺线螺距的影响。我们上下调整螺距，对比改变前后的板凳碰撞时间。
 	\subsection{问题三模型的建立与求解}
  我们建立了以\textbf{等距螺线螺距}为\textbf{目标函数}的\textbf{单目标优化模型}。使用了问题二建立的模型和算法，求解出特定螺距下龙头与原点的\textbf{最小距离}。通过\textbf{可视化与回归分析}确认了螺距-龙头与原点最小距离函数的\textbf{单调性}。最后利用\textbf{二分查找}求解出满足题目要求的最小螺距为\textbf{46.269531cm}。
 	\subsubsection{最优化模型的建立}
+ 问题三中，仍然以螺距中心为原点建立极坐标，用分别用参数方程和直角坐标表示所有研究对象的位置，在螺距变化时，以龙头前把手位于等距螺旋线第16圈的时刻作为$t = 0$的时刻。
+
  根据问题二的模型，添加螺距作为点的参数，我们得到某一螺距下碰撞最小时间同螺距的函数关系，即：
  		\begin{equation}
    \begin{aligned}
 				& \tau(D) = \min \quad \quad t \\
 				& \text { s.t. }\left\{\begin{array}{l}
                         B_i(t) = \phi_1(A_i(t, D), A_{i + 1}(t, D))\\
-                        B_{i + 1}(t, D) = \phi_2(A_i(t, D), A_{i + 1}(t, D))\\
+                        B_{i}'(t, D) = \phi_2(A_i(t, D), A_{i + 1}(t, D))\\
                         C_i(t, D) = \phi_3(A_i(t, D), A_{i + 1}(t, D))\\
-                        C_{i + 1}(t, D) = \phi_4(A_i(t, D), A_{i + 1}(t, D))\\
-               \underset{i=0}{\overset{222}{\bigcup}}\quad \underset{0\leq j \leq i - 2}{\bigcup}(B_i(t, D)B_{i + 1}(t, D)\bigcap C_j(t,D)C_{j + 1}(t, D) = \emptyset
+                        C_{i}'(t, D) = \phi_4(A_i(t, D), A_{i + 1}(t, D))\\
+               \underset{i=0}{\overset{222}{\bigcup}}\quad \underset{0\leq j \leq i - 2}{\bigcup}(\overline{B_i(t, D)B_{i}'(t, D)}\bigcap \overline{C_j(t,D)C_{j}'(t, D)} = \emptyset
 
   \\
 					% Z_k=\frac{Y_{i, y} \cdot \beta_k}{1-\alpha_k} \\
@@ -423,7 +516,9 @@
 				\end{array}\right.
     \end{aligned}
 		\end{equation}
- 问题三可建模为如下优化问题：求D的最小值，使得板凳龙首次碰撞的时候龙头把手与原点的距离小于4.5m。约束条件的计算分为两步，首先使用问题二的模型计算某螺距下运行时间的最小值，其次使用问题一的模型计算某时刻龙头把手距离圆心的距离。模型的形式化描述如下：
+
+
+ 问题三可建模为如下优化问题：求D的最小值，使得板凳龙首次碰撞的时候龙头把手与原点的距离小于4.5m。约束条件的计算分为两步，首先使用问题二的优化模型和启发式算法计算某螺距下总运行时间的最小值，其次使用问题一的参数方程模型计算运行至碰撞时龙头把手距离圆心的距离。模型的形式化描述如下：
    		\begin{equation}
    \begin{aligned}
 				& \min \quad \quad D \\
@@ -433,11 +528,39 @@
 		\end{equation}
       D其中函数$g$由（4）式决定，$\tau$由（11）式决定。
         \subsubsection{模型的二分查找求解}
-        使用问题二的模型，对45cm至55cm螺距下板凳龙碰撞时刻龙头把手距离原点的距离进行数据分析，可以发现$\rho$关于D递增。因此直接采用二分查找的方式寻找$\rho = \frac{D}{2 \pi} g^{-1}(\tau(D))< 4.5$，求得当D = 46.26953125cm时，$\rho$为449.94774549cm，满足题意；当D更小时$\rho$超过450cm。故满足提题意的\textbf{螺距最小值为46.26953125cm}。
+
+        用\textbf{数学证明和数据分析}可以论证$D-\rho$关系的单调性。
+        若有两个不同螺距$D1 \le D2$，且$D1$螺距下在龙头把手处于$\theta$参数位置时产生碰撞，则$D2$螺距下也有龙头把手处于$\theta$参数位置时发生碰撞，且此时龙头把手距离原点的位置满足$\rho(D1, \theta) \le \rho(D2, \theta)$,这说明在更小螺距时，龙头把手能过够行进到的距离原点的最近距离。
+
+        使用问题二的模型，简单验证可得当螺距为50cm以及超过50cm时，板凳龙会在掉头区域内部才发生碰撞；螺距为45cm时，在掉头区域外部会发生碰撞。
+
+        对45cm至50cm螺距下板凳龙碰撞时刻龙头把手距离原点的距离进行数据分析，如下图，其中横坐标为螺距D，纵坐标为龙头前把手与原点的最小距离。可以得到$\rho$关于D的变化规律，
+        \begin{itemize}
+        \item $\rho$关于D递减，
+        \item $\rho$关于D的变化趋势呈现阶梯式递减，即按照一定的周期先平缓递减，再迅速递减。
+        \end{itemize}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{image/analasis_3.png}
+    \caption{45cm-55cm螺距下龙头前把手与原点最近距离}
+    \label{fig:enter-label}
+\end{figure}
+
+        因此直接采用二分查找的方式搜索$$\rho -4.5 = \frac{D}{2 \pi} g^{-1}(\tau(D)) - 4.5$$的零点，求得当D = 46.26953125cm时，$\rho$为449.94774549cm，满足题意；当D更小时$\rho$超过450cm。故满足提题意的\textbf{螺距最小值为46.26953125cm}。
+
+        下图展示了二分查找过程，横坐标为螺距，纵坐标为龙头前把手与原点的最近距离，其中虚线表示左侧的点纵坐标大于450cm，无需算出准确值。
+ \begin{figure}[h]
+     \centering
+     \includegraphics[width=0.5\linewidth]{image/search_3.png}
+     \caption{二分查找过程示意图}
+     \label{fig:enter-label}
+ \end{figure}
 	\subsection{问题四模型的建立与求解}
 
 		% TODO: 先说明我们是用题目中叙述的圆弧来进行建模，再叙述建模求解过程
-		依据题意，在满足各部分相切，且前一圆弧的半径是后一圆弧半径的两倍的条件下，两圆弧的位置仅由进入和离开掉头区域的位置及方向唯一确定。因此，\textbf{两圆弧的位置不能再优化}。下面将逐步\textbf{确定圆弧的位置}、建立舞龙队\textbf{行进路线的参数方程}，最终计算得到\textbf{舞龙队各把手的位置和速度}。% TODO
+		依据题意，建立了掉头曲线的几何模型，确定了在满足各部分相切，且前一圆弧的半径是后一圆弧半径的两倍的条件下，两圆弧的位置仅由进入和离开掉头区域的位置及方向唯一确定。因此，\textbf{在题目给定的相切约束和圆弧半径倍数的约束下，两圆弧的位置不能再优化；如果取消圆弧约束，则可以将掉头曲线直接优化为与进入位置和离开位置以尽可能小的圆弧平滑连接的一条线段}。
+
+        在下文的所有讨论中，将严格按照全体约束条件，\textbf{确定圆弧的位置}，并以该严格约束下的圆弧为掉头路径建立舞龙队\textbf{行进路线的参数方程模型}，最终计算得到\textbf{舞龙队各把手的位置和速度}。% TODO
 
 		\subsubsection{掉头曲线的几何模型及其求解}
 
@@ -485,7 +608,7 @@
 			k = \frac{dy}{dx}\Bigg|_{\theta=\theta_0} = \frac{dy}{d\theta} \frac{1}{\frac{dx}{d\theta}} \Bigg|_{\theta=\theta_0} = \frac{\sin\theta_0 + \theta_0 \cos(\theta_0)}{\cos(\theta_0) - \theta_0 \sin(\theta_0)}
 		\end{equation}
 
-		\begin{figure}[h]
+		\begin{figure}[H]
 			\centering
 			\includegraphics[width=0.5\textwidth]{image/Figure_5411.png}
 			\caption{掉头曲线示意}
@@ -558,7 +681,7 @@
 		的 t\_to\_xy\_q4() 函数中。对该函数进行绘制即可得到舞龙队的行进路线，如图%TODO
 		所示。
 		
-		\begin{figure}[h]
+		\begin{figure}[H]
 			\centering
 			\includegraphics[width=0.7\textwidth]{image/Figure_5412.png}
 			\caption{问题四舞龙队行进路线}
@@ -567,62 +690,74 @@
 	
 	\subsubsection{求解舞龙队的速度和位置}
 	
-	利用舞龙队行进路线的参数方程，以及龙头把手位置与时间的关系后，结合问题一的\textbf{二分查找算法}和\textbf{微元法}即可得到舞龙队行进的速度和位置。其中，− 100 s、− 50 s、0 s、50 s、100 s 时，龙头前把手、龙头后面第 1、
-	51、101、151、201 节龙身前把手和龙尾后把手的位置和速度如表%TODO
-	所示。
+		利用舞龙队行进路线的参数方程，以及龙头把手位置与时间的关系后，结合问题一的\textbf{二分查找算法}和\textbf{微元法}即可得到舞龙队行进的速度和位置。其中，− 100 s、− 50 s、0 s、50 s、100 s 时，龙头前把手、龙头后面第 1、
+		51、101、151、201 节龙身前把手和龙尾后把手的位置和速度如表%TODO
+		所示。
+
+		\begin{table}[H] %[h]表示在此处添加浮动体，默认为tbf，即页面顶部、底部和空白处添加
+			\captionsetup{skip=4pt} % 设置标题与表格的间距为4pt
+			\caption{问题四的位置结果}
+			\centering
+			\setlength{\arrayrulewidth}{0.5pt} % 设置表格线条宽度为1pt
+			\begin{tabular}{|c|c|c|c|c|c|} %c表示居中，l表示左对齐，r表示右对齐，中间添加“|”表示竖线
+				\hline
+				% \makebox[0.15\textwidth][c]{符号} & \makebox[0.6\textwidth][c]{说明}  \\
+				% \hline
+				& -100 s & -50 s & 0 s & 50 s & 100 s \\ \hline
+				龙头 x (m)          & 7.778034 & 6.608301 & -2.711856 & 1.332696 & -3.157229 \\ \hline
+				龙头 y (m)          & 3.717164 & 1.898865 & -3.591078 & 6.175324 & 7.548511 \\ \hline
+				第 1 节龙身 x (m)   & 6.209273 & 5.366911 & -0.063534 & 3.862265 & -0.346890 \\ \hline
+				第 1 节龙身 y (m)   & 6.108521 & 4.475403 & -4.670888 & 4.840828 & 8.079166 \\ \hline
+				第 51 节龙身 x (m)  & -10.608038 & -3.629945 & 2.459962 & -1.671385 & 2.095033 \\ \hline
+				第 51 节龙身 y (m)  & 2.831491 & -8.963800 & -7.778145 & -6.076713 & 4.033787 \\ \hline
+				第 101 节龙身 x (m) & -11.922761 & 10.125787 & 3.008493 & -7.591816 & -7.288774 \\ \hline
+				第 101 节龙身 y (m) & -4.802378 & -5.972247 & 10.108539 & 5.175487 & 2.063875 \\ \hline
+				第 151 节龙身 x (m) & -14.351032 & 12.974784 & -7.002789 & -4.605165 & 9.462513 \\ \hline
+				第 151 节龙身 y (m) & -1.980993 & -3.810357 & 10.337482 & -10.386988 & -3.540357 \\ \hline
+				第 201 节龙身 x (m) & -11.952942 & 10.522509 & -6.872842 & 0.336952 & 8.524374 \\ \hline
+				第 201 节龙身 y (m) & 10.566998 & -10.807425 & 12.382609 & -13.177610 & 8.606933 \\ \hline
+				龙尾（后） x (m)    & -1.011059 & 0.189809 & -1.933627 & 5.859094 & -10.980157 \\ \hline
+				龙尾（后） y (m)    & -16.527573 & 15.720588 & -14.713128 & 12.612894 & -6.770006 \\ \hline
+			\end{tabular}
+			% \hline是横线，采用\makebox设置列宽
+		\end{table}
 	
-	\begin{table}[H] %[h]表示在此处添加浮动体，默认为tbf，即页面顶部、底部和空白处添加
-		\captionsetup{skip=4pt} % 设置标题与表格的间距为4pt
-		\caption{问题一的位置结果}
-		\centering
-		\setlength{\arrayrulewidth}{0.5pt} % 设置表格线条宽度为1pt
-		\begin{tabular}{|c|c|c|c|c|c|} %c表示居中，l表示左对齐，r表示右对齐，中间添加“|”表示竖线
-			\hline
-			% \makebox[0.15\textwidth][c]{符号} & \makebox[0.6\textwidth][c]{说明}  \\ 
-			% \hline
-			& -100 s & -50 s & 0 s & 50 s & 100 s \\ \hline
-			龙头 x (m)          & 8.800000 &	5.799209 &	-4.084887 &	-2.963609 &	-0.818702 \\ \hline
-			龙头 y (m)          & -0.000000 &	-5.771092 &	-6.304479 &	6.094780 &	5.590600 \\ \hline
-			第 1 节龙身 x (m)   & 8.363824 &	7.456758 &	-1.445473 &	-5.237118 &	-3.469210 \\ \hline
-			第 1 节龙身 y (m)   & 2.826544 &	-3.440399 &	-7.405883 &	4.359627 &	4.516167 \\ \hline
-			第 51 节龙身 x (m)  & -9.518732 &	-8.686317 &	-5.543150 &	2.890455 &	-6.560125 301346 \\ \hline
-			第 51 节龙身 y (m)  & 1.341137 &	2.540108 &	6.377946 &	7.249289 &	1.969759 \\ \hline
-			第 101 节龙身 x (m) & 2.913983 &	5.687116 &	5.361939 &	1.898794 &	0.218823 \\ \hline
-			第 101 节龙身 y (m) & -9.918311 &	-8.001384 &	-7.557638 &	-8.471614 &	7.831999 \\ \hline
-			第 151 节龙身 x (m) & 10.861726 &	6.682311 &	2.388757 &	1.005154 &	4.451294 \\ \hline
-			第 151 节龙身 y (m) & 1.828753 &	8.134544 &	9.727411 &	9.424751 &	-7.486030 \\ \hline
-			第 201 节龙身 x (m) & 4.555102 &	-6.619664 &	-10.627211 &	-9.287720 &	-1.731014 \\ \hline
-			第 201 节龙身 y (m) & 10.725118 &	9.025570 &	1.359847 &	-4.246673 &	9.344557 \\ \hline
-			龙尾（后） x (m)    & -5.305444 &	7.364557 &	10.974348 &	7.383896 &	7.057739 \\ \hline
-			龙尾（后） y (m)    & -10.676584 &	-8.797992 &	0.843473 &	7.492370 &	-6.846021 \\ \hline
-		\end{tabular}
-		% \hline是横线，采用\makebox设置列宽
-	\end{table}
-	
-	\begin{table}[H] %[h]表示在此处添加浮动体，默认为tbf，即页面顶部、底部和空白处添加
-		\captionsetup{skip=4pt} % 设置标题与表格的间距为4pt
-		\caption{问题一的速度结果}
-		\centering
-		\setlength{\arrayrulewidth}{0.5pt} % 设置表格线条宽度为1pt
-		\begin{tabular}{|c|c|c|c|c|c|} %c表示居中，l表示左对齐，r表示右对齐，中间添加“|”表示竖线
-			\hline
-			% \makebox[0.15\textwidth][c]{符号} & \makebox[0.6\textwidth][c]{说明}  \\ 
-			% \hline
-			& -100 s & -50 s & 0 s & 50 s & 100 s \\ \hline
-			龙头 (m/s)          & 1.000000 & 1.000000 & 1.000000 & 1.000000 & 1.000000 \\ \hline
-			第 1 节龙身 (m/s)   & 0.999971 & 0.999961 & 0.999945 & 0.999917 & 0.999859 \\ \hline
-			第 51 节龙身 (m/s)  & 0.999742 & 0.999662 & 0.999540 & 0.999331 & 0.998940 \\ \hline
-			第 101 节龙身 (m/s) & 0.999575 & 0.999455 & 0.999277 & 0.998971 & 0.998436 \\ \hline
-			第 151 节龙身 (m/s) & 0.999451 & 0.999303 & 0.999082 & 0.998726 & 0.998121 \\ \hline
-			第 201 节龙身 (m/s) & 0.999352 & 0.999190 & 0.998942 & 0.998552 & 0.997902 \\ \hline
-			龙尾（后） (m/s)    & 0.999317 &	0.999143 & 0.998889 & 0.998490 & 0.997827 \\ \hline
-		\end{tabular}
-		% \hline是横线，采用\makebox设置列宽
-	\end{table}
+		\begin{table}[H] %[h]表示在此处添加浮动体，默认为tbf，即页面顶部、底部和空白处添加
+			\captionsetup{skip=4pt} % 设置标题与表格的间距为4pt
+			\caption{问题四的速度结果}
+			\centering
+			\setlength{\arrayrulewidth}{0.5pt} % 设置表格线条宽度为1pt
+			\begin{tabular}{|c|c|c|c|c|c|} %c表示居中，l表示左对齐，r表示右对齐，中间添加“|”表示竖线
+				\hline
+				% \makebox[0.15\textwidth][c]{符号} & \makebox[0.6\textwidth][c]{说明}  \\
+				% \hline
+				& -100 s & -50 s & 0 s & 50 s & 100 s \\ \hline
+				龙头 (m/s)          & 1.000000 & 1.000000 & 1.000000 & 1.000000 & 1.000000 \\ \hline
+				第 1 节龙身 (m/s)   & 0.999904 & 0.999762 & 0.998687 & 1.000363 & 1.000124 \\ \hline
+				第 51 节龙身 (m/s)  & 0.999346 & 0.998641 & 0.995134 & 0.949934 & 1.003966 \\ \hline
+				第 101 节龙身 (m/s) & 0.999091 & 0.998248 & 0.994446 & 0.948479 & 1.096262 \\ \hline
+				第 151 节龙身 (m/s) & 0.998944 & 0.998047 & 0.994154 & 0.948035 & 1.095306 \\ \hline
+				第 201 节龙身 (m/s) & 0.998849 & 0.997925 & 0.993992 & 0.947820 & 1.094933 \\ \hline
+				龙尾（后） (m/s)    & 0.998817 & 0.997885 & 0.993942 & 0.947757 & 1.094833 \\ \hline
+			\end{tabular}
+			% \hline是横线，采用\makebox设置列宽
+		\end{table}
 	
 	\subsection{问题五模型的建立与求解}
 	
-	
+	\subsubsection{确定把手速度分布规律}
+
+		通过对问题一、问题二的速度分析可以看出 % TODO
+
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.8\textwidth]{image/Figure_5511.png}
+			\caption{问题五最大速度关于时间的函数}
+			\label{Figure_5511}
+		\end{figure}
+
+
+
 	%Part Six
 	\section{模型的评价、改进与推广}
 	\subsection{模型优点}

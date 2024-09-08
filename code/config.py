@@ -15,16 +15,18 @@ q4_end_time = 100
 
 fixed_distances = [2 * _spacing * np.pi * len_head / space, 2 * _spacing * np.pi * len_body / space]   # 龙头前把手与后把手的间距 + 龙身与龙尾前把手与后把手的间距
 actual_fixed_distances = [len_head, len_body]   # 龙头前把手与后把手的间距 + 龙身与龙尾前把手与后把手的间距
-sys_length = 30
-start_time = time.time() - 409
-actual_q4_start_time = time.time() + 0
+sys_length = 45
+start_time = time.time()
+actual_q4_start_time = time.time() + 100.0
 actual_q4_end_time = time.time() - 100.0
-integer_time = 0
 
 dis_tolerance = 1e-12
-time_tolerance = 1e-5
 
 ##################################
 
 # q4
 median = 2.5
+
+def set_spacing(space):
+    global _spacing
+    _spacing = space

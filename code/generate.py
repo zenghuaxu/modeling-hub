@@ -35,8 +35,21 @@ def generate_bench_line(bench_lines, positions):
         bench_lines[2][i].append(vector(back_in[0], back_in[1], 0))
         bench_lines[3][i].append(vector(font_out[0], font_out[1], 0))
         bench_lines[3][i].append(vector(back_out[0], back_out[1], 0))
-    
+        # 自定义一个多边形顶点列表
+        vertices = [
+            vector(font_in[0], font_in[1]),  # 顶点 1
+            vector(font_out[0], font_out[1]),  # 顶点 2
+            vector(back_in[0], back_in[1]),  # 顶点 3
+            vector(back_out[0], back_out[1])  # 顶点 4
+        ]
+
+        # 通过路径连接这些顶点，形成一个封闭的形状
+        path = [vector(0, 0, 0), vector(0, 0, 0.01)]  # 定义路径，给它一个小的厚度
+
+        # 使用 extrusion 来将路径挤压并染色
+        extrusion(path=path, shape=vertices, color=color.red)
 def q1_generate_spiral():
+    config.set_spacing(0.3)
     spiral = curve(color=color.black, radius=0.05)
 
     # 创建关键点
@@ -49,7 +62,7 @@ def q1_generate_spiral():
         theta += 0.01
 
 def q1_generate(points, lines, bench_lines):
-    current_time = time.time() - config.start_time
+    current_time = 0
     theta = t_to_theta(current_time)
     while theta > 0:
         rate(60)  # 控制移动速度
@@ -63,7 +76,7 @@ def q1_generate(points, lines, bench_lines):
         current_theta = theta
         positions = [pos_1]
         for i in range(1, len(points)):
-            delta_theta = find_delta_theta(current_theta, config.fixed_distances[0 if i == 1 else 1])
+            delta_theta = find_delta_theta(current_theta, config.fixed_distances[0 if i == 1 else 1], 1e-3)
             pos = get_position(current_theta + delta_theta)
             positions.append(pos)
             points[i].pos = pos
@@ -73,10 +86,11 @@ def q1_generate(points, lines, bench_lines):
         generate_line(lines, positions)
         generate_bench_line(bench_lines, positions)
 
-        current_time = time.time() - config.start_time
+        current_time += 0.1
         theta = t_to_theta(current_time)
 
 def q4_generate_curve():
+    config.set_spacing(0.4)
     spiral = curve(color=color.black, radius=0.05)
 
     # 创建关键点
@@ -86,13 +100,12 @@ def q4_generate_curve():
         x = x * config.median
         y = y * config.median
         spiral.append(vector(x, y, 0))
-        t += 0.01
+        t += 0.05
 
 def q4_generate(points, lines, bench_lines):
-    # current_time = time.time() - config.actual_q4_start_time
-    # end_time = time.time() - config.actual_q4_end_time
-    current_time = 380
-    end_time = 500
+    dis_tolerance = 1e-5
+    current_time = 14.8
+    end_time = 100
     while current_time < end_time:
         rate(60)  # 控制移动速度
         record_time(current_time)
@@ -108,10 +121,7 @@ def q4_generate(points, lines, bench_lines):
         ergodic_time = current_time
         positions = [pos_1]
         for i in range(1, len(points)):
-            st = time.time()
-            delta_time = find_delta_time(ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1])
-            et = time.time()
-            print("cal:", et - st)
+            delta_time = find_delta_time(ergodic_time, config.actual_fixed_distances[0 if i == 1 else 1], dis_tolerance)
             ergodic_time -= delta_time
             _x, _y = t_to_xy_q4(ergodic_time)
             _x = _x * config.median
@@ -121,10 +131,7 @@ def q4_generate(points, lines, bench_lines):
             points[i].pos = pos
 
         # 更新连线
-        st = time.time()
         generate_line(lines, positions)
         generate_bench_line(bench_lines, positions)
-        et = time.time()
-        print("draw: ", et - st)
 
         current_time += 1

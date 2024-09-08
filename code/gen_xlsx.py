@@ -186,7 +186,7 @@ def collision_fill_xlsx():
         cell = ws.cell(row=i + 2, column=4, value=f"{v[0]:.6f}")
         cell.font = font_new
 
-    # wb.save("result2.xlsx")
+    wb.save("result2.xlsx")
 
 def q4_dis_xlsx_init():
     for row_num, row_name in enumerate(q4_dis_row_names, start=2):
@@ -327,23 +327,3 @@ def q5_v_find_test():
         print("calculating:", time)
 
     wb.save("result5_v_test.xlsx")
-
-# dis_xlsx_init()
-# dis_fill_xlsx()
-
-# v_xlsx_init()
-# v_fill_xlsx()
-
-collision_xlsx_init()
-collision_fill_xlsx()
-
-# q4_dis_xlsx_init()
-# q4_dis_fill()
-
-# q4_v_xlsx_init()
-# q4_v_fill()
-
-# q4_v_fill_test()
-# q4_v_fill_test()
-
-q5_v_find_test()

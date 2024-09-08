@@ -25,11 +25,11 @@ def polar_distance(theta_1, theta_2):
     return np.sqrt(rho_1 ** 2 + rho_2 ** 2 - 2 * rho_1 * rho_2 * np.cos(theta_1 - theta_2))
 
 # 使用二分法寻找更准确的 delta_theta
-def find_delta_theta(theta, fixed_distance):
+def find_delta_theta(theta, fixed_distance, dis_tolerance):
     # 二分上下限
     low = 0
     high = np.pi - 1e-2
-    while high - low > config.dis_tolerance:
+    while high - low > dis_tolerance:
         mid = (low + high) / 2
         pos1 = get_position(theta)
         pos2 = get_position(theta + mid)
@@ -41,10 +41,10 @@ def find_delta_theta(theta, fixed_distance):
             high = mid
     return (low + high) / 2
 
-def find_delta_time(time, fixed_distance):
+def find_delta_time(time, fixed_distance, dis_tolerance):
     low = 1.5
     high = 6
-    while high - low > config.dis_tolerance:
+    while high - low > dis_tolerance:
         mid = (low + high) / 2
         x1, y1 = t_to_xy_q4(time)
         x2, y2 = t_to_xy_q4(time - mid)

@@ -204,9 +204,9 @@ def pso_cal_min_distance(space, n, c1, c2):
 smallest = 46
 biggist  = 50
 
-for i in range(smallest, biggist + 1, 1):
-    pso_cal_min_distance(i, 10, c1, c2)
-    pso_cal_min_distance(i + 0.5, 10, c1, c2)
+# for i in range(smallest, biggist + 1, 1):
+#     pso_cal_min_distance(i, 10, c1, c2)
+#     pso_cal_min_distance(i + 0.5, 10, c1, c2)
 
 # pso_cal_min_distance(55, 10, c1, c2)
 #

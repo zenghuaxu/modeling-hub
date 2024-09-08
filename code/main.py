@@ -20,12 +20,13 @@ if __name__ == "__main__":
 
     # 第二问数据生成
     # 舞龙队盘入恰好使得板凳之间不发生碰撞的时刻下舞龙队的位置和速度，储存在当前目录下的result2.xlsx中
-    # collision_xlsx_init()
-    # collision_fill_xlsx()
+    collision_xlsx_init()
+    # time, if_in = pso_cal_min_distance(55)
+    # print(f"在{time}s恰好发生碰撞")
+    collision_fill_xlsx(412.4742127430167)
 
     # 第三问验证函数
-    # pso_cal_min_distance(...)
-    # local_check()
+    # print("问题三最小螺距：", cal_min_D())
 
     # 第四问数据生成
     # 以调头开始时间为零时刻，从 −100s 开始到 100s 为止，每秒舞龙队的位置，储存在当前目录下的result4_dis.xlsx中

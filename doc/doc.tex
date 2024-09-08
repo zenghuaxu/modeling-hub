@@ -317,7 +317,7 @@
 		具体来说，对于给定的时间 $t_1$ ，把手 $A_i$ 此时的速度大小的数值解为：
 
 		\begin{equation}
-			v_{t1} = \frac{\sqrt{(x_i(t_1 + \Delta t) - x_i(t_1 - \Delta t))^2 + (y_i(t_1 + \Delta t) - y_i(t_1 - \Delta t))^2}}{2\Delta t}
+			v_{t1} = \dfrac{\sqrt{(x_i(t_1 + \Delta t) - x_i(t_1 - \Delta t))^2 + (y_i(t_1 + \Delta t) - y_i(t_1 - \Delta t))^2}}{2\Delta t}
 		\end{equation}
 
 		% TODO: \subsubsection{模型的检验}
@@ -761,7 +761,7 @@
 		$A_i$，$A_{i+1}$分别为某一板凳的前把手和后把手，靠 $A_i$ 侧的曲线曲率逐渐增大。板凳 $A_iA_{i+1}$ 可视为一运动线段。在盘入阶段，$\overline{A_iA_{i+1}}$ 运动方向如图所示，设 $\overline{A_iA_{i+1}}$ 在时间 $\Delta t$ 内运动到了 $\overline{A_i'A_{i+1}'}$ 位置。由于曲率随运动而增大，对于弧 $\overset{\frown}{A_i'A_{i+1}'}$ 的曲率岛屿弧 $ \overset{\frown}{A_iA_{i+1}} $的，进而两弧满足 $|\overset{\frown}{A_i'A_{i+1}'}| > |\overset{\frown}{A_iA_{i+1}}| $关系。 因此，$A_i$ 点和 $A{i+1}$ 点的平均运动速度即满足关系：
 		
 		\begin{equation}
-			\overline{v_{i}} = \frac{\overset{\frown}{A_iA_i'}}{\Delta t} \ge
+			\overline{v_{i}} = \dfrac{\overset{\frown}{A_iA_i'}}{\Delta t} \ge
 			\frac{\overset{\frown}{A_{i+1}A_{i+1}'}}{\Delta t} = \overline{v_{i+1}}
 		\end{equation}
 		
@@ -787,24 +787,41 @@
 		
 		\begin{figure}[H]
 			\centering
-			\includegraphics[width=0.9\textwidth]{image/Figure_5511.png}
+			\includegraphics[width=0.6\textwidth]{image/Figure_5511.png}
 			\caption{问题五最大速度关于时间的函数}
 			\label{Figure_5511}
 		\end{figure}
 	
 		\begin{figure}[H]
 			\centering
-			\includegraphics[width=0.9\textwidth]{image/Figure_5512.png}
+			\includegraphics[width=0.6\textwidth]{image/Figure_5512.png}
 			\caption{问题五最大速度关于时间的函数}
 			\label{Figure_5512}
 		\end{figure}
 		
-	\subsubsection{利用三分算法求解速度最大值}
+	\subsubsection{利用模拟退火算法求解速度最大值}
 	
-		确定了最大速度的区间范围后，原问题转换成了最大值/极大值的求解问题。三分算法是一种用于在给定区间内寻找函数极值的数值方法。这种方法的优势在于其简单性和效率，尤其适用于单峰或单谷函数的极值搜索。
+		确定了最大速度的区间范围后，原问题转换成了最优解的求解问题。\textbf{先对求解区域内的目标函数进行考察}。取 0.01s 作为步长绘制舞龙队最大把手速度关于时间的函数，结果如图%TODO
+		所示
 		
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.5\textwidth]{image/Figure_5514.png}
+			\caption{问题五最大速度关于时间的函数}
+			\label{Figure_5514}
+		\end{figure}
 		
+		可以发现，在目标区间 $t \in [9, 18]$ 内有多个局部极大值，且\textbf{难以确定是否存在更细粒度的局部极值点}，因此采用启发式算法进行最大值求解。模拟退火算法是一种概率型全局优化算法，通过模拟系统温度逐渐降低时的随机搜索过程来寻找问题的全局最优解，适合用于多极大值时求解最大值。
 		
+		具体来说，模拟退火算法的迭代分为两步。首先，对于目标函数 $f(t)$ 和查找区域 $[l, r]$ 选定自变量的初始点 $t_i$ 后，模拟退火算法会随机选取范围内的一点 $t_{i+1}$ 。$t_{i+1}$ 的选取由下式决定。
+		\begin{equation}
+			t_{i+1} = t_i + random(-1, 1) \cdot T
+		\end{equation}
+		如果 $t{i+1}$ 的计算结果超出了求解范围边界，则可以在 $t_i$ 和边界之间随机选取一点作为 $t_{i+1}。若 $v_{max}(t_1) \ge v_{max}(t_0)$，则将 $t_0$ 更新为 $t_1$ ；否则，将 $t_0$ 更新为 $t_1$ 的概率由 Metropolis 算法决定，即概率 $P$ 为：
+		\begin{equation}
+			P = \exp(-\dfrac{f(t_1) - f(t_0)}{T})
+		\end{equation}
+		然后，对自变量进行了多次迭代更新后，将温度 $T$ 等比减小以模拟降低温度
 		
 		
 	\subsubsection{利用模拟退火算法对速度最大值进行检验}

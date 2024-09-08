@@ -62,13 +62,14 @@ def p(t, t_next):
 
 def sa():
     global T
+    time_tolerance = 1e-5
     rd.seed(1234)
     t = initial_t
     iter = 0
-    total_iter = int(np.log(config.time_tolerance / T) / np.log(alpha))
+    total_iter = int(np.log(time_tolerance / T) / np.log(alpha))
     f_t = evaluate_function(t)
     f_next: float
-    while T > config.time_tolerance:
+    while T > time_tolerance:
         iter += 1
         print(f"\033[32mRound ({iter}/{total_iter}): {f_t:.6f}m/s at {t:.6f}s when T={T:.06f}\033[0m")
         for i in range(iteration):
